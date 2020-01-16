@@ -9,6 +9,13 @@ Here we define the Opendistro chart with its templates and default configuration
 
 * https://github.com/opendistro-for-elasticsearch/community/tree/master/open-distro-elasticsearch-kubernetes
 
+
+## AWS Configuration
+
+Set the storageClass to gp2 for *master* and *data*:
+
+    storageClassName: gp2
+
 <!---
 Copyright 2019 Viasat, Inc.
 
