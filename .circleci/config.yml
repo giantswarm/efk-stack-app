@@ -6,10 +6,10 @@ workflows:
   package-and-push-chart-on-tag:
     jobs:
       - architect/push-to-app-catalog:
-          name: "package and push {CHART-NAME} chart"
+          name: "package and push opendistro-app chart"
           app_catalog: "giantswarm-incubator-catalog"
           app_catalog_test: "giantswarm-incubator-test-catalog"
-          chart: "{CHART-NAME}"
+          chart: "opendistro-es"
           # Trigger job on git tag.
           filters:
             tags:
