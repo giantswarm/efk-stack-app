@@ -7,8 +7,8 @@ workflows:
     jobs:
       - architect/push-to-app-catalog:
           name: "package and push opendistro-app chart"
-          app_catalog: "giantswarm-incubator-catalog"
-          app_catalog_test: "giantswarm-incubator-test-catalog"
+          app_catalog: "giantswarm-playground-catalog"
+          app_catalog_test: "giantswarm-playground-test-catalog"
           chart: "opendistro-app"
           # Trigger job on git tag.
           filters:
