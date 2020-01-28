@@ -1,6 +1,18 @@
 demo-certificates:
   enabled: true
 
+fluentd:
+  enabled: true
+  elasticsearch:
+    host: opendistro-opendistro-es-client-service
+    sslVerify: false
+    scheme: "https"
+    auth:
+      enabled: true
+      user: "admin"
+      password: "admin"
+    logLevel: "debug"
+
 opendistro-es:
   enabled: true
 
@@ -91,7 +103,7 @@ opendistro-es:
       enabled: true
       path: "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
       configSecret: "elasticsearch-security-config"
-    
+
     config:
       # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example
       opendistro_security.audit.ignore_users: ["admin"]
