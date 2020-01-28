@@ -1,0 +1,1166 @@
+---
+# Source: opendistro-app/charts/opendistro-es/templates/psp.yml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: policy/v1beta1
+kind: PodSecurityPolicy
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+  name: opendistro-opendistro-es-psp
+spec:
+  privileged: true
+  #requiredDropCapabilities:
+  volumes:
+    - 'configMap'
+    - 'emptyDir'
+    - 'projected'
+    - 'secret'
+    - 'downwardAPI'
+    - 'persistentVolumeClaim'
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  runAsUser:
+    rule: 'RunAsAny'
+  seLinux:
+    rule: 'RunAsAny'
+  supplementalGroups:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  fsGroup:
+    rule: 'MustRunAs'
+    ranges:
+      - min: 1
+        max: 65535
+  readOnlyRootFilesystem: false
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-config-secret.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opendistro-opendistro-es-es-config
+  namespace: opendistro
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+type: Opaque
+data:
+  elasticsearch.yml: "aHR0cDoKICBjb21wcmVzc2lvbjogdHJ1ZQpub2RlOgogIGF0dHIuYm94X3R5cGU6IGhvdAogIG1heF9sb2NhbF9zdG9yYWdlX25vZGVzOiAxCm9wZW5kaXN0cm9fc2VjdXJpdHkuYWxsb3dfZGVmYXVsdF9pbml0X3NlY3VyaXR5aW5kZXg6IHRydWUKb3BlbmRpc3Ryb19zZWN1cml0eS5hbGxvd191bnNhZmVfZGVtb2NlcnRpZmljYXRlczogZmFsc2UKb3BlbmRpc3Ryb19zZWN1cml0eS5hdWRpdC5pZ25vcmVfdXNlcnM6Ci0gYWRtaW4Kb3BlbmRpc3Ryb19zZWN1cml0eS5hdWRpdC50eXBlOiBpbnRlcm5hbF9lbGFzdGljc2VhcmNoCm9wZW5kaXN0cm9fc2VjdXJpdHkuYXV0aGN6LmFkbWluX2RuOgotIENOPWFkbWluLE9VPUFwcHMsTz1HaWFudCBTd2FybSxMPURlZmF1bHQgQ2l0eSxDPUdzCm9wZW5kaXN0cm9fc2VjdXJpdHkubm9kZXNfZG46Ci0gQ049KixPVT1BcHBzLE89R2lhbnQgU3dhcm0sTD1EZWZhdWx0IENpdHksQz1HcwpvcGVuZGlzdHJvX3NlY3VyaXR5LnJlc3RhcGkucm9sZXNfZW5hYmxlZDoKLSBhbGxfYWNjZXNzCi0gc2VjdXJpdHlfcmVzdF9hcGlfYWNjZXNzCm9wZW5kaXN0cm9fc2VjdXJpdHkucm9sZXNfbWFwcGluZ19yZXNvbHV0aW9uOiBCT1RICm9wZW5kaXN0cm9fc2VjdXJpdHkuc2VjdXJpdHkudHJhbnNwb3J0LnNzbC52ZXJpZmljYXRpb25fbW9kZTogY2VydGlmaWNhdGUKb3BlbmRpc3Ryb19zZWN1cml0eS5zc2wuaHR0cC5lbmFibGVkOiB0cnVlCm9wZW5kaXN0cm9fc2VjdXJpdHkuc3NsLmh0dHAucGVtY2VydF9maWxlcGF0aDogZWxrLXJlc3QtY3J0LnBlbQpvcGVuZGlzdHJvX3NlY3VyaXR5LnNzbC5odHRwLnBlbWtleV9maWxlcGF0aDogZWxrLXJlc3Qta2V5LnBlbQpvcGVuZGlzdHJvX3NlY3VyaXR5LnNzbC5odHRwLnBlbXRydXN0ZWRjYXNfZmlsZXBhdGg6IGVsay1yZXN0LXJvb3QtY2EucGVtCm9wZW5kaXN0cm9fc2VjdXJpdHkuc3NsLnRyYW5zcG9ydC5wZW1jZXJ0X2ZpbGVwYXRoOiBlbGstdHJhbnNwb3J0LWNydC5wZW0Kb3BlbmRpc3Ryb19zZWN1cml0eS5zc2wudHJhbnNwb3J0LnBlbWtleV9maWxlcGF0aDogZWxrLXRyYW5zcG9ydC1rZXkucGVtCm9wZW5kaXN0cm9fc2VjdXJpdHkuc3NsLnRyYW5zcG9ydC5wZW10cnVzdGVkY2FzX2ZpbGVwYXRoOiBlbGstdHJhbnNwb3J0LXJvb3QtY2EucGVtCm9wZW5kaXN0cm9fc2VjdXJpdHkuc3NsLnRyYW5zcG9ydC50cnVzdHN0b3JlX2ZpbGVwYXRoOiBvcGVuZGlzdHJvLWVzLnRydXN0c3RvcmUKcHJvY2Vzc29yczogJHtQUk9DRVNTT1JTOjF9CnRocmVhZF9wb29sLndyaXRlLnF1ZXVlX3NpemU6IDgwMAo="
+  logging.yml: "YXBwZW5kZXI6CiAgY29uc29sZToKICAgIGxheW91dDoKICAgICAgY29udmVyc2lvblBhdHRlcm46ICdbJWR7SVNPODYwMX1dWyUtNXBdWyUtMjVjXSAlbSVuJwogICAgICB0eXBlOiBjb25zb2xlUGF0dGVybgogICAgdHlwZTogY29uc29sZQplcy5sb2dnZXIubGV2ZWw6IElORk8KbG9nZ2VyOgogIGFjdGlvbjogREVCVUcKICBjb20uYW1hem9uYXdzOiBXQVJOCnJvb3RMb2dnZXI6ICR7ZXMubG9nZ2VyLmxldmVsfSwgY29uc29sZQo="
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-config-secret.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: v1
+kind: Secret
+metadata:
+  name: opendistro-opendistro-es-kibana-config
+  namespace: opendistro
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+data:
+  kibana.yml: ZWxhc3RpY3NlYXJjaC5ob3N0czogaHR0cHM6Ly9lbGFzdGljc2VhcmNoLmV4YW1wbGUuY29tOjQ0MwplbGFzdGljc2VhcmNoLnBhc3N3b3JkOiAke0VMQVNUSUNTRUFSQ0hfUEFTU1dPUkR9CmVsYXN0aWNzZWFyY2gucmVxdWVzdEhlYWRlcnNXaGl0ZWxpc3Q6Ci0gc2VjdXJpdHl0ZW5hbnQKLSBBdXRob3JpemF0aW9uCmVsYXN0aWNzZWFyY2gucmVxdWVzdFRpbWVvdXQ6IDM2MDAwMAplbGFzdGljc2VhcmNoLnNzbC5jZXJ0aWZpY2F0ZTogL3Vzci9zaGFyZS9raWJhbmEvY2VydHMvZWxrLXJlc3QtY3J0LnBlbQplbGFzdGljc2VhcmNoLnNzbC5jZXJ0aWZpY2F0ZUF1dGhvcml0aWVzOgotIC91c3Ivc2hhcmUva2liYW5hL2NlcnRzL2Vsay1yZXN0LXJvb3QtY2EucGVtCmVsYXN0aWNzZWFyY2guc3NsLmtleTogL3Vzci9zaGFyZS9raWJhbmEvY2VydHMvZWxrLXJlc3Qta2V5LnBlbQplbGFzdGljc2VhcmNoLnVzZXJuYW1lOiAke0VMQVNUSUNTRUFSQ0hfVVNFUk5BTUV9CmxvZ2dpbmcudmVyYm9zZTogdHJ1ZQpvcGVuZGlzdHJvX3NlY3VyaXR5LmFsbG93X2NsaWVudF9jZXJ0aWZpY2F0ZXM6IHRydWUKb3BlbmRpc3Ryb19zZWN1cml0eS5jb29raWUucGFzc3dvcmQ6ICR7Q09PS0lFX1BBU1N9Cm9wZW5kaXN0cm9fc2VjdXJpdHkuY29va2llLnNlY3VyZTogdHJ1ZQpvcGVuZGlzdHJvX3NlY3VyaXR5Lm11bHRpdGVuYW5jeS5lbmFibGVkOiBmYWxzZQpvcGVuZGlzdHJvX3NlY3VyaXR5Lm11bHRpdGVuYW5jeS50ZW5hbnRzLmVuYWJsZV9nbG9iYWw6IGZhbHNlCm9wZW5kaXN0cm9fc2VjdXJpdHkubXVsdGl0ZW5hbmN5LnRlbmFudHMuZW5hYmxlX3ByaXZhdGU6IGZhbHNlCm9wZW5kaXN0cm9fc2VjdXJpdHkucmVhZG9ubHlfbW9kZS5yb2xlczoKLSBraWJhbmFfcmVhZF9vbmx5CnNlcnZlci5ob3N0OiAiMCIKc2VydmVyLm5hbWU6IGtpYmFuYQpzZXJ2ZXIuc3NsLmNlcnRpZmljYXRlOiAvdXNyL3NoYXJlL2tpYmFuYS9jZXJ0cy9raWJhbmEtY3J0LnBlbQpzZXJ2ZXIuc3NsLmVuYWJsZWQ6IHRydWUKc2VydmVyLnNzbC5rZXk6IC91c3Ivc2hhcmUva2liYW5hL2NlcnRzL2tpYmFuYS1rZXkucGVtCg==
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/elasticsearch-serviceaccount.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: opendistro-opendistro-es-es
+  namespace: opendistro
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+
+
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-serviceaccount.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: opendistro-opendistro-es-kibana
+  namespace: opendistro
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/role.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: opendistro-opendistro-es-es
+  namespace: opendistro
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+rules:
+- apiGroups: ['extensions']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - opendistro-opendistro-es-psp
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/kibana/role.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: opendistro-opendistro-es-kibana
+  namespace: opendistro
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+rules:
+- apiGroups: ['extensions']
+  resources: ['podsecuritypolicies']
+  verbs:     ['use']
+  resourceNames:
+  - opendistro-opendistro-es-psp
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/rolebinding.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+  name: opendistro-opendistro-es-elastic-rolebinding
+  namespace: opendistro
+roleRef:
+  kind: Role
+  name: opendistro-opendistro-es-es
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: opendistro-opendistro-es-es
+  namespace: opendistro
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/kibana/rolebinding.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+  name: opendistro-opendistro-es-kibana-rolebinding
+  namespace: opendistro
+roleRef:
+  kind: Role
+  name: opendistro-opendistro-es-kibana
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: opendistro-opendistro-es-kibana
+  namespace: opendistro
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-data-svc.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+    role: data
+  name: opendistro-opendistro-es-data-svc
+  namespace: opendistro
+spec:
+  ports:
+  - port: 9300
+    name: transport
+  - port: 9200
+    name: http
+  - port: 9600
+    name: metrics
+  clusterIP: None
+  selector:
+    role: data
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-service.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+kind: Service
+apiVersion: v1
+metadata:
+  annotations:
+    {}
+    
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+    role: client
+  name: opendistro-opendistro-es-client-service
+  namespace: opendistro
+spec:
+  ports:
+    - name: http
+      port: 9200
+    - name: transport
+      port: 9300
+    - name: metrics
+      port: 9600
+  selector:
+    role: client
+  type: ClusterIP
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/master-svc.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+    role: master
+  name: opendistro-opendistro-es-discovery
+  namespace: opendistro
+spec:
+  ports:
+    - port: 9300
+      protocol: TCP
+  clusterIP: None
+  selector:
+    role: master
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-service.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    {}
+    
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+  name: opendistro-opendistro-es-kibana-svc
+  namespace: opendistro
+spec:
+  ports:
+  - name: kibana-svc
+    port: 443
+    targetPort: 5601
+  selector:
+    app: opendistro-opendistro-es-kibana
+  type: ClusterIP
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-client-deploy.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+    role: client
+  name: opendistro-opendistro-es-client
+  namespace: opendistro
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: opendistro-opendistro-es
+      role: client
+  template:
+    metadata:
+      labels:
+        app: opendistro-opendistro-es
+        chart: "opendistro-es-1.1.0"
+        release: "opendistro"
+        heritage: "Tiller"
+        role: client
+      annotations:
+        
+        configchecksum: dac3b11ff632d1f576164d7f8d61e4174596117a94092b0240eef850b97e5d2
+    spec:      
+      serviceAccountName: opendistro-opendistro-es-es
+      # Weighted anti-affinity to disallow deploying client node to the same worker node as master node
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: "kubernetes.io/hostname"
+                labelSelector:
+                  matchLabels:
+                    role: client
+      initContainers:
+      - name: init-sysctl
+        image: busybox:1.31.0
+        command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        securityContext:
+          privileged: true
+      containers:
+      - name: elasticsearch
+        env:
+        - name: cluster.name
+          value: elasticsearch
+        - name: node.master
+          value: "false"
+        - name: node.ingest
+          value: "true"
+        - name: node.data
+          value: "false"
+        - name: network.host
+          value: "0.0.0.0"
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: discovery.seed_hosts
+          value: opendistro-opendistro-es-discovery
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROCESSORS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        - name: ES_JAVA_OPTS
+          value: -Xms512m -Xmx512m
+        resources:
+            limits:
+              cpu: 1
+              memory: 1024Mi
+            requests:
+              cpu: 200m
+              memory: 1024Mi
+            
+        # Official Image from Open Distro Team
+        image: amazon/opendistro-for-elasticsearch:1.3.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9200
+          name: http
+        - containerPort: 9300
+          name: transport
+        - containerPort: 9600
+          name: metrics
+        livenessProbe:
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          tcpSocket:
+            port: transport
+          
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          name: config
+          subPath: elasticsearch.yml
+        - mountPath: /usr/share/elasticsearch/config/logging.yml
+          name: config
+          subPath: logging.yml
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-crt.pem
+          name: transport-certs
+          subPath: elk-transport-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-key.pem
+          name: transport-certs
+          subPath: elk-transport-key.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-root-ca.pem
+          name: transport-certs
+          subPath: elk-transport-root-ca.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-crt.pem
+          name: rest-certs
+          subPath: elk-rest-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-key.pem
+          name: rest-certs
+          subPath: elk-rest-key.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-root-ca.pem
+          name: rest-certs
+          subPath: elk-rest-root-ca.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-crt.pem
+          name: admin-certs
+          subPath: admin-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-key.pem
+          name: admin-certs
+          subPath: admin-key.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-root-ca.pem
+          name: admin-certs
+          subPath: admin-root-ca.pem
+      volumes:
+      - name: config
+        secret:
+          secretName: opendistro-opendistro-es-es-config
+      - name: transport-certs
+        secret:
+          secretName: elasticsearch-transport-certs
+      - name: rest-certs
+        secret:
+          secretName: elasticsearch-rest-certs
+      - name: admin-certs
+        secret:
+          secretName: elasticsearch-admin-certs
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-deployment.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+  name: opendistro-opendistro-es-kibana
+  namespace: opendistro
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: opendistro-opendistro-es-kibana
+  template:
+    metadata:
+      labels:
+        app: opendistro-opendistro-es
+        chart: "opendistro-es-1.1.0"
+        release: "opendistro"
+        heritage: "Tiller"
+        app: opendistro-opendistro-es-kibana
+      annotations:
+        
+        checksum/config: 39dece005059695124e07c5ad57b5c255e87c498a0283908d6714f3f42b2f13
+    spec:      
+      containers:
+      - env:
+        - name: CLUSTER_NAME
+          value: elasticsearch
+        # If no custom configuration provided, default to internal DNS
+        - name: ELASTICSEARCH_USERNAME
+          valueFrom:
+             secretKeyRef:
+               name: kibana-auth
+               key: username
+        - name: ELASTICSEARCH_PASSWORD
+          valueFrom:
+             secretKeyRef:
+               name: kibana-auth
+               key: password
+        - name: COOKIE_PASS
+          valueFrom:
+             secretKeyRef:
+               name: kibana-auth
+               key: cookie
+        image: amazon/opendistro-for-elasticsearch-kibana:1.3.0
+        resources:
+            limits:
+              cpu: 2500m
+              memory: 2Gi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+            
+        name: opendistro-opendistro-es-kibana
+        volumeMounts:
+          - mountPath: /usr/share/kibana/config/kibana.yml
+            name: config
+            subPath: kibana.yml
+          - mountPath: /usr/share/kibana/certs/kibana-crt.pem
+            name: kibana-certs
+            subPath: kibana-crt.pem
+          - mountPath: /usr/share/kibana/certs/kibana-key.pem
+            name: kibana-certs
+            subPath: kibana-key.pem
+          - mountPath: /usr/share/kibana/certs/kibana-root-ca.pem
+            name: kibana-certs
+            subPath: kibana-root-ca.pem
+          - mountPath: /usr/share/kibana/certs/elk-rest-crt.pem
+            name: elasticsearch-certs
+            subPath: elk-rest-crt.pem
+          - mountPath: /usr/share/kibana/certs/elk-rest-key.pem
+            name: elasticsearch-certs
+            subPath: elk-rest-key.pem
+          - mountPath: /usr/share/kibana/certs/elk-rest-root-ca.pem
+            name: elasticsearch-certs
+            subPath: elk-rest-root-ca.pem
+        ports:
+        - containerPort: 5601
+      serviceAccountName: opendistro-opendistro-es-kibana
+      volumes:
+        - name: config
+          secret:
+            secretName: opendistro-opendistro-es-kibana-config
+        - name: kibana-certs
+          secret:
+            secretName: elasticsearch-kibana-certs
+        - name: elasticsearch-certs
+          secret:
+            secretName: elasticsearch-rest-certs
+      restartPolicy: Always
+
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-data-sts.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+    role: data
+  name: opendistro-opendistro-es-data
+  namespace: opendistro
+spec:
+  serviceName: opendistro-opendistro-es-data-svc
+  replicas: 3
+  selector:
+    matchLabels:
+      app: opendistro-opendistro-es
+      role: data
+  updateStrategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: opendistro-opendistro-es
+        chart: "opendistro-es-1.1.0"
+        release: "opendistro"
+        heritage: "Tiller"
+        role: data
+      annotations:
+        
+        configchecksum: dac3b11ff632d1f576164d7f8d61e4174596117a94092b0240eef850b97e5d2
+    spec:      
+      initContainers:
+      - name: init-sysctl
+        image: busybox:1.31.0
+        command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        securityContext:
+          privileged: true
+      - name: fixmount
+        command: [ 'sh', '-c', 'chown -R 1000:1000 /usr/share/elasticsearch/data' ]
+        image: busybox
+        volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: data
+      # Weighted anti-affinity to disallow deploying client node to the same worker node as master node
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  role: data
+      serviceAccountName: opendistro-opendistro-es-es
+      containers:
+      - name: elasticsearch
+        env:
+        - name: cluster.name
+          value: elasticsearch
+        - name: node.master
+          value: "false"
+        - name: node.ingest
+          value: "false"
+        - name: network.host
+          value: "0.0.0.0"
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: discovery.seed_hosts
+          value: "opendistro-opendistro-es-discovery"
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: node.data
+          value: "true"
+        - name: PROCESSORS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        - name: ES_JAVA_OPTS
+          value: -Xms512m -Xmx512m
+        # Official Image from Open Distro Team
+        image: amazon/opendistro-for-elasticsearch:1.3.0
+        imagePullPolicy: Always
+        # only publish the transport port
+        ports:
+        - containerPort: 9300
+          name: transport
+        resources:
+            limits:
+              cpu: 1
+              memory: 1024Mi
+            requests:
+              cpu: 200m
+              memory: 1024Mi
+            
+        livenessProbe:
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          tcpSocket:
+            port: transport
+          
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: data
+        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          name: config
+          subPath: elasticsearch.yml
+        - mountPath: /usr/share/elasticsearch/config/logging.yml
+          name: config
+          subPath: logging.yml
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-crt.pem
+          name: transport-certs
+          subPath: elk-transport-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-key.pem
+          name: transport-certs
+          subPath: elk-transport-key.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-root-ca.pem
+          name: transport-certs
+          subPath: elk-transport-root-ca.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-crt.pem
+          name: rest-certs
+          subPath: elk-rest-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-key.pem
+          name: rest-certs
+          subPath: elk-rest-key.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-root-ca.pem
+          name: rest-certs
+          subPath: elk-rest-root-ca.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-crt.pem
+          name: admin-certs
+          subPath: admin-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-key.pem
+          name: admin-certs
+          subPath: admin-key.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-root-ca.pem
+          name: admin-certs
+          subPath: admin-root-ca.pem
+      volumes:
+      - name: config
+        secret:
+          secretName: opendistro-opendistro-es-es-config
+      - name: transport-certs
+        secret:
+          secretName: elasticsearch-transport-certs
+      - name: rest-certs
+        secret:
+          secretName: elasticsearch-rest-certs
+      - name: admin-certs
+        secret:
+          secretName: elasticsearch-admin-certs
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ ReadWriteOnce ]
+      storageClassName: gp2
+      resources:
+        requests:
+          storage: 100Gi
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-master-sts.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: opendistro-opendistro-es
+    chart: "opendistro-es-1.1.0"
+    release: "opendistro"
+    heritage: "Tiller"
+    role: master
+  name: opendistro-opendistro-es-master
+  namespace: opendistro
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: opendistro-opendistro-es
+      role: master
+  updateStrategy:
+    type: RollingUpdate
+  serviceName: opendistro-opendistro-es-discovery
+  template:
+    metadata:
+      labels:
+        app: opendistro-opendistro-es
+        chart: "opendistro-es-1.1.0"
+        release: "opendistro"
+        heritage: "Tiller"
+        role: master
+      annotations:
+        
+        configchecksum: dac3b11ff632d1f576164d7f8d61e4174596117a94092b0240eef850b97e5d2
+    spec:      
+      serviceAccountName: opendistro-opendistro-es-es
+      # Anti-affinity to disallow deploying client and master nodes on the same worker node
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                role: master
+      initContainers:
+      - name: init-sysctl
+        image: busybox:1.31.0
+        command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        securityContext:
+          privileged: true
+      - name: fixmount
+        command: [ 'sh', '-c', 'chown -R 1000:1000 /usr/share/elasticsearch/data' ]
+        image: busybox
+        volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: data
+      containers:
+      - name: elasticsearch
+        env:
+        - name: cluster.name
+          value: elasticsearch
+        - name: cluster.initial_master_nodes
+          value: opendistro-opendistro-es-master-0,opendistro-opendistro-es-master-1,opendistro-opendistro-es-master-2,
+        - name: node.master
+          value: "true"
+        - name: node.ingest
+          value: "false"
+        - name: node.data
+          value: "false"
+        - name: network.host
+          value: "0.0.0.0"
+        - name: node.name
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: discovery.seed_hosts
+          value: opendistro-opendistro-es-discovery
+        - name: KUBERNETES_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: PROCESSORS
+          valueFrom:
+            resourceFieldRef:
+              resource: limits.cpu
+        - name: ES_JAVA_OPTS
+          value: -Xms512m -Xmx512m
+        resources:
+            limits:
+              cpu: 1
+              memory: 1024Mi
+            requests:
+              cpu: 200m
+              memory: 1024Mi
+            
+        livenessProbe:
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          tcpSocket:
+            port: transport
+          
+        # Official Image from Open Distro Team
+        image: amazon/opendistro-for-elasticsearch:1.3.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 9300
+          name: transport
+        - containerPort: 9200
+          name: http
+        - containerPort: 9600
+          name: metrics
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: data
+        - mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          name: config
+          subPath: elasticsearch.yml
+        - mountPath: /usr/share/elasticsearch/config/logging.yml
+          name: config
+          subPath: logging.yml
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-crt.pem
+          name: transport-certs
+          subPath: elk-transport-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-key.pem
+          name: transport-certs
+          subPath: elk-transport-key.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-transport-root-ca.pem
+          name: transport-certs
+          subPath: elk-transport-root-ca.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-crt.pem
+          name: rest-certs
+          subPath: elk-rest-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-key.pem
+          name: rest-certs
+          subPath: elk-rest-key.pem
+        - mountPath: /usr/share/elasticsearch/config/elk-rest-root-ca.pem
+          name: rest-certs
+          subPath: elk-rest-root-ca.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-crt.pem
+          name: admin-certs
+          subPath: admin-crt.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-key.pem
+          name: admin-certs
+          subPath: admin-key.pem
+        - mountPath: /usr/share/elasticsearch/config/admin-root-ca.pem
+          name: admin-certs
+          subPath: admin-root-ca.pem
+      volumes:
+      - name: config
+        secret:
+          secretName: opendistro-opendistro-es-es-config
+      - name: transport-certs
+        secret:
+          secretName: elasticsearch-transport-certs
+      - name: rest-certs
+        secret:
+          secretName: elasticsearch-rest-certs
+      - name: admin-certs
+        secret:
+          secretName: elasticsearch-admin-certs
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ ReadWriteOnce ]
+      storageClassName: gp2
+      resources:
+        requests:
+          storage: 50Gi
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-client-ingress.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-client-pdb.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-data-pdb.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-master-pdb.yaml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+---
+# Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-ingress.yml
+# Copyright 2019 Viasat, Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+
+
