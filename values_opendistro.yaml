@@ -10,7 +10,7 @@ opendistro-es:
       server.name: kibana
       server.host: "0"
 
-      elasticsearch.hosts: https://opendistro-opendistro-client-service:9200
+      elasticsearch.hosts: https://opendistro-opendistro-es-client-service:9200
       elasticsearch.requestTimeout: 360000
 
       logging.verbose: true
