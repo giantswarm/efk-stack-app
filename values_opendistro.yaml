@@ -12,6 +12,7 @@ opendistro-es:
 
       elasticsearch.hosts: https://opendistro-opendistro-es-client-service:9200
       elasticsearch.requestTimeout: 360000
+      elasticsearch.ssl.verificationMode: none
 
       logging.verbose: true
 
@@ -33,7 +34,7 @@ opendistro-es:
 
       # Multitenancy with global/private tenants disabled,
       # set to both to true if you want them to be available.
-      opendistro_security.multitenancy.enabled: false
+      opendistro_security.multitenancy.enabled: true
       opendistro_security.multitenancy.tenants.enable_private: false
       opendistro_security.multitenancy.tenants.enable_global: false
       opendistro_security.readonly_mode.roles: ["kibana_read_only"]
@@ -83,6 +84,11 @@ opendistro-es:
         enabled: true
         existingCertSecret: elasticsearch-admin-certs
 
+    securityConfig:
+      enabled: true
+      path: "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
+      configSecret: "security-config"
+    
     config:
       # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example
       opendistro_security.audit.ignore_users: ["admin"]
@@ -111,6 +117,7 @@ opendistro-es:
         compression: true
 
       # TLS Configuration Transport Layer
+      opendistro_security.ssl.transport.enforce_hostname_verification: false
       opendistro_security.ssl.transport.pemcert_filepath: elk-transport-crt.pem
       opendistro_security.ssl.transport.pemkey_filepath: elk-transport-key.pem
       opendistro_security.ssl.transport.pemtrustedcas_filepath: elk-transport-root-ca.pem

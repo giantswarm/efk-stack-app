@@ -603,7 +603,7 @@ The following table lists the configurable parameters of the opendistro elastics
     Locality Name (eg, city) [Default City]:
     Organization Name (eg, company) [Default Company Ltd]:Giant Swarm
     Organizational Unit Name (eg, section) []:Apps
-    Common Name (eg, your name or your server's hostname) []:opendistro-opendistro-es-discovery
+    Common Name (eg, your name or your server's hostname) []:transport
     Email Address []:
 
     Please enter the following 'extra' attributes
