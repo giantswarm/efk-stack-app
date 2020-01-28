@@ -90,7 +90,7 @@ opendistro-es:
     securityConfig:
       enabled: true
       path: "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
-      configSecret: "security-config"
+      configSecret: "elasticsearch-security-config"
     
     config:
       # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example

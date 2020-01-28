@@ -1,6 +1,7 @@
 #!/bin/bash
 
 kubectl create ns opendistro
+
 kubectl create secret generic kibana-auth --from-literal=username='admin' --from-literal=password='admin'  --from-literal=cookie='akrjp45dpluix6vlbbivdv3e0w03fkichp29llkr' -n opendistro
 
 kubectl create secret generic elasticsearch-admin-certs -n opendistro \
@@ -23,8 +24,4 @@ kubectl create secret generic elasticsearch-kibana-certs -n opendistro \
       --from-file=kibana-key.pem=./certs/kibana-key.pem \
       --from-file=kibana-root-ca.pem=./certs/kibana-root-ca.pem
 
-kubectl create secret generic -n opendistro security-config --from-file=config.yml
-
-helm template --namespace opendistro --name opendistro --tiller-namespace giantswarm ./helm/opendistro-app -f values_opendistro.yaml > deploy.yaml
-
-kubectl apply -f deploy.yaml
+kubectl create secret generic -n opendistro elasticsearch-security-config --from-file=config.yml
