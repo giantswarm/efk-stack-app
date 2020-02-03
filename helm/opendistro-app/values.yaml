@@ -1,6 +1,46 @@
 opendistro-certs:
   enabled: true
 
+elasticsearch-curator:
+  enabled: true
+  configMaps:
+    # Delete indices older than 7 days
+    action_file_yml: |-
+      ---
+      actions:
+        1:
+          action: delete_indices
+          description: "Clean up ES by deleting old indices"
+          options:
+            timeout_override:
+            continue_if_exception: False
+            disable_action: False
+            ignore_empty_list: True
+          filters:
+          - filtertype: age
+            source: name
+            direction: older
+            timestring: '%Y.%m.%d'
+            unit: days
+            unit_count: 3
+            field:
+            stats_result:
+            epoch:
+            exclude: False
+    # Having config_yaml WILL override the other config
+    config_yml: |-
+      ---
+      client:
+        hosts:
+          - opendistro-opendistro-es-client-service
+        port: 9200
+        http_auth: admin:admin
+
+elasticsearch-exporter:
+  enabled: true
+  es:
+    uri: http://admin:admin@opendistro-opendistro-es-client-service:9200
+  
 fluentd:
   enabled: true
   elasticsearch:
