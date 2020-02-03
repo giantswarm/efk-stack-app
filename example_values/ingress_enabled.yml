@@ -1,5 +1,8 @@
 opendistro-es:
   kibana:
+    username: admin
+    password: admin
+    
     ingress:
       enabled: true
       annotations:
