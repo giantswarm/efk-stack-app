@@ -1,6 +1,6 @@
-demo-certificates:
+opendistro-certs:
   enabled: true
-
+    
 fluentd:
   enabled: true
   elasticsearch:

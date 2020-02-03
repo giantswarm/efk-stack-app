@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ include "fluentd-elasticsearch.fullname" . }}
+  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "fluentd-elasticsearch.labels" . | indent 4 }}
     {{- if semverCompare "> 1.6" .Capabilities.KubeVersion.GitVersion }}

@@ -122,7 +122,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: opendistro-opendistro-es-es-config
-  namespace: opendistro2
+  namespace: opendistro
   labels:
     app: opendistro-opendistro-es
     chart: "opendistro-es-1.1.0"
@@ -133,6 +133,19 @@ data:
   elasticsearch.yml: "aHR0cDoKICBjb21wcmVzc2lvbjogdHJ1ZQpub2RlOgogIGF0dHIuYm94X3R5cGU6IGhvdAogIG1heF9sb2NhbF9zdG9yYWdlX25vZGVzOiAxCm9wZW5kaXN0cm9fc2VjdXJpdHkuYWxsb3dfZGVmYXVsdF9pbml0X3NlY3VyaXR5aW5kZXg6IHRydWUKb3BlbmRpc3Ryb19zZWN1cml0eS5hbGxvd191bnNhZmVfZGVtb2NlcnRpZmljYXRlczogZmFsc2UKb3BlbmRpc3Ryb19zZWN1cml0eS5hdWRpdC5pZ25vcmVfdXNlcnM6Ci0gYWRtaW4Kb3BlbmRpc3Ryb19zZWN1cml0eS5hdWRpdC50eXBlOiBpbnRlcm5hbF9lbGFzdGljc2VhcmNoCm9wZW5kaXN0cm9fc2VjdXJpdHkubm9kZXNfZG46Ci0gJyonCm9wZW5kaXN0cm9fc2VjdXJpdHkucmVzdGFwaS5yb2xlc19lbmFibGVkOgotIGFsbF9hY2Nlc3MKLSBzZWN1cml0eV9yZXN0X2FwaV9hY2Nlc3MKb3BlbmRpc3Ryb19zZWN1cml0eS5yb2xlc19tYXBwaW5nX3Jlc29sdXRpb246IEJPVEgKb3BlbmRpc3Ryb19zZWN1cml0eS5zc2wudHJhbnNwb3J0LmVuZm9yY2VfaG9zdG5hbWVfdmVyaWZpY2F0aW9uOiBmYWxzZQpvcGVuZGlzdHJvX3NlY3VyaXR5LnNzbC50cmFuc3BvcnQucGVtY2VydF9maWxlcGF0aDogZWxrLXRyYW5zcG9ydC1jcnQucGVtCm9wZW5kaXN0cm9fc2VjdXJpdHkuc3NsLnRyYW5zcG9ydC5wZW1rZXlfZmlsZXBhdGg6IGVsay10cmFuc3BvcnQta2V5LnBlbQpvcGVuZGlzdHJvX3NlY3VyaXR5LnNzbC50cmFuc3BvcnQucGVtdHJ1c3RlZGNhc19maWxlcGF0aDogZWxrLXRyYW5zcG9ydC1yb290LWNhLnBlbQpwcm9jZXNzb3JzOiAke1BST0NFU1NPUlM6MX0KdGhyZWFkX3Bvb2wud3JpdGUucXVldWVfc2l6ZTogODAwCg=="
   logging.yml: "YXBwZW5kZXI6CiAgY29uc29sZToKICAgIGxheW91dDoKICAgICAgY29udmVyc2lvblBhdHRlcm46ICdbJWR7SVNPODYwMX1dWyUtNXBdWyUtMjVjXSAlbSVuJwogICAgICB0eXBlOiBjb25zb2xlUGF0dGVybgogICAgdHlwZTogY29uc29sZQplcy5sb2dnZXIubGV2ZWw6IElORk8KbG9nZ2VyOgogIGFjdGlvbjogREVCVUcKICBjb20uYW1hem9uYXdzOiBXQVJOCnJvb3RMb2dnZXI6ICR7ZXMubG9nZ2VyLmxldmVsfSwgY29uc29sZQo="
 
+---
+# Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-auth.yaml
+
+kind: Secret                                                                                                                                                                                                                                                                                                                
+apiVersion: v1                                                                                                                                                                                                                                                                                                              
+type: Opaque
+metadata:                                                                                                                                                                                                                                                                                                                   
+  name: kibana-auth                                                                                                                                                                                                                                                                                                         
+  namespace: opendistro
+data:
+  cookie: "RU91TWxYc3pEMmd3SE5vclJtY2xpQ3IwdWtOOTVIR1I="
+  password: "c1hHMnZEeDhFWA=="
+  username: YWRtaW4=
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-config-secret.yaml
 # Copyright 2019 Viasat, Inc.
@@ -152,7 +165,7 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: opendistro-opendistro-es-kibana-config
-  namespace: opendistro2
+  namespace: opendistro
   labels:
     app: opendistro-opendistro-es
     chart: "opendistro-es-1.1.0"
@@ -167,6 +180,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: opendistro-fluentd
+  namespace: opendistro
   labels:
     app.kubernetes.io/name: fluentd
     helm.sh/chart: fluentd-0.2.2
@@ -404,6 +418,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: opendistro-fluentd
+  namespace: opendistro
   labels:
     app.kubernetes.io/name: fluentd
     helm.sh/chart: fluentd-0.2.2
@@ -411,6 +426,42 @@ metadata:
     app.kubernetes.io/managed-by: Tiller
     kubernetes.io/cluster-service: "true"
     addonmanager.kubernetes.io/mode: Reconcile
+---
+# Source: opendistro-app/charts/opendistro-certs/templates/rbac.yaml
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: opendistro-opendistro-certs
+  namespace: opendistro
+---
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: Role
+metadata:
+  name: opendistro-opendistro-certs
+  namespace: opendistro
+rules:
+- apiGroups: ['']
+  resources: ['secrets']
+  verbs:     ['create', 'list', 'get', 'update']
+- apiGroups: ['']
+  resources: ['pods']
+  verbs:     ['delete', 'list']
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: opendistro-opendistro-certs
+  namespace: opendistro
+roleRef:
+  kind: Role
+  name: opendistro-opendistro-certs
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: opendistro-opendistro-certs
+  namespace: opendistro
+
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/elasticsearch-serviceaccount.yaml
 # Copyright 2019 Viasat, Inc.
@@ -432,7 +483,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: opendistro-opendistro-es-es
-  namespace: opendistro2
+  namespace: opendistro
   labels:
     app: opendistro-opendistro-es
     chart: "opendistro-es-1.1.0"
@@ -461,7 +512,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: opendistro-opendistro-es-kibana
-  namespace: opendistro2
+  namespace: opendistro
   labels:
     app: opendistro-opendistro-es
     chart: "opendistro-es-1.1.0"
@@ -509,7 +560,7 @@ metadata:
 subjects:
 - kind: ServiceAccount
   name: opendistro-fluentd
-  namespace: opendistro2
+  namespace: opendistro
 roleRef:
   kind: ClusterRole
   name: opendistro-fluentd
@@ -521,6 +572,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   name: opendistro-fluentd
+  namespace: opendistro
   labels:
     app.kubernetes.io/name: fluentd
     helm.sh/chart: fluentd-0.2.2
@@ -554,7 +606,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   name: opendistro-opendistro-es-es
-  namespace: opendistro2
+  namespace: opendistro
   labels:
     app: opendistro-opendistro-es
     chart: "opendistro-es-1.1.0"
@@ -585,7 +637,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: Role
 metadata:
   name: opendistro-opendistro-es-kibana
-  namespace: opendistro2
+  namespace: opendistro
   labels:
     app: opendistro-opendistro-es
     chart: "opendistro-es-1.1.0"
@@ -605,6 +657,7 @@ apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: RoleBinding
 metadata:
   name: opendistro-fluentd
+  namespace: opendistro
   labels:
     app.kubernetes.io/name: fluentd
     helm.sh/chart: fluentd-0.2.2
@@ -620,7 +673,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: opendistro-fluentd
-  namespace: opendistro2
+  namespace: opendistro
 
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/rolebinding.yaml
@@ -645,7 +698,7 @@ metadata:
     release: "opendistro"
     heritage: "Tiller"
   name: opendistro-opendistro-es-elastic-rolebinding
-  namespace: opendistro2
+  namespace: opendistro
 roleRef:
   kind: Role
   name: opendistro-opendistro-es-es
@@ -653,7 +706,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: opendistro-opendistro-es-es
-  namespace: opendistro2
+  namespace: opendistro
 
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/kibana/rolebinding.yaml
@@ -678,7 +731,7 @@ metadata:
     release: "opendistro"
     heritage: "Tiller"
   name: opendistro-opendistro-es-kibana-rolebinding
-  namespace: opendistro2
+  namespace: opendistro
 roleRef:
   kind: Role
   name: opendistro-opendistro-es-kibana
@@ -686,7 +739,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: opendistro-opendistro-es-kibana
-  namespace: opendistro2
+  namespace: opendistro
 
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/elasticsearch/es-data-svc.yaml
@@ -713,7 +766,7 @@ metadata:
     heritage: "Tiller"
     role: data
   name: opendistro-opendistro-es-data-svc
-  namespace: opendistro2
+  namespace: opendistro
 spec:
   ports:
   - port: 9300
@@ -754,7 +807,7 @@ metadata:
     heritage: "Tiller"
     role: client
   name: opendistro-opendistro-es-client-service
-  namespace: opendistro2
+  namespace: opendistro
 spec:
   ports:
     - name: http
@@ -792,7 +845,7 @@ metadata:
     heritage: "Tiller"
     role: master
   name: opendistro-opendistro-es-discovery
-  namespace: opendistro2
+  namespace: opendistro
 spec:
   ports:
     - port: 9300
@@ -828,7 +881,7 @@ metadata:
     release: "opendistro"
     heritage: "Tiller"
   name: opendistro-opendistro-es-kibana-svc
-  namespace: opendistro2
+  namespace: opendistro
 spec:
   ports:
   - name: kibana-svc
@@ -844,6 +897,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: opendistro-fluentd
+  namespace: opendistro
   labels:
     app.kubernetes.io/name: fluentd
     helm.sh/chart: fluentd-0.2.2
@@ -876,7 +930,7 @@ spec:
         # NB! this annotation is deprecated as of version 1.13 and will be removed in 1.14.
         # ref: https://kubernetes.io/docs/tasks/administer-cluster/guaranteed-scheduling-critical-addon-pods/
         scheduler.alpha.kubernetes.io/critical-pod: ''
-        checksum/config: 298b9dedd87f28d11fa336c991935edee2af5e2950f46a7b664d646283cc5829
+        checksum/config: dfb888e4cd5148631467bec7f2a28522f8e2714eae681f6ffb57c446aabfc3fb
     spec:
       serviceAccountName: opendistro-fluentd
       containers:
@@ -1001,7 +1055,7 @@ metadata:
     heritage: "Tiller"
     role: client
   name: opendistro-opendistro-es-client
-  namespace: opendistro2
+  namespace: opendistro
 spec:
   replicas: 2
   selector:
@@ -1018,7 +1072,7 @@ spec:
         role: client
       annotations:
         
-        configchecksum: 13ac99b0fabb50b753a8ab3a5aca33f2e3ca60bb1e0139eb6296ea5668aae0b
+        configchecksum: 6eee2623f8fb60da70768439f3d0c500013cd48aaab5c133fa7a7e25e681bc5
     spec:      
       serviceAccountName: opendistro-opendistro-es-es
       # Weighted anti-affinity to disallow deploying client node to the same worker node as master node
@@ -1115,7 +1169,7 @@ spec:
           secretName: opendistro-opendistro-es-es-config
       - name: transport-certs
         secret:
-          secretName: elasticsearch-transport-certs
+          secretName: opendistro-transport-certs
 
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-deployment.yaml
@@ -1141,7 +1195,7 @@ metadata:
     release: "opendistro"
     heritage: "Tiller"
   name: opendistro-opendistro-es-kibana
-  namespace: opendistro2
+  namespace: opendistro
 spec:
   replicas: 1
   selector:
@@ -1157,7 +1211,7 @@ spec:
         app: opendistro-opendistro-es-kibana
       annotations:
         
-        checksum/config: 8495bc5e69dcc24734a885369d296c860405180796a644adaa6a6000589b525
+        checksum/config: 18769adb14e51c5169d96b6c22159fbb5db5a6fa891532e7ed96e57882ec1c2
     spec:      
       containers:
       - env:
@@ -1230,7 +1284,7 @@ metadata:
     heritage: "Tiller"
     role: data
   name: opendistro-opendistro-es-data
-  namespace: opendistro2
+  namespace: opendistro
 spec:
   serviceName: opendistro-opendistro-es-data-svc
   replicas: 3
@@ -1250,7 +1304,7 @@ spec:
         role: data
       annotations:
         
-        configchecksum: 13ac99b0fabb50b753a8ab3a5aca33f2e3ca60bb1e0139eb6296ea5668aae0b
+        configchecksum: 6eee2623f8fb60da70768439f3d0c500013cd48aaab5c133fa7a7e25e681bc5
     spec:      
       initContainers:
       - name: init-sysctl
@@ -1352,7 +1406,7 @@ spec:
           secretName: opendistro-opendistro-es-es-config
       - name: transport-certs
         secret:
-          secretName: elasticsearch-transport-certs
+          secretName: opendistro-transport-certs
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -1388,7 +1442,7 @@ metadata:
     heritage: "Tiller"
     role: master
   name: opendistro-opendistro-es-master
-  namespace: opendistro2
+  namespace: opendistro
 spec:
   replicas: 3
   selector:
@@ -1408,7 +1462,7 @@ spec:
         role: master
       annotations:
         
-        configchecksum: 13ac99b0fabb50b753a8ab3a5aca33f2e3ca60bb1e0139eb6296ea5668aae0b
+        configchecksum: 6eee2623f8fb60da70768439f3d0c500013cd48aaab5c133fa7a7e25e681bc5
     spec:      
       serviceAccountName: opendistro-opendistro-es-es
       # Anti-affinity to disallow deploying client and master nodes on the same worker node
@@ -1507,19 +1561,13 @@ spec:
         - mountPath: /usr/share/elasticsearch/config/elk-transport-root-ca.pem
           name: transport-certs
           subPath: elk-transport-root-ca.pem
-        - mountPath: /usr/share/elasticsearch/plugins/opendistro_security/securityconfig/config.yml
-          name: security-config
-          subPath: config.yml
       volumes:
       - name: config
         secret:
           secretName: opendistro-opendistro-es-es-config
       - name: transport-certs
         secret:
-          secretName: elasticsearch-transport-certs
-      - name: security-config
-        secret:
-          secretName: elasticsearch-security-config
+          secretName: opendistro-transport-certs
   volumeClaimTemplates:
   - metadata:
       name: data
@@ -1530,6 +1578,41 @@ spec:
         requests:
           storage: 50Gi
 
+---
+# Source: opendistro-app/charts/opendistro-certs/templates/job.yaml
+# Copyright 2019 Viasat, Inc.
+# Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License").
+# You may not use this file except in compliance with the License.
+# A copy of the License is located at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# or in the "license" file accompanying this file. This file is distributed
+# on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+# express or implied. See the License for the specific language governing
+# permissions and limitations under the License.
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: opendistro-opendistro-certs
+  namespace: opendistro
+spec:
+  schedule: "0 6 * * 2"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          serviceAccountName: opendistro-opendistro-certs
+          containers:
+          - name: certs
+            image: paurosello/opendistro-certs:0.0.17
+            env:
+              - name: RELEASE
+                value: opendistro
+          restartPolicy: Never
+      backoffLimit: 4
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-ingress.yml
 # Copyright 2019 Viasat, Inc.
@@ -1553,7 +1636,7 @@ metadata:
     release: "opendistro"
     heritage: "Tiller"
   name: opendistro-opendistro-es-kibana
-  namespace: opendistro2
+  namespace: opendistro
   annotations:
       kubernetes.io/ingress.class: "nginx"
       kubernetes.io/tls-acme: "true"
