@@ -143,8 +143,8 @@ metadata:
   name: kibana-auth                                                                                                                                                                                                                                                                                                         
   namespace: opendistro
 data:
-  cookie: "RU91TWxYc3pEMmd3SE5vclJtY2xpQ3IwdWtOOTVIR1I="
-  password: "c1hHMnZEeDhFWA=="
+  cookie: "MFV5bDBKNWlsZVZGNnM0T3VFM2lGY01DbHV1ZEhnQmU="
+  password: "RDBmNDZqMkl0Wg=="
   username: YWRtaW4=
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-config-secret.yaml
@@ -1607,12 +1607,30 @@ spec:
           serviceAccountName: opendistro-opendistro-certs
           containers:
           - name: certs
-            image: paurosello/opendistro-certs:0.0.17
+            image: quay.io/giantswarm/opendistro-certs:v0.0.2
             env:
               - name: RELEASE
                 value: opendistro
           restartPolicy: Never
       backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: opendistro-opendistro-certs-initial
+  namespace: opendistro
+spec:
+  template:
+    spec:
+      serviceAccountName: opendistro-opendistro-certs
+      containers:
+      - name: certs
+        image: quay.io/giantswarm/opendistro-certs:v0.0.2
+        env:
+          - name: RELEASE
+            value: opendistro
+      restartPolicy: Never
+  backoffLimit: 4
 ---
 # Source: opendistro-app/charts/opendistro-es/templates/kibana/kibana-ingress.yml
 # Copyright 2019 Viasat, Inc.

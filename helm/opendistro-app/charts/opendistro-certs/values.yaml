@@ -2,5 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-opendistro_certs:
-  enabled: true
+enabled: true
+image: quay.io/giantswarm/opendistro-certs
+imageTag: v0.0.2

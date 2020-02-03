@@ -12,7 +12,7 @@
 # express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
-{{- if .Values.opendistro_certs.enabled }}
+{{- if .Values.enabled }}
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
@@ -27,10 +27,28 @@ spec:
           serviceAccountName: {{ include "opendistro-certs.fullname" . }}
           containers:
           - name: certs
-            image: paurosello/opendistro-certs:0.0.17
+            image: {{ .Values.image }}:{{ .Values.imageTag }}
             env:
               - name: RELEASE
                 value: {{ .Release.Name }}
           restartPolicy: Never
       backoffLimit: 4
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "opendistro-certs.fullname" . }}-initial
+  namespace: {{ .Release.Namespace }}
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ include "opendistro-certs.fullname" . }}
+      containers:
+      - name: certs
+        image: {{ .Values.image }}:{{ .Values.imageTag }}
+        env:
+          - name: RELEASE
+            value: {{ .Release.Name }}
+      restartPolicy: Never
+  backoffLimit: 4
 {{- end }}
