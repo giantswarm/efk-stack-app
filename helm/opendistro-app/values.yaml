@@ -74,10 +74,11 @@ opendistro-es:
         enabled: true
         existingCertSecret: opendistro-transport-certs
 
-    # securityConfig:
-    #   enabled: true
-    #   path: "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
-    #   configSecret: "elasticsearch-security-config"
+    securityConfig:
+      enabled: true
+      path: "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
+      internalUsersSecret: "opendistro-internal-users"
+      configSecret: "opendistro-security-config"
 
     config:
       # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example

@@ -1,0 +1,33 @@
+fluentd:
+  elasticsearch:
+    auth:
+      user: "logstash"
+      password: "logstash"
+
+# kubectl create secret generic -n opendistro opendistro-security-config --from-file=config_examples/config.yml
+# kubectl create secret generic -n opendistro opendistro-internal-users --from-file=config_examples/internal_users.yml
+
+opendistro-es:
+  elasticsearch:
+    securityConfig:
+      enabled: true
+      path: "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"
+      internalUsersSecret: "opendistro-internal-users"
+      configSecret: "opendistro-security-config"
+      
+  kibana:
+    username: admin
+    password: test
+    
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      path: /
+      hosts:
+        - kibana.2tn93.k8s.gauss.eu-central-1.aws.gigantic.io
+      tls:
+       - secretName: kibana-tls
+         hosts:
+           - kibana.2tn93.k8s.gauss.eu-central-1.aws.gigantic.io

@@ -1,0 +1,22 @@
+---
+# This is the internal user database
+# The hash value is a bcrypt hash and can be generated with plugin/tools/hash.sh or https://bcrypt-generator.com/
+
+_meta:
+  type: "internalusers"
+  config_version: 2
+
+## Demo users
+admin:
+  hash: "$2y$12$gfdD4n0KRQnM1uv40vN3ue2KdVVZFK/XZtZ9CixN.Hc2R..zHcXbO" #test
+  reserved: true
+  backend_roles:
+  - "admin"
+  description: "Demo admin user"
+
+logstash:
+  hash: "$2y$12$h6TuuPkYbovC9AX6EDyTOOcrH6R1Xbc6bIv2n0tkzYPrvvgJZzgXS" #logstash
+  reserved: false
+  backend_roles:
+  - "logstash"
+  description: "Demo logstash user"
