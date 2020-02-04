@@ -1,8 +1,5 @@
 opendistro-es:
   kibana:
-    username: admin
-    password: admin
-    
     ingress:
       enabled: true
       annotations:
@@ -10,8 +7,8 @@ opendistro-es:
         kubernetes.io/tls-acme: "true"
       path: /
       hosts:
-        - kibana.2tn93.k8s.gauss.eu-central-1.aws.gigantic.io
+        - kibana.x5xg2.k8s.ghost.westeurope.azure.gigantic.io
       tls:
        - secretName: kibana-tls
          hosts:
-           - kibana.2tn93.k8s.gauss.eu-central-1.aws.gigantic.io
+           - kibana.x5xg2.k8s.ghost.westeurope.azure.gigantic.io

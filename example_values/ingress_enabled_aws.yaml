@@ -1,0 +1,24 @@
+opendistro-es:
+  kibana:
+    ingress:
+      enabled: true
+      annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+      path: /
+      hosts:
+        - kibana.5f3kb.k8s.gauss.eu-central-1.aws.gigantic.io
+      tls:
+       - secretName: kibana-tls
+         hosts:
+           - kibana.5f3kb.k8s.gauss.eu-central-1.aws.gigantic.io
+
+  elasticsearch:
+    master:
+      storageClassName: gp2
+      storage: 50Gi
+
+    data:
+      storageClassName: gp2
+      storage: 100Gi
+    
