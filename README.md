@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/giantswarm/opendistro-app.svg?style=shield)](https://circleci.com/gh/giantswarm/{APP-NAME}-app)
+[![CircleCI](https://circleci.com/gh/giantswarm/opendistro-app.svg?style=shield)](https://circleci.com/gh/giantswarm/opendistro-app)
 
 # Opendistro-app chart
 
