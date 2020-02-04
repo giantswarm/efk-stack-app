@@ -149,7 +149,7 @@ data:
     <match kubernetes.var.log.containers.**_kube-public_**>
       @type null
     </match>
-    <match kubernetes.var.log.containers.**_opendistro_**>
+    <match kubernetes.var.log.containers.**_opendistro-app_**>
       @type null
     </match>
     <match kubernetes.var.log.containers.**_giantswarm_**>
