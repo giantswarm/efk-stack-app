@@ -11,7 +11,7 @@ data:
   {{- if .Values.kibana.password }}
   password: {{ .Values.kibana.password | b64enc | quote }}
   {{- else }}
-  password: {{ randAlphaNum 10 | b64enc | quote }}
+  password: YWRtaW4=
   {{- end }}
 
   {{- if .Values.kibana.username }}
