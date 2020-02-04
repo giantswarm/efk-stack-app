@@ -551,3 +551,131 @@ The following table lists the configurable parameters of the opendistro elastics
 
 ## Acknowledgements
 * [Kalvin Chau](https://github.com/kalvinnchau) (Software Engineer - Viasat) for all his help with the Kubernetes internals, certs, and debugging
+
+
+# Generate Namespace and password
+```
+  $ kubectl create namespace opendistro
+  $ kubectl create secret generic kibana-auth --from-literal=username='admin' --from-literal=password='admin'  --from-literal=cookie='akrjp45dpluix6vlbbivdv3e0w03fkichp29llkr' -n opendistro
+```
+
+# Generate Certificates
+
+```
+  $ mkdir certs
+  $ cd certs
+
+  $ openssl genrsa -out root-ca-key.pem 2048
+  $ openssl req -new -x509 -sha256 -key root-ca-key.pem -out root-ca.pem
+    Country Name (2 letter code) [XX]:GS
+    State or Province Name (full name) []:
+    Locality Name (eg, city) [Default City]:
+    Organization Name (eg, company) [Default Company Ltd]:Giant Swarm
+    Organizational Unit Name (eg, section) []:Apps
+    Common Name (eg, your name or your server's hostname) []:root
+    Email Address []:
+
+  # Admin cert
+  $ openssl genrsa -out admin-key-temp.pem 2048
+  $ openssl pkcs8 -inform PEM -outform PEM -in admin-key-temp.pem -topk8 -nocrypt -v1 PBE-SHA1-3DES -out admin-key.pem
+  $ openssl req -new -key admin-key.pem -out admin.csr
+    Country Name (2 letter code) [XX]:ES
+    State or Province Name (full name) []:
+    Locality Name (eg, city) [Default City]:
+    Organization Name (eg, company) [Default Company Ltd]:Giant Swarm
+    Organizational Unit Name (eg, section) []:Apps
+    Common Name (eg, your name or your server's hostname) []:admin
+    Email Address []:
+
+    Please enter the following 'extra' attributes
+    to be sent with your certificate request
+    A challenge password []:
+    An optional company name []:
+  $ openssl x509 -req -in admin.csr -CA root-ca.pem -CAkey root-ca-key.pem -CAcreateserial -sha256 -out admin.pem
+  $ cp root-ca.pem admin-root-ca.pem
+
+  # Transport cert
+  $ openssl genrsa -out elk-transport-key-temp.pem 2048
+  $ openssl pkcs8 -inform PEM -outform PEM -in elk-transport-key-temp.pem -topk8 -nocrypt -v1 PBE-SHA1-3DES -out elk-transport-key.pem
+  $ openssl req -new -key elk-transport-key.pem -out elk-transport.csr
+    Country Name (2 letter code) [XX]:ES
+    State or Province Name (full name) []:
+    Locality Name (eg, city) [Default City]:
+    Organization Name (eg, company) [Default Company Ltd]:Giant Swarm
+    Organizational Unit Name (eg, section) []:Apps
+    Common Name (eg, your name or your server's hostname) []:transport
+    Email Address []:
+
+    Please enter the following 'extra' attributes
+    to be sent with your certificate request
+    A challenge password []:
+    An optional company name []:
+  $ openssl x509 -req -in elk-transport.csr -CA root-ca.pem -CAkey root-ca-key.pem -CAcreateserial -sha256 -out elk-transport.pem
+  $ cp root-ca.pem elk-transport-root-ca.pem
+
+  # Rest cert
+  $ openssl genrsa -out rest-key-temp.pem 2048
+  $ openssl pkcs8 -inform PEM -outform PEM -in rest-key-temp.pem -topk8 -nocrypt -v1 PBE-SHA1-3DES -out rest-key.pem
+  $ openssl req -new -key rest-key.pem -out rest.csr
+    Country Name (2 letter code) [XX]:ES
+    State or Province Name (full name) []:
+    Locality Name (eg, city) [Default City]:
+    Organization Name (eg, company) [Default Company Ltd]:Giant Swarm
+    Organizational Unit Name (eg, section) []:Apps
+    Common Name (eg, your name or your server's hostname) []:rest
+    Email Address []:
+
+    Please enter the following 'extra' attributes
+    to be sent with your certificate request
+    A challenge password []:
+    An optional company name []:
+  $ openssl x509 -req -in rest.csr -CA root-ca.pem -CAkey root-ca-key.pem -CAcreateserial -sha256 -out rest.pem
+  $ cp root-ca.pem rest-root-ca.pem
+  
+  # Kibana cert
+  $ openssl genrsa -out kibana-key-temp.pem 2048
+  $ openssl pkcs8 -inform PEM -outform PEM -in kibana-key-temp.pem -topk8 -nocrypt -v1 PBE-SHA1-3DES -out kibana-key.pem
+  $ openssl req -new -key kibana-key.pem -out kibana.csr
+    Country Name (2 letter code) [XX]:ES
+    State or Province Name (full name) []:
+    Locality Name (eg, city) [Default City]:
+    Organization Name (eg, company) [Default Company Ltd]:Giant Swarm
+    Organizational Unit Name (eg, section) []:Apps
+    Common Name (eg, your name or your server's hostname) []:kibana
+    Email Address []:
+
+    Please enter the following 'extra' attributes
+    to be sent with your certificate request
+    A challenge password []:
+    An optional company name []:
+  $ openssl x509 -req -in kibana.csr -CA root-ca.pem -CAkey root-ca-key.pem -CAcreateserial -sha256 -out kibana.pem
+  $ cp root-ca.pem kibana-root-ca.pem
+
+  # Cleanup
+  $ rm admin-key-temp.pem
+  $ rm admin.csr
+  $ rm elk-transport-key-temp.pem
+  $ rm elk-transport.csr
+  $ rm rest-key-temp.pem
+  $ rm rest.csr
+
+  $ kubectl create secret generic elasticsearch-admin-certs -n opendistro \
+      --from-file=admin-crt.pem=./certs/admin.pem \
+      --from-file=admin-key.pem=./certs/admin-key.pem \
+      --from-file=admin-root-ca.pem=./certs/admin-root-ca.pem
+
+  $ kubectl create secret generic elasticsearch-transport-certs -n opendistro \
+      --from-file=elk-transport-crt.pem=./certs/elk-transport.pem \
+      --from-file=elk-transport-key.pem=./certs/elk-transport-key.pem \
+      --from-file=elk-transport-root-ca.pem=./certs/elk-transport-root-ca.pem
+
+  $ kubectl create secret generic elasticsearch-rest-certs -n opendistro \
+      --from-file=elk-rest-crt.pem=./certs/rest.pem \
+      --from-file=elk-rest-key.pem=./certs/rest-key.pem \
+      --from-file=elk-rest-root-ca.pem=./certs/rest-root-ca.pem
+
+  $ kubectl create secret generic elasticsearch-kibana-certs -n opendistro \
+      --from-file=kibana-crt.pem=./certs/kibana.pem \
+      --from-file=kibana-key.pem=./certs/kibana-key.pem \
+      --from-file=kibana-root-ca.pem=./certs/kibana-root-ca.pem
+```

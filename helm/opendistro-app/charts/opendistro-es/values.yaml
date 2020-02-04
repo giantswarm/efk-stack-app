@@ -12,6 +12,8 @@
 # permissions and limitations under the License.
 
 kibana:
+  # username: admin
+  # password: admin
   enabled: true
   image: amazon/opendistro-for-elasticsearch-kibana
   imageTag: 1.2.0
