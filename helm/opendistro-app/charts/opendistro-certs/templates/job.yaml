@@ -35,6 +35,8 @@ spec:
                 value: {{ .Values.organization }}
               - name: EXPIRATION
                 value: {{ .Values.expiration }}
+              - name: NAMESPACE
+                value: {{ .Release.Namespace }}
           restartPolicy: Never
       backoffLimit: 4
 ---
@@ -57,6 +59,8 @@ spec:
             value: {{ .Values.organization }}
           - name: EXPIRATION
             value: {{ .Values.expiration }}
+          - name: NAMESPACE
+            value: {{ .Release.Namespace }}
       restartPolicy: Never
   backoffLimit: 4
 {{- end }}
