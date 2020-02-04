@@ -61,7 +61,7 @@ fluentd:
     repository: quay.io/fluentd_elasticsearch/fluentd
     tag: v2.9.0
   elasticsearch:
-    host: opendistro-opendistro-es-client-service
+    host: opendistro-app-opendistro-es-client-service
     sslVerify: false
     scheme: "http"
     auth:

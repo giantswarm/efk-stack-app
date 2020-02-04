@@ -25,5 +25,5 @@ maintainers:
 name: opendistro-app
 sources:
 - https://github.com/giantswarm/opendistro-app
-version: 0.0.5
+version: 0.0.6
 icon: https://github.com/giantswarm/opendistro-app/raw/master/images/logo.png
