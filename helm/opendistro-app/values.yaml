@@ -34,7 +34,7 @@ elasticsearch-curator:
       ---
       client:
         hosts:
-          - opendistro-opendistro-es-client-service
+          - opendistro-app-opendistro-es-client-service
         port: 9200
         http_auth: admin:admin
 
@@ -46,7 +46,7 @@ elasticsearch-exporter:
       giantswarm.io/monitoring-path: /metrics
       giantswarm.io/monitoring-port: "9108"
   es:
-    uri: http://admin:admin@opendistro-opendistro-es-client-service:9200
+    uri: http://admin:admin@opendistro-app-opendistro-es-client-service:9200
   
 fluentd:
   enabled: true
@@ -72,7 +72,7 @@ opendistro-es:
       server.name: kibana
       server.host: "0"
 
-      elasticsearch.hosts: http://opendistro-opendistro-es-client-service:9200
+      elasticsearch.hosts: http://opendistro-app-opendistro-es-client-service:9200
       elasticsearch.requestTimeout: 360000
 
       logging.verbose: false
