@@ -5,6 +5,9 @@ opendistro-certs:
 
 elasticsearch-curator:
   enabled: true
+  image:
+    repository: bobrik/curator
+    tag: 5.8.1
   configMaps:
     # Delete indices older than 7 days
     action_file_yml: |-
@@ -40,6 +43,9 @@ elasticsearch-curator:
 
 elasticsearch-exporter:
   enabled: true
+  image:
+    repository: justwatch/elasticsearch_exporter
+    tag: 1.1.0
   service:
     annotations:
       giantswarm.io/monitoring: "true"
@@ -50,6 +56,9 @@ elasticsearch-exporter:
   
 fluentd:
   enabled: true
+  image:
+    repository: quay.io/fluentd_elasticsearch/fluentd
+    tag: v2.9.0
   elasticsearch:
     host: opendistro-opendistro-es-client-service
     sslVerify: false
@@ -154,5 +163,5 @@ opendistro-es:
       opendistro_security.ssl.transport.pemkey_filepath: elk-transport-key.pem
       opendistro_security.ssl.transport.pemtrustedcas_filepath: elk-transport-root-ca.pem
 
-    image: amazon/opendistro-for-elasticsearch
+    image: quay.io/giantswarm/opendistro-for-elasticsearch
     imageTag: 1.3.0
