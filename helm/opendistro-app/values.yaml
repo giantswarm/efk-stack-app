@@ -1,5 +1,7 @@
 opendistro-certs:
   enabled: true
+  organization: Giant Swarm
+  expiration: 5 years
 
 elasticsearch-curator:
   enabled: true
@@ -38,6 +40,11 @@ elasticsearch-curator:
 
 elasticsearch-exporter:
   enabled: true
+  service:
+    annotations:
+      giantswarm.io/monitoring: "true"
+      giantswarm.io/monitoring-path: /metrics
+      giantswarm.io/monitoring-port: "9108"
   es:
     uri: http://admin:admin@opendistro-opendistro-es-client-service:9200
   
@@ -58,7 +65,7 @@ opendistro-es:
 
   kibana:
     enabled: true
-    image: amazon/opendistro-for-elasticsearch-kibana
+    image: quay.io/giantswarm/opendistro-for-elasticsearch-kibana:1.3.0
     imageTag: 1.3.0
 
     config:

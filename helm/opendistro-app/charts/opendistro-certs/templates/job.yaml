@@ -31,6 +31,10 @@ spec:
             env:
               - name: RELEASE
                 value: {{ .Release.Name }}
+              - name: ORGANIZATION
+                value: {{ .Values.organization }}
+              - name: EXPIRATION
+                value: {{ .Values.expiration }}
           restartPolicy: Never
       backoffLimit: 4
 ---
@@ -49,6 +53,10 @@ spec:
         env:
           - name: RELEASE
             value: {{ .Release.Name }}
+          - name: ORGANIZATION
+            value: {{ .Values.organization }}
+          - name: EXPIRATION
+            value: {{ .Values.expiration }}
       restartPolicy: Never
   backoffLimit: 4
 {{- end }}
