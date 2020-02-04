@@ -49,6 +49,14 @@ elasticsearch-exporter:
 
 opendistro-es:
   elasticsearch:
+    master:
+      storageClassName: gp2
+      storage: 50Gi
+
+    data:
+      storageClassName: gp2
+      storage: 100Gi
+
     securityConfig:
       enabled: true
       path: "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"

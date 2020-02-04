@@ -98,7 +98,7 @@ opendistro-es:
     master:
       enabled: true
       replicas: 3
-      storageClassName: gp2
+      storageClassName: default
       storage: 50Gi
 
     initContainer:
@@ -108,7 +108,7 @@ opendistro-es:
     data:
       enabled: true
       replicas: 3
-      storageClassName: gp2
+      storageClassName: default
       storage: 100Gi
 
     client:
