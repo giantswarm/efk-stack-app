@@ -5,6 +5,7 @@ opendistro-certs:
 
 elasticsearch-curator:
   enabled: true
+  command: ["/usr/bin/curator"]
   image:
     repository: bobrik/curator
     tag: 5.8.1
