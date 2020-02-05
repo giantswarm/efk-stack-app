@@ -18,6 +18,14 @@ This application is intended to have a centralized log storage for your applicat
 
 - If you change the name of the helm release from "opendistro-app" to "logging-stack" you will need to adapt default configuration and change all references of "opendistro-app-opendistro-es-client-service" to "logging-stack-opendistro-es-client-service" in the [values file](./helm/opendistro-app/values.yaml)
 
+## Components
+
+### Opendistro Certificate Generator
+Generates the certificates to start OpenDistro in a secure way. It will create a rootCA and the certificate that will be used to stablish communications between nodes.
+
+### ElasticSearch Exporter
+Exposes Prometheus metrics that can be explored wit https://grafana.com/grafana/dashboards/2322
+
 ## Configuration
 
 This chart is composed of multiple helm charts and each can be configured from a single values file with the following format:
@@ -39,7 +47,9 @@ opendistro-es:
   Check ./helm/opendistro-app/charts/opendistro-es/values.yaml
 ```
 
-Check [deafult values file](./helm/opendistro-app/values.yaml) for all components.
+Check [deafult values file](./helm/opendistro-app/values.yaml) for all components. 
+
+This configuration has been tuned by our team to give sane defaults for all components and modifying the internal_users.yaml file should be enough in most cases.
 
 ## Example Configurations
 
