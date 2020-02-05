@@ -21,24 +21,29 @@ This application is intended to have a centralized log storage for your applicat
 ## Components
 
 ### OpenDistro
-OSS Elasticsearch distribution
-(Additional info)[./helm/opendistro-app/charts/opendistro-es/README.md]
+OSS Elasticsearch distribution.
+
+[Additional info](./helm/opendistro-app/charts/opendistro-es/README.md)
 
 ### OpenDistro Certificate Generator
 Generates the certificates to start OpenDistro in a secure way. It will create a rootCA and the certificate that will be used to stablish communications between nodes.
-(Additional info)[./helm/opendistro-app/charts/opendistro-certs/README.md]
+
+[Additional info](./helm/opendistro-app/charts/opendistro-certs/README.md)
 
 ### ElasticSearch Exporter
-Exposes Prometheus metrics that can be explored wit https://grafana.com/grafana/dashboards/2322
-(Additional info)[./helm/opendistro-app/charts/elasticsearch-exporter/README.md]
+Exposes Prometheus metrics that can be explored with https://grafana.com/grafana/dashboards/2322
+
+[Additional info](./helm/opendistro-app/charts/elasticsearch-exporter/README.md)
 
 ### ElasticSearch Curator
-Manages ElasticSearch indexes lifecycle, by default is configured to delete indices older than 7 days
-(Additional info)[./helm/opendistro-app/charts/elasticsearch-curator/README.md]
+Manages ElasticSearch indexes lifecycle, by default is configured to delete indices older than 7 days.
+
+[Additional info](./helm/opendistro-app/charts/elasticsearch-curator/README.md)
 
 ### FluentD
 Log collector and parser that will send pod logs to ElasticSearch.
-(Additional info)[./helm/opendistro-app/charts/fluentd/README.md]
+
+[Additional info](./helm/opendistro-app/charts/fluentd/README.md)
 
 
 ## Configuration
