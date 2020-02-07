@@ -25,5 +25,5 @@ maintainers:
 name: elastic-stack-app
 sources:
 - https://github.com/giantswarm/elastic-stack-app
-version: 0.0.8
+version: 0.1.0
 icon: https://github.com/giantswarm/elastic-stack-app/raw/master/images/logo.png
