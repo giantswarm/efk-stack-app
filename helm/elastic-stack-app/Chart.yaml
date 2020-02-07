@@ -14,12 +14,7 @@
 appVersion: 1.3.0
 description: 'Open Distro for Elasticsearch'
 engine: gotpl
-kubeVersion: ^1.10.0-0
 maintainers:
-- email: derek.heldt-werle@viasat.com
-  name: Derek Heldt-Werle
-- email: kalvin.chau@viasat.com
-  name: Kalvin Chau
 - name: Giant Swarm applications team
   url: https://github.com/giantswarm/efk-stack-app
 name: efk-stack-app
