@@ -38,7 +38,7 @@ elasticsearch-curator:
       ---
       client:
         hosts:
-          - opendistro-app-opendistro-es-client-service
+          - elastic-stack-app-opendistro-es-client-service
         port: 9200
         http_auth: admin:admin
 
@@ -53,7 +53,7 @@ elasticsearch-exporter:
       giantswarm.io/monitoring-path: /metrics
       giantswarm.io/monitoring-port: "9108"
   es:
-    uri: http://admin:admin@opendistro-app-opendistro-es-client-service:9200
+    uri: http://admin:admin@elastic-stack-app-opendistro-es-client-service:9200
   
 fluentd:
   enabled: true
@@ -61,7 +61,7 @@ fluentd:
     repository: quay.io/fluentd_elasticsearch/fluentd
     tag: v2.9.0
   elasticsearch:
-    host: opendistro-app-opendistro-es-client-service
+    host: elastic-stack-app-opendistro-es-client-service
     sslVerify: false
     scheme: "http"
     auth:
@@ -82,7 +82,7 @@ opendistro-es:
       server.name: kibana
       server.host: "0"
 
-      elasticsearch.hosts: http://opendistro-app-opendistro-es-client-service:9200
+      elasticsearch.hosts: http://elastic-stack-app-opendistro-es-client-service:9200
       elasticsearch.requestTimeout: 360000
 
       logging.verbose: false

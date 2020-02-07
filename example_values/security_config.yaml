@@ -1,5 +1,6 @@
 fluentd:
   elasticsearch:
+    host: elastic-stack-app-opendistro-es-client-service
     auth:
       user: "admin"
       password: "test"
@@ -35,14 +36,14 @@ elasticsearch-curator:
       ---
       client:
         hosts:
-          - opendistro-opendistro-es-client-service
+          - elastic-stack-app-opendistro-es-client-service
         port: 9200
         http_auth: admin:test
 
 elasticsearch-exporter:
   enabled: true
   es:
-    uri: http://admin:test@opendistro-opendistro-es-client-service:9200
+    uri: http://admin:test@elastic-stack-app-opendistro-es-client-service:9200
 
 
 opendistro-es:
