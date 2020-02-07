@@ -93,8 +93,8 @@ This configuration has been tuned by our team to give sane defaults for all comp
     
     You will need to create additional resources in kubernetes to make it more secure:
 
-        $ kubectl create secret generic -n opendistro opendistro-security-config --from-file=config_examples/config.yml
-        $ kubectl create secret generic -n opendistro opendistro-internal-users --from-file=config_examples/internal_users.yml
+        $ kubectl create secret generic -n elastic-stack-app opendistro-security-config --from-file=config_examples/config.yml
+        $ kubectl create secret generic -n elastic-stack-app opendistro-internal-users --from-file=config_examples/internal_users.yml
 
     You need to change the password values in internal_users.yml file and adjust the values in security_config.yaml accordingly.
     
