@@ -105,4 +105,4 @@ This configuration has been tuned by our team to give sane defaults for all comp
 
 * https://github.com/justwatchcom/elasticsearch_exporter
 
-* https://github.com/helm/charts/tree/master/stable/fluentd
+* https://github.com/kiwigrid/helm-charts/tree/master/charts/fluentd-elasticsearch

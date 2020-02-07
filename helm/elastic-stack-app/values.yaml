@@ -55,7 +55,7 @@ elasticsearch-exporter:
   es:
     uri: http://admin:admin@elastic-stack-app-opendistro-es-client-service:9200
   
-fluentd:
+fluentd-elasticsearch:
   enabled: true
   image:
     repository: quay.io/fluentd_elasticsearch/fluentd

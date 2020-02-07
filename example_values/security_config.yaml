@@ -1,4 +1,4 @@
-fluentd:
+fluentd-elasticsearch:
   elasticsearch:
     host: elastic-stack-app-opendistro-es-client-service
     auth:

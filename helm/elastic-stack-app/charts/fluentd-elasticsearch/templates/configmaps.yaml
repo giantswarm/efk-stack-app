@@ -2,7 +2,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ include "fluentd-elasticsearch.fullname" . }}
-  namespace: {{ .Release.Namespace }}
   labels:
 {{ include "fluentd-elasticsearch.labels" . | indent 4 }}
     {{- if semverCompare "> 1.6" .Capabilities.KubeVersion.GitVersion }}
@@ -137,25 +136,6 @@ data:
       </parse>
     </source>
 
-    <match kubernetes.var.log.containers.**_default_**>
-      @type null
-    </match>
-    <match kubernetes.var.log.containers.**_kube-system_**>
-      @type null
-    </match>
-    <match kubernetes.var.log.containers.**_kube-node-lease_**>
-      @type null
-    </match>
-    <match kubernetes.var.log.containers.**_kube-public_**>
-      @type null
-    </match>
-    <match kubernetes.var.log.containers.**_elastic-stack-app_**>
-      @type null
-    </match>
-    <match kubernetes.var.log.containers.**_giantswarm_**>
-      @type null
-    </match>
-    
     # Detect exceptions in the log output and forward them as one log entry.
     <match raw.kubernetes.**>
       @id raw.kubernetes
@@ -175,6 +155,8 @@ data:
       key message
       multiline_end_regexp /\n$/
       separator ""
+      timeout_label @NORMAL
+      flush_interval 5
     </filter>
 
     # Enriches records with Kubernetes metadata
@@ -188,6 +170,7 @@ data:
       @id filter_parser
       @type parser
       key_name log
+      reserve_time true
       reserve_data true
       remove_key_name_field true
       <parse>
@@ -257,6 +240,7 @@ data:
     # statements, such as those that include entire object bodies, get split into
     # multiple lines by glog.
     # Example:
+    # I0204 07:32:30.020537    3368 server.go:1048] POST /stats/container/: (13.972191ms) 200 [[Go-http-client/1.1] 10.244.1.3:40537]
     <source>
       @id kubelet.log
       @type tail
@@ -286,6 +270,7 @@ data:
     </source>
 
     # Example:
+    # I0204 07:00:19.604280       5 handlers.go:131] GET /api/v1/nodes: (1.624207ms) 200 [[kube-controller-manager/v1.1.3 (linux/amd64) kubernetes/6a81b50] 127.0.0.1:38266]
     <source>
       @id kube-apiserver.log
       @type tail
@@ -300,6 +285,7 @@ data:
     </source>
 
     # Example:
+    # I0204 06:55:31.872680       5 servicecontroller.go:277] LB already exists and doesn't need update for service kube-system/kube-ui
     <source>
       @id kube-controller-manager.log
       @type tail
@@ -369,6 +355,10 @@ data:
         persistent true
         path /var/log/journald-docker.pos
       </storage>
+      <entry>
+        fields_strip_underscores true
+        fields_lowercase true
+      </entry>
       read_from_head true
       tag docker
     </source>
@@ -382,6 +372,10 @@ data:
         persistent true
         path /var/log/journald-container-runtime.pos
       </storage>
+      <entry>
+        fields_strip_underscores true
+        fields_lowercase true
+      </entry>
       read_from_head true
       tag container-runtime
     </source>
@@ -395,6 +389,10 @@ data:
         persistent true
         path /var/log/journald-kubelet.pos
       </storage>
+      <entry>
+        fields_strip_underscores true
+        fields_lowercase true
+      </entry>
       read_from_head true
       tag kubelet
     </source>
@@ -408,6 +406,10 @@ data:
         persistent true
         path /var/log/journald-node-problem-detector.pos
       </storage>
+      <entry>
+        fields_strip_underscores true
+        fields_lowercase true
+      </entry>
       read_from_head true
       tag node-problem-detector
     </source>
@@ -483,6 +485,13 @@ data:
 
 {{- if .Values.configMaps.useDefaults.outputConf }}
   output.conf: |-
+    # handle timeout log lines from concat plugin
+    <match **>
+      @type relabel
+      @label @NORMAL
+    </match>
+
+    <label @NORMAL>
     <match **>
       @id elasticsearch
       @type elasticsearch
@@ -518,6 +527,7 @@ data:
         overflow_action block
       </buffer>
     </match>
+    </label>
 {{- end }}
 
 {{- range $key, $value := .Values.extraConfigMaps }}

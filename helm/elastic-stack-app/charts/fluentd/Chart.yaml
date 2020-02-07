@@ -1,5 +1,0 @@
-apiVersion: v1
-appVersion: 2.7.0
-description: A Helm chart for fluentd-elasticsearch
-name: fluentd
-version: 0.2.2
