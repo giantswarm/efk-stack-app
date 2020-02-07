@@ -21,9 +21,9 @@ maintainers:
 - email: kalvin.chau@viasat.com
   name: Kalvin Chau
 - name: Giant Swarm applications team
-  url: https://github.com/giantswarm/elastic-stack-app
-name: elastic-stack-app
+  url: https://github.com/giantswarm/efk-stack-app
+name: efk-stack-app
 sources:
-- https://github.com/giantswarm/elastic-stack-app
+- https://github.com/giantswarm/efk-stack-app
 version: 0.1.0
-icon: https://github.com/giantswarm/elastic-stack-app/raw/master/images/logo.png
+icon: https://github.com/giantswarm/efk-stack-app/raw/master/images/logo.png

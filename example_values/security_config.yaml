@@ -1,6 +1,6 @@
 fluentd-elasticsearch:
   elasticsearch:
-    host: elastic-stack-app-opendistro-es-client-service
+    host: efk-stack-app-opendistro-es-client-service
     auth:
       user: "admin"
       password: "test"
@@ -36,14 +36,14 @@ elasticsearch-curator:
       ---
       client:
         hosts:
-          - elastic-stack-app-opendistro-es-client-service
+          - efk-stack-app-opendistro-es-client-service
         port: 9200
         http_auth: admin:test
 
 elasticsearch-exporter:
   enabled: true
   es:
-    uri: http://admin:test@elastic-stack-app-opendistro-es-client-service:9200
+    uri: http://admin:test@efk-stack-app-opendistro-es-client-service:9200
 
 
 opendistro-es:
@@ -56,8 +56,8 @@ opendistro-es:
       storageClassName: gp2
       storage: 100Gi
     
-    # kubectl create secret generic -n elastic-stack-app opendistro-security-config --from-file=config_examples/config.yml
-    # kubectl create secret generic -n elastic-stack-app opendistro-internal-users --from-file=config_examples/internal_users.yml
+    # kubectl create secret generic -n efk-stack-app opendistro-security-config --from-file=config_examples/config.yml
+    # kubectl create secret generic -n efk-stack-app opendistro-internal-users --from-file=config_examples/internal_users.yml
     securityConfig:
       enabled: true
       path: "/usr/share/elasticsearch/plugins/opendistro_security/securityconfig"

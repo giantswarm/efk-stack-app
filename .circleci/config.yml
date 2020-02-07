@@ -6,10 +6,10 @@ workflows:
   package-and-push-chart-on-tag:
     jobs:
       - architect/push-to-app-catalog:
-          name: "package and push elastic-stack-app chart"
+          name: "package and push efk-stack-app chart"
           app_catalog: "giantswarm-playground-catalog"
           app_catalog_test: "giantswarm-playground-test-catalog"
-          chart: "elastic-stack-app"
+          chart: "efk-stack-app"
           # Trigger job on git tag.
           filters:
             tags:
