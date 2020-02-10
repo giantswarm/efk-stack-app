@@ -79,7 +79,7 @@ This configuration has been tuned by our team to give sane defaults for all comp
 
     Default user: admin/admin
 
-[Azure Example Configuration](./example_values/ingress_enabled_aws.yaml)
+[Azure Example Configuration](./example_values/ingress_enabled_azure.yaml)
 
     Do not use in production, just for testing
 
