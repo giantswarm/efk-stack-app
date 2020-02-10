@@ -57,6 +57,10 @@ elasticsearch-exporter:
   
 fluentd-elasticsearch:
   enabled: true
+  configMaps:
+    useDefaults:
+      systemConf: true
+      systemInputConf: false
   podSecurityPolicy:
     enabled: true
   image:
@@ -64,13 +68,13 @@ fluentd-elasticsearch:
     tag: v2.9.0
   elasticsearch:
     host: efk-stack-app-opendistro-es-client-service
+    logstashPrefix: "fluentd"
     sslVerify: false
     scheme: "http"
     auth:
       enabled: true
       user: "admin"
       password: "admin"
-    logLevel: "debug"
 
 opendistro-es:
   enabled: true

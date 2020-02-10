@@ -136,6 +136,25 @@ data:
       </parse>
     </source>
 
+    <match kubernetes.var.log.containers.**_default_**>
+      @type null
+    </match>
+    <match kubernetes.var.log.containers.**_kube-system_**>
+      @type null
+    </match>
+    <match kubernetes.var.log.containers.**_kube-node-lease_**>
+      @type null
+    </match>
+    <match kubernetes.var.log.containers.**_kube-public_**>
+      @type null
+    </match>
+    <match kubernetes.var.log.containers.**_opendistro-app_**>
+      @type null
+    </match>
+    <match kubernetes.var.log.containers.**_giantswarm_**>
+      @type null
+    </match>
+    
     # Detect exceptions in the log output and forward them as one log entry.
     <match raw.kubernetes.**>
       @id raw.kubernetes
