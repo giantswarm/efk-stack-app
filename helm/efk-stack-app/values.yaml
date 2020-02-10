@@ -57,6 +57,8 @@ elasticsearch-exporter:
   
 fluentd-elasticsearch:
   enabled: true
+  podSecurityPolicy:
+    enabled: true
   image:
     repository: quay.io/fluentd_elasticsearch/fluentd
     tag: v2.9.0
