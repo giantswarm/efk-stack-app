@@ -7,6 +7,10 @@ Here we define the Opendistro chart with its templates and default configuration
 
 This application is intended to have a centralized log storage for your applications, it's not meant to be long term storage and is prepared to delete old indexes (7 days by default)
 
+## Compatibility
+- AWS: 9.0.0+
+- Azure: 9.0.0+
+- KVM: 9.0.0+       (Persistent volumes are required)
 
 ## Features
 - OpenDistro Elasticsearch with security enabled
