@@ -7,7 +7,7 @@ elasticsearch-curator:
   enabled: true
   command: ["/usr/bin/curator"]
   image:
-    repository: bobrik/curator
+    repository: quay.io/giantswarm/bobrik-curator
     tag: 5.8.1
   configMaps:
     # Delete indices older than 7 days
@@ -45,7 +45,7 @@ elasticsearch-curator:
 elasticsearch-exporter:
   enabled: true
   image:
-    repository: justwatch/elasticsearch_exporter
+    repository: quay.io/giantswarm/elasticsearch_exporter
     tag: 1.1.0
   service:
     annotations:
@@ -64,7 +64,7 @@ fluentd-elasticsearch:
   podSecurityPolicy:
     enabled: true
   image:
-    repository: quay.io/fluentd_elasticsearch/fluentd
+    repository: quay.io/giantswarm/fluentd
     tag: v2.9.0
   elasticsearch:
     host: efk-stack-app-opendistro-es-client-service
