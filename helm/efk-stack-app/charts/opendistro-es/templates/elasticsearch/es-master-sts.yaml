@@ -76,7 +76,7 @@ spec:
         securityContext:
           privileged: true
       - name: fixmount
-        command: [ 'sh', '-c', 'chown -R 1000:1000 /usr/share/elasticsearch/data' ]
+        command: [ 'sh', '-c', 'chown 1000:1000 /usr/share/elasticsearch/data' ]
         image: busybox
         volumeMounts:
           - mountPath: /usr/share/elasticsearch/data
