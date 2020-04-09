@@ -20,5 +20,5 @@ maintainers:
 name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
-version: 0.1.5
+version: [[ .Version ]]
 icon: https://github.com/giantswarm/efk-stack-app/raw/master/images/logo.png
