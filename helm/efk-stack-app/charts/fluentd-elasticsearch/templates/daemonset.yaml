@@ -63,7 +63,7 @@ spec:
             {{- range .Values.additionalPlugins }}
             gem install {{ .name }} --version {{ .version }} &&
             {{- end }}
-            /run.sh
+            /entrypoint.sh
         {{- end }}
         env:
         - name: FLUENTD_ARGS
@@ -82,7 +82,7 @@ spec:
           {{- end }}
         - name: OUTPUT_PATH
           value: {{ .Values.elasticsearch.path | quote }}
-{{- if .Values.elasticsearch.auth.enabled }}
+{{- if and .Values.elasticsearch.auth.enabled .Values.elasticsearch.auth.user }}
         - name: OUTPUT_USER
           value: {{ .Values.elasticsearch.auth.user | quote }}
 {{- if .Values.elasticsearch.auth.password }}
@@ -98,6 +98,8 @@ spec:
           {{- else }}
           value: {{ .Values.elasticsearch.scheme | quote }}
           {{- end }}
+        - name: OUTPUT_TYPE
+          value: {{ .Values.elasticsearch.outputType | quote }}
         - name: OUTPUT_SSL_VERIFY
           value: {{ .Values.elasticsearch.sslVerify | quote }}
         - name: OUTPUT_SSL_VERSION

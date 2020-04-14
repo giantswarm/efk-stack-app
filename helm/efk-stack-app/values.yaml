@@ -5,6 +5,17 @@ opendistro-certs:
 
 elasticsearch-curator:
   enabled: true
+  env:
+    ELASTIC_CREDS: $(ELASTIC_USER):$(ELASTIC_PASS)
+  envFromSecrets: 
+    ELASTIC_USER:
+      from:
+        secret: kibana-auth
+        key: username
+    ELASTIC_PASS:
+      from:
+        secret: kibana-auth
+        key: password
   command: ["/usr/bin/curator"]
   image:
     repository: quay.io/giantswarm/bobrik-curator
@@ -34,13 +45,14 @@ elasticsearch-curator:
             epoch:
             exclude: False
     # Having config_yaml WILL override the other config
+    # Check workarround https://github.com/elastic/curator/issues/1440#issuecomment-522409936
     config_yml: |-
       ---
       client:
         hosts:
           - efk-stack-app-opendistro-es-client-service
         port: 9200
-        http_auth: admin:admin
+        http_auth: ${ELASTIC_CREDS}
 
 elasticsearch-exporter:
   enabled: true
@@ -52,8 +64,9 @@ elasticsearch-exporter:
       giantswarm.io/monitoring: "true"
       giantswarm.io/monitoring-path: /metrics
       giantswarm.io/monitoring-port: "9108"
+  envFromSecret: "kibana-auth"
   es:
-    uri: http://admin:admin@efk-stack-app-opendistro-es-client-service:9200
+    uri: http://$(username):$(password)@efk-stack-app-opendistro-es-client-service:9200
 
 fluentd-elasticsearch:
   enabled: true
@@ -65,7 +78,7 @@ fluentd-elasticsearch:
     enabled: true
   image:
     repository: quay.io/giantswarm/fluentd
-    tag: v2.9.0
+    tag: v3.0.0
   elasticsearch:
     host: efk-stack-app-opendistro-es-client-service
     logstashPrefix: "fluentd"
@@ -73,8 +86,15 @@ fluentd-elasticsearch:
     scheme: "http"
     auth:
       enabled: true
-      user: "admin"
-      password: "admin"
+  env:
+      LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+  secret:
+    - name: OUTPUT_USER
+      secret_name: kibana-auth
+      secret_key: username
+    - name: OUTPUT_PASSWORD
+      secret_name: kibana-auth
+      secret_key: password
 
 opendistro-es:
   enabled: true
@@ -82,7 +102,7 @@ opendistro-es:
   kibana:
     enabled: true
     image: quay.io/giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.3.0
+    imageTag: 1.6.0
 
     config:
       server.name: kibana
@@ -114,8 +134,9 @@ opendistro-es:
     master:
       enabled: true
       replicas: 3
-      storageClassName: default
-      storage: 50Gi
+      persistence:
+        storageClassName: default
+        size: 50Gi
 
     initContainer:
       image: busybox
@@ -124,8 +145,9 @@ opendistro-es:
     data:
       enabled: true
       replicas: 3
-      storageClassName: default
-      storage: 100Gi
+      persistence:
+        storageClassName: default
+        size: 100Gi
 
     client:
       enabled: true
@@ -171,4 +193,4 @@ opendistro-es:
       opendistro_security.ssl.transport.pemtrustedcas_filepath: elk-transport-root-ca.pem
 
     image: quay.io/giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.3.0
+    imageTag: 1.6.0
