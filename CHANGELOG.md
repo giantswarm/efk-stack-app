@@ -11,14 +11,14 @@
 
 # 0.2.0
 ## Opendistro
-- Upgrade to OpenDistro 1.6.0
+- Upgrade to OpenDistro 1.6.0 [Changelog](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/master/release-notes/release-notes-odfe-1.6.0.md)
 - Add pod affinity
 - Allow subpath for Persistent Volumes
 - Allow use of unmanaged Persistent Volumes
 - Configurable init images
 
 ## FluentD
-- Upgrade fluentD version
+- Upgrade fluentD version to 3.0.0
 - Get auth from secret
 
 ## ElasticSearch Exporter

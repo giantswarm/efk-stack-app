@@ -7,7 +7,7 @@ elasticsearch-curator:
   enabled: true
   env:
     ELASTIC_CREDS: $(ELASTIC_USER):$(ELASTIC_PASS)
-  envFromSecrets: 
+  envFromSecrets:
     ELASTIC_USER:
       from:
         secret: kibana-auth
@@ -87,7 +87,7 @@ fluentd-elasticsearch:
     auth:
       enabled: true
   env:
-      LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+    LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libjemalloc.so.2
   secret:
     - name: OUTPUT_USER
       secret_name: kibana-auth
