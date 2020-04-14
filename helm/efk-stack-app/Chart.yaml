@@ -11,14 +11,16 @@
 # express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
+apiVersion: v1
 appVersion: 1.3.0
 description: 'Open Distro for Elasticsearch'
 engine: gotpl
+home: https://github.com/giantswarm/efk-stack-app
+icon: https://github.com/giantswarm/efk-stack-app/raw/master/images/logo.png
 maintainers:
 - name: Giant Swarm applications team
   url: https://github.com/giantswarm/efk-stack-app
 name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
-version: 0.1.5
-icon: https://github.com/giantswarm/efk-stack-app/raw/master/images/logo.png
+version: [[ .Version ]]

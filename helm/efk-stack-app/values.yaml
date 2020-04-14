@@ -54,7 +54,7 @@ elasticsearch-exporter:
       giantswarm.io/monitoring-port: "9108"
   es:
     uri: http://admin:admin@efk-stack-app-opendistro-es-client-service:9200
-  
+
 fluentd-elasticsearch:
   enabled: true
   configMaps:
@@ -105,7 +105,7 @@ opendistro-es:
       opendistro_security.multitenancy.tenants.enable_private: false
       opendistro_security.multitenancy.tenants.enable_global: false
       opendistro_security.readonly_mode.roles: ["kibana_read_only"]
-      elasticsearch.requestHeadersWhitelist: ["securitytenant","Authorization"]
+      elasticsearch.requestHeadersWhitelist: ["securitytenant", "Authorization"]
 
     elasticsearchAccount:
       secret: kibana-auth
