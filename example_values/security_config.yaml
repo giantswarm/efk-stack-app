@@ -1,60 +1,14 @@
-fluentd-elasticsearch:
-  elasticsearch:
-    host: efk-stack-app-opendistro-es-client-service
-    auth:
-      user: "admin"
-      password: "test"
-
-elasticsearch-curator:
-  enabled: true
-  configMaps:
-    # Delete indices older than 7 days
-    action_file_yml: |-
-      ---
-      actions:
-        1:
-          action: delete_indices
-          description: "Clean up ES by deleting old indices"
-          options:
-            timeout_override:
-            continue_if_exception: False
-            disable_action: False
-            ignore_empty_list: True
-          filters:
-          - filtertype: age
-            source: name
-            direction: older
-            timestring: '%Y.%m.%d'
-            unit: days
-            unit_count: 3
-            field:
-            stats_result:
-            epoch:
-            exclude: False
-    # Having config_yaml WILL override the other config
-    config_yml: |-
-      ---
-      client:
-        hosts:
-          - efk-stack-app-opendistro-es-client-service
-        port: 9200
-        http_auth: admin:test
-
-elasticsearch-exporter:
-  enabled: true
-  es:
-    uri: http://admin:test@efk-stack-app-opendistro-es-client-service:9200
-
-
 opendistro-es:
   elasticsearch:
     master:
-      storageClassName: gp2
-      storage: 50Gi
+      persistence:
+        storageClass: gp2
+        size: 50Gi
 
     data:
-      storageClassName: gp2
-      storage: 100Gi
+      persistence:
+        storageClass: gp2
+        size: 100Gi
     
     # kubectl create secret generic -n efk-stack-app opendistro-security-config --from-file=config_examples/config.yml
     # kubectl create secret generic -n efk-stack-app opendistro-internal-users --from-file=config_examples/internal_users.yml

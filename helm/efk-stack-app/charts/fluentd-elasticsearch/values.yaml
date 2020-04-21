@@ -3,7 +3,7 @@ image:
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
 ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
-  tag: v2.8.0
+  tag: v3.0.0
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -57,8 +57,6 @@ resources: {}
 elasticsearch:
   auth:
     enabled: false
-    user: "yourUser"
-    password: "yourPass"
   bufferChunkLimit: "2M"
   bufferQueueLimit: 8
   host: "elasticsearch-client"
@@ -68,6 +66,7 @@ elasticsearch:
   scheme: "http"
   sslVerify: true
   sslVersion: "TLSv1_2"
+  outputType: "elasticsearch"
   typeName: "_doc"
   logLevel: "info"
 
@@ -79,19 +78,19 @@ fluentdArgs: "--no-supervisor -q"
 # If you want to add custom environment variables, use the env dict
 # You can then reference these in your config file e.g.:
 #     user "#{ENV['OUTPUT_USER']}"
-env:
+env: {}
   # OUTPUT_USER: my_user
   # LIVENESS_THRESHOLD_SECONDS: 300
   # STUCK_THRESHOLD_SECONDS: 900
 
 # If you want to add custom environment variables from secrets, use the secret list
-secret:
+secret: []
 # - name: ELASTICSEARCH_PASSWORD
 #   secret_name: elasticsearch
 #   secret_key: password
 
 # If you want to add plugins at start time
-additionalPlugins:
+additionalPlugins: []
 # - name: fluent-plugin-s3
 #   version: 1.1.11
 
@@ -199,6 +198,8 @@ serviceMonitor:
   labels: {}
   metricRelabelings: []
   relabelings: []
+  jobLabel: "app.kubernetes.io/instance"
+  type: ClusterIP
 
 serviceMetric:
   ## If true, the metrics service will be created

@@ -7,18 +7,20 @@ opendistro-es:
         kubernetes.io/tls-acme: "true"
       path: /
       hosts:
-        - kibana.5f3kb.k8s.gauss.eu-central-1.aws.gigantic.io
+        - kibana.f6cau.k8s.gauss.eu-central-1.aws.gigantic.io
       tls:
        - secretName: kibana-tls
          hosts:
-           - kibana.5f3kb.k8s.gauss.eu-central-1.aws.gigantic.io
+           - kibana.f6cau.k8s.gauss.eu-central-1.aws.gigantic.io
 
   elasticsearch:
     master:
-      storageClassName: gp2
-      storage: 50Gi
+      persistence:
+        storageClass: gp2
+        size: 50Gi
 
     data:
-      storageClassName: gp2
-      storage: 100Gi
+      persistence:
+        storageClass: gp2
+        size: 100Gi
     
