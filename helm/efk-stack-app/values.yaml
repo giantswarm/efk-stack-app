@@ -45,7 +45,7 @@ elasticsearch-curator:
             epoch:
             exclude: False
     # Having config_yaml WILL override the other config
-    # Check workarround https://github.com/elastic/curator/issues/1440#issuecomment-522409936
+    # Check workaround https://github.com/elastic/curator/issues/1440#issuecomment-522409936
     config_yml: |-
       ---
       client:
