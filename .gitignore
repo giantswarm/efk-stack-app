@@ -1,2 +1,5 @@
 deploy.yaml
 upstream
+.pytest-kind
+__pycache__
+.kube
