@@ -56,7 +56,7 @@ Log collector and parser that will send pod logs to ElasticSearch.
 
 This chart is composed of multiple helm charts and each can be configured from a single values file with the following format:
 
-``` 
+```
 opendistro-certs:
   Check ./helm/efk-stack-app/charts/opendistro-certs/values.yaml
 
@@ -73,11 +73,21 @@ opendistro-es:
   Check ./helm/efk-stack-app/charts/opendistro-es/values.yaml
 ```
 
-Check [deafult values file](./helm/efk-stack-app/values.yaml) for all components. 
+Check [default values file](./helm/efk-stack-app/values.yaml) for all components.
 
 This configuration has been tuned by our team to give sane defaults for all components and modifying the internal_users.yaml file should be enough in most cases.
 
 ## Example Configurations
+
+Here are some example configurations for getting this App running on your cluster.
+Make sure you change the `hosts:` keys to something that matches your installation
+and cluster id.
+
+The files here can be downloaded, edited, and uploaded directly as the 'values.yaml'
+during the installation step in our Web UI. If you are not using the web interface
+to install your app, then you must place these values into a user level ConfigMap formatted
+in the right way and reference it from the App CR. Read our [reference on app configuration](https://docs.giantswarm.io/reference/app-configuration/) for more details.
+
 
 [AWS Example Configuration](./example_values/ingress_enabled_aws.yaml)
 
@@ -96,14 +106,14 @@ This configuration has been tuned by our team to give sane defaults for all comp
     Modify internal_users.yml before deploying the application
 
     Default user: admin/test
-    
+
     You will need to create additional resources in kubernetes to make it more secure:
 
         $ kubectl create secret generic -n efk-stack-app opendistro-security-config --from-file=config_examples/config.yml
         $ kubectl create secret generic -n efk-stack-app opendistro-internal-users --from-file=config_examples/internal_users.yml
 
     You need to change the password values in internal_users.yml file and adjust the values in security_config.yaml accordingly.
-    
+
 
 ## Credit
 
