@@ -115,6 +115,7 @@ in the right way and reference it from the App CR. Read our [reference on app co
     You need to change the password values in internal_users.yml file and adjust the values in security_config.yaml accordingly.
 
 
+
 ## Credit
 
 * https://github.com/opendistro-for-elasticsearch/community/tree/master/open-distro-elasticsearch-kubernetes
