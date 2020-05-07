@@ -1,0 +1,11 @@
+owner: giantswarm
+scaling:
+  min: 3
+  max: 3
+workers:
+- memory:
+    size_gb: 16
+  cpu:
+    cores: 8
+  storage:
+    size_gb: 100
