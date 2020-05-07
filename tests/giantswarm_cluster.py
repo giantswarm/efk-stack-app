@@ -6,7 +6,6 @@ import random
 
 import requests
 import yaml
-# from pykube import Pod
 import pykube
 import pytest
 
@@ -22,8 +21,6 @@ import json
 
 
 class GiantswarmCluster(Cluster):
-    def __init__(self, name: str = None):
-        self.name = name
 
     def create(
         self, 
@@ -47,7 +44,6 @@ class GiantswarmCluster(Cluster):
                 --endpoint={self.endpoint}
                 --password={self.password}
         """
-        # subprocess.run(login_cmd.split(), encoding="utf-8", check=True)
         out = subprocess.check_output(login_cmd.split(), encoding="utf-8")
 
         list_cmd = f"""
@@ -87,18 +83,20 @@ class GiantswarmCluster(Cluster):
                 --certificate-organizations=system:masters
                 --cluster={self.id}
                 --description=pytest
+                --self-contained={self.kubeconfig_path}
+                --force
         """
         subprocess.run(kubeconfig_cmd.split(), encoding="utf-8", check=True)
 
         cluster_ready = False
         while not cluster_ready:
-            cp = subprocess.run(["kubectl", "cluster-info"])
+            cp = subprocess.run([self.kubectl_path, f"--kubeconfig={self.kubeconfig_path}", "cluster-info"])
             if not cp.returncode:
                 cluster_ready = True
             else:
                 time.sleep(2)
 
-        config = pykube.KubeConfig.from_file("/root/.kube/config")
+        config = pykube.KubeConfig.from_file(self.kubeconfig_path)
         self.api = pykube.HTTPClient(config)
 
 
@@ -106,28 +104,6 @@ class GiantswarmCluster(Cluster):
     def load_docker_image(self, docker_image: str):
         pass
 
-
-    def kubectl(self, *args: str, **kwargs) -> str:
-        """Run a kubectl command against the cluster and return the output as string"""
-        # self.ensure_kubectl()
-        return subprocess.check_output(
-            ["kubectl", *args],
-            # env={"KUBECONFIG": str(self.kubeconfig_path)},
-            encoding="utf-8",
-            **kwargs,
-        )
-
-    # # not yet implemented
-    # @contextmanager
-    # def port_forward(
-    #     self,
-    #     service_or_pod_name: str,
-    #     remote_port: int,
-    #     *args,
-    #     local_port: int = None,
-    #     retries: int = 10,
-    # ) -> Generator[int, None, None]:
-    #     pass
 
     def delete(self):
         """Delete the Giant Swarm cluster ("kind delete cluster")"""
