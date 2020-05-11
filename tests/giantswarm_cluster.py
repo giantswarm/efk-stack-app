@@ -1,34 +1,34 @@
-import subprocess
+import json
 import logging
-from pathlib import Path
-from tempfile import NamedTemporaryFile
-import random
-
-import requests
-import yaml
-import pykube
-import pytest
-
-from functools import partial
+import subprocess
 import time
+from pathlib import Path
+from typing import Union
 
-from contextlib import contextmanager
-from typing import Generator, Union
+import yaml
+
+import pykube
 
 from .cluster import Cluster
 
-import json
+# @dataclass
+# class GiantswarmClusterConfig:
 
 
 class GiantswarmCluster(Cluster):
 
+    # FIXME
+    # Refactor, see cluster.py
+
     def create(
-        self, 
+        self,
         name,
         endpoint,
         email,
         password,
-        config_file: Union[str, Path] = None):
+        config=None,
+        config_file: Union[str, Path] = None,
+    ):
         """Create the cluster if it does not exist (otherwise re-use)"""
 
         self.name = name
@@ -37,7 +37,9 @@ class GiantswarmCluster(Cluster):
         self.password = password
         self.owner = "giantswarm"
         self.id = None
-
+        self.config = config
+        if not config_file:
+            config_file = "-"
 
         login_cmd = f"""
             gsctl login {self.email}
@@ -68,7 +70,9 @@ class GiantswarmCluster(Cluster):
                     --owner={self.owner}
                     --file={config_file}
             """
-            subprocess.run(create_cmd.split(), check=True)
+            subprocess.run(
+                create_cmd.split(), stdin=yaml.safe_load(self.config), check=True
+            )
             cluster_exists = True
 
         out = subprocess.check_output(list_cmd.split(), encoding="utf-8")
@@ -76,7 +80,7 @@ class GiantswarmCluster(Cluster):
         for cluster in json.loads(out):
             if cluster["name"] == self.name:
                 self.id = cluster["id"]
-        
+
         kubeconfig_cmd = f"""
             gsctl create kubeconfig
                 --ttl=1h
@@ -90,7 +94,13 @@ class GiantswarmCluster(Cluster):
 
         cluster_ready = False
         while not cluster_ready:
-            cp = subprocess.run([self.kubectl_path, f"--kubeconfig={self.kubeconfig_path}", "cluster-info"])
+            cp = subprocess.run(
+                [
+                    self.kubectl_path,
+                    f"--kubeconfig={self.kubeconfig_path}",
+                    "cluster-info",
+                ]
+            )
             if not cp.returncode:
                 cluster_ready = True
             else:
@@ -99,16 +109,11 @@ class GiantswarmCluster(Cluster):
         config = pykube.KubeConfig.from_file(self.kubeconfig_path)
         self.api = pykube.HTTPClient(config)
 
-
     # not implemented
     def load_docker_image(self, docker_image: str):
         pass
 
-
     def delete(self):
-        """Delete the Giant Swarm cluster ("kind delete cluster")"""
+        """Delete the cluster"""
         logging.info(f"Deleting cluster {self.name}..")
-        subprocess.run(
-            ["gsctl", "delete", "cluster", "--force", self.id],
-            check=True,
-        )
+        subprocess.run(["gsctl", "delete", "cluster", "--force", self.id], check=True)
