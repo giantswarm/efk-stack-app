@@ -13,6 +13,7 @@ import yaml
 from .giantswarm_cluster import GiantswarmCluster
 from .kind_cluster import KindCluster
 
+
 # from pytest_kube import KindCluster, GiantswarmCluster
 
 
@@ -90,7 +91,7 @@ def test_kubernetes_chart_museum(cluster_create):
     assert cluster.api.version in [("1", "16"), ("1", "17"), ("1", "18")]
 
 
-@skip
+# @skip
 def test_helm(cluster_create):
     cluster = cluster_create(**cluster_setting)
 
@@ -99,13 +100,17 @@ def test_helm(cluster_create):
     )
 
     chart_path = Path(".") / "helm" / "efk-stack-app"
-    subprocess.check_output(
-        ["helm", "template", "helm-test-efk", chart_path], encoding="utf-8"
-    )
+    # subprocess.check_output(
+    #     ["helm", "template", "helm-test-efk", chart_path], encoding="utf-8"
+    # )
 
     with NamedTemporaryFile(mode="w+") as tmp:
+        helm_template_cmd = f"""
+            helm template helm-test-efk {chart_path}
+                --values={Path(__file__).parent / "values-one-node.yaml"}
+        """
         rendered_manifests = subprocess.check_output(
-            ["helm", "template", "helm-test-efk", chart_path], encoding="utf-8"
+            helm_template_cmd.split(), encoding="utf-8"
         )
 
         resources = list(yaml.safe_load_all(rendered_manifests))
@@ -117,19 +122,11 @@ def test_helm(cluster_create):
     namespace = "default"
 
     cluster.kubectl(
-        "-n",
-        namespace,
-        "rollout",
-        "status",
-        "statefulset/helm-test-efk-opendistro-es-master",
+        *f"""
+        -n {namespace} rollout status statefulset/helm-test-efk-opendistro-es-master
+    """.split()
     )
-    cluster.kubectl(
-        "-n",
-        namespace,
-        "rollout",
-        "status",
-        "statefulset/helm-test-efk-opendistro-es-data",
-    )
+
     cluster.kubectl(
         "-n",
         namespace,
@@ -138,11 +135,13 @@ def test_helm(cluster_create):
         "deployment/helm-test-efk-opendistro-es-kibana",
     )
 
-    all_masters_initialized = False
+    # FIXME wait for answer on servide port?
 
+    # all_masters_initialized = False
+    
     # while not all_masters_initialized:
     #     all_masters_initialized = True
-
+    
     #     # does not work if cluster is already up for longer time..
     #     for pod in Pod.objects(cluster.api).filter(selector="statefulset.kubernetes.io/pod-name=helm-test-efk-opendistro-es-master-0"):
     #         # assert "Node 'helm-test-efk-opendistro-es-master-0' initialized" in pod.logs()
@@ -159,7 +158,7 @@ def test_helm(cluster_create):
         assert "You Know, for Search" in r.text
 
 
-@skip
+# @skip
 def test_elasticsearch_unauthorized(cluster_create):
     cluster = cluster_create(**cluster_setting)
 

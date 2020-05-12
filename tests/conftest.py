@@ -19,8 +19,9 @@ def cluster_create(request):
         nonlocal cluster
 
         if not cluster:
-            cluster = cluster_cls(kwargs.pop("name"))
-            cluster.create(*args, **kwargs)
+            cluster = cluster_cls(*args, **kwargs)
+            # cluster = cluster_cls(kwargs.pop("name"))
+            # cluster.create(*args, **kwargs)
 
         return cluster
 

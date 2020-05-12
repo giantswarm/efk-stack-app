@@ -1,0 +1,197 @@
+opendistro-certs:
+  enabled: true
+  organization: Giant Swarm
+  expiration: 5 years
+
+elasticsearch-curator:
+  enabled: true
+  env:
+    ELASTIC_CREDS: $(ELASTIC_USER):$(ELASTIC_PASS)
+  envFromSecrets:
+    ELASTIC_USER:
+      from:
+        secret: kibana-auth
+        key: username
+    ELASTIC_PASS:
+      from:
+        secret: kibana-auth
+        key: password
+  command: ["/usr/bin/curator"]
+  image:
+    repository: quay.io/giantswarm/bobrik-curator
+    tag: 5.8.1
+  configMaps:
+    # Delete indices older than 7 days
+    action_file_yml: |-
+      ---
+      actions:
+        1:
+          action: delete_indices
+          description: "Clean up ES by deleting old indices"
+          options:
+            timeout_override:
+            continue_if_exception: False
+            disable_action: False
+            ignore_empty_list: True
+          filters:
+          - filtertype: age
+            source: name
+            direction: older
+            timestring: '%Y.%m.%d'
+            unit: days
+            unit_count: 7
+            field:
+            stats_result:
+            epoch:
+            exclude: False
+    # Having config_yaml WILL override the other config
+    # Check workaround https://github.com/elastic/curator/issues/1440#issuecomment-522409936
+    config_yml: |-
+      ---
+      client:
+        hosts:
+          - efk-stack-app-opendistro-es-client-service
+        port: 9200
+        http_auth: ${ELASTIC_CREDS}
+
+elasticsearch-exporter:
+  enabled: true
+  image:
+    repository: quay.io/giantswarm/elasticsearch_exporter
+    tag: 1.1.0
+  service:
+    annotations:
+      giantswarm.io/monitoring: "true"
+      giantswarm.io/monitoring-path: /metrics
+      giantswarm.io/monitoring-port: "9108"
+  envFromSecret: "kibana-auth"
+  es:
+    uri: http://$(username):$(password)@efk-stack-app-opendistro-es-client-service:9200
+
+fluentd-elasticsearch:
+  enabled: true
+  configMaps:
+    useDefaults:
+      systemConf: true
+      systemInputConf: false
+  podSecurityPolicy:
+    enabled: true
+  image:
+    repository: quay.io/giantswarm/fluentd
+    tag: v3.0.0
+  elasticsearch:
+    host: efk-stack-app-opendistro-es-client-service
+    logstashPrefix: "fluentd"
+    sslVerify: false
+    scheme: "http"
+    auth:
+      enabled: true
+  env:
+    LD_PRELOAD: /usr/lib/x86_64-linux-gnu/libjemalloc.so.2
+  secret:
+    - name: OUTPUT_USER
+      secret_name: kibana-auth
+      secret_key: username
+    - name: OUTPUT_PASSWORD
+      secret_name: kibana-auth
+      secret_key: password
+
+opendistro-es:
+  enabled: true
+
+  kibana:
+    enabled: true
+    image: quay.io/giantswarm/opendistro-for-elasticsearch-kibana
+    imageTag: 1.6.0
+
+    config:
+      server.name: kibana
+      server.host: "0"
+
+      elasticsearch.hosts: http://efk-stack-app-opendistro-es-client-service:9200
+      elasticsearch.requestTimeout: 360000
+
+      logging.verbose: false
+
+      opendistro_security.cookie.secure: true
+      opendistro_security.cookie.password: ${COOKIE_PASS}
+
+      elasticsearch.username: ${ELASTICSEARCH_USERNAME}
+      elasticsearch.password: ${ELASTICSEARCH_PASSWORD}
+
+      # Multitenancy with global/private tenants disabled,
+      # set to both to true if you want them to be available.
+      opendistro_security.multitenancy.enabled: false
+      opendistro_security.multitenancy.tenants.enable_private: false
+      opendistro_security.multitenancy.tenants.enable_global: false
+      opendistro_security.readonly_mode.roles: ["kibana_read_only"]
+      elasticsearch.requestHeadersWhitelist: ["securitytenant", "Authorization"]
+
+    elasticsearchAccount:
+      secret: kibana-auth
+
+  elasticsearch:
+    master:
+      enabled: true
+      replicas: 1
+      persistence:
+        storageClassName: default
+        size: 50Gi
+
+    initContainer:
+      image: busybox
+      imageTag: 1.31.0
+
+    data:
+      enabled: true
+      replicas: 1
+      persistence:
+        storageClassName: default
+        size: 100Gi
+
+    client:
+      enabled: true
+      replicas: 1
+      ingress:
+        enabled: false
+
+    ssl:
+      transport:
+        enabled: true
+        existingCertSecret: opendistro-transport-certs
+
+    config:
+      # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example
+      opendistro_security.audit.ignore_users: ["admin"]
+      opendistro_security.allow_unsafe_democertificates: false
+      # Set to false if running securityadmin.sh manually following deployment
+      opendistro_security.allow_default_init_securityindex: true
+      # See: https://opendistro.github.io/for-elasticsearch-docs/docs/security-audit-logs/
+      opendistro_security.audit.type: internal_elasticsearch
+      # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L27
+      opendistro_security.roles_mapping_resolution: BOTH
+      opendistro_security.restapi.roles_enabled: ["all_access", "security_rest_api_access"]
+
+      node:
+        max_local_storage_nodes: 1
+        attr.box_type: hot
+
+      # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L17
+      opendistro_security.nodes_dn:
+        - "*"
+
+      processors: ${PROCESSORS:1}
+
+      thread_pool.write.queue_size: 800
+
+      http:
+        compression: true
+
+      # TLS Configuration Transport Layer
+      opendistro_security.ssl.transport.enforce_hostname_verification: false
+      opendistro_security.ssl.transport.pemcert_filepath: elk-transport-crt.pem
+      opendistro_security.ssl.transport.pemkey_filepath: elk-transport-key.pem
+      opendistro_security.ssl.transport.pemtrustedcas_filepath: elk-transport-root-ca.pem
+
+    image: quay.io/giantswarm/opendistro-for-elasticsearch
+    imageTag: 1.6.0

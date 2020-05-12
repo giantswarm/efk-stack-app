@@ -7,12 +7,17 @@ from .cluster import Cluster
 # based on https://github.com/hjacobs/pytest-kind/blob/master/pytest_kind/cluster.py
 # but uses different __init__ from Cluster
 
+
 class KindCluster(Cluster):
-    super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, name=kwargs.pop("name"), **kwargs)
 
-    self.kind_path = Path("/usr/local/bin/kind")
+        self.kind_path = Path("/usr/local/bin/kind")
+        self.__create(*args, **kwargs)
 
-    def create(self, *args, **kwargs):
+    def __create(self, *args, **kwargs):
         """Creates the cluster"""
         # FIXME what if cluster exists?
-        return KindCluster.create(self, *args, **kwargs)
+        # FIXME should return pykube.HTTPClient or so.
+        # at the moment it is set at self.api
+        return KindClusterUpstream.create(self, *args, **kwargs)

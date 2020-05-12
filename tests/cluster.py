@@ -6,7 +6,8 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator, Union
 
-from pytest_kind import KindCluster
+# from pytest_kind import KindCluster
+from pytest_kind import KindCluster as KindClusterUpstream
 
 
 class Cluster:
@@ -29,7 +30,7 @@ class Cluster:
       expected
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, *args, **kwargs):
         self.name = name
 
         # FIXME not sure: could also be a temporary directory?
@@ -77,9 +78,13 @@ class Cluster:
     def ensure_kubectl(self):
         pass
 
+    # def kubectl(self, *args: str, **kwargs) -> str:
+    #     """Run a kubectl command against the cluster and return the output as string"""
+    #     return KindCluster.kubectl(self, *args, **kwargs)
+
     def kubectl(self, *args: str, **kwargs) -> str:
         """Run a kubectl command against the cluster and return the output as string"""
-        return KindCluster.kubectl(self, *args, **kwargs)
+        return KindClusterUpstream.kubectl(self, *args, **kwargs)
 
     # def helm(self, *args: str, **kwargs) -> str:
     #     """Run a kubectl command against the cluster and return the output as string"""
@@ -94,14 +99,11 @@ class Cluster:
     # def kustomize(self, *args: str, **kwargs) -> str:
     #     pass
 
-    @contextmanager
-    def port_forward(
-        self,
-        service_or_pod_name: str,
-        remote_port: int,
-        *args,
-        local_port: int = None,
-        retries: int = 10,
-    ) -> Generator[int, None, None]:
+    # @contextmanager
+    def port_forward(self, *args, **kwargs) -> Generator[int, None, None]:
         """Run "kubectl port-forward" for the given service/pod and use a random local port"""
-        return KindCluster.port_forward(self, *args, **kwargs)
+        return KindClusterUpstream.port_forward(self, *args, **kwargs)
+
+    def delete(self, *args, **kwargs) -> Generator[int, None, None]:
+        """Run "kubectl port-forward" for the given service/pod and use a random local port"""
+        return KindClusterUpstream.delete(self, *args, **kwargs)
