@@ -1,7 +1,8 @@
 import pytest
 
-# from .cluster import Cluster
-from pytest_kube import Cluster
+from .cluster import Cluster
+
+# from pytest_kube import Cluster
 
 from functools import partial
 
@@ -17,11 +18,8 @@ def cluster_create(request):
         # name = request.config.getoption("cluster_name")
 
         nonlocal cluster
-
         if not cluster:
             cluster = cluster_cls(*args, **kwargs)
-            # cluster = cluster_cls(kwargs.pop("name"))
-            # cluster.create(*args, **kwargs)
 
         return cluster
 

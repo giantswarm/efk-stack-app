@@ -29,27 +29,19 @@ skip = pytest.mark.skipif("True")
 #     "config_file": Path(__file__).parent / "giantswarm-cluster-azure.yaml"
 # }
 
-# cluster_setting = {
-#     "cluster_cls": GiantswarmCluster,
-#     "name": "pytest-cluster",
-#     # "endpoint": "https://api.g8s.ghost.westeurope.azure.gigantic.io",
-#     "endpoint": "https://api.g8s.godsmack.westeurope.azure.gigantic.io",
-#     "email": os.environ['GSCTL_EMAIL'],
-#     "password": os.environ['GSCTL_PASSWORD'],
-#     # "config_file": Path(__file__).parent / "giantswarm-cluster-azure.yaml"
-#     "config": {
-#         "owner": "giantswarm",
-#         "scaling": {
-#             "min": 3,
-#             "max": 3
-#         },
-#         "workers": [{
-#             "azure": {
-#                 "vm_size": "Standard_D4s_v3"
-#             }
-#         }]
-#     }
-# }
+cluster_setting_godsmack = {
+    "cluster_cls": GiantswarmCluster,
+    "name": "pytest-godsmack",
+    # "endpoint": "https://api.g8s.ghost.westeurope.azure.gigantic.io",
+    "endpoint": "https://api.g8s.godsmack.westeurope.azure.gigantic.io",
+    "email": os.environ["GSCTL_EMAIL"],
+    "password": os.environ["GSCTL_PASSWORD"],
+    "config": {
+        "owner": "giantswarm",
+        "scaling": {"min": 3, "max": 3},
+        "workers": [{"azure": {"vm_size": "Standard_D4s_v3"}}],
+    },
+}
 
 
 # cluster_setting = {
@@ -68,11 +60,13 @@ skip = pytest.mark.skipif("True")
 #     "config_file": Path(__file__).parent / "giantswarm-cluster-aws.yaml"
 # }
 
-cluster_setting = {
+cluster_setting_kind = {
     "cluster_cls": KindCluster,
     "name": "pytest-kind12",
     "config_file": Path(__file__).parent / "kind-config.yaml",
 }
+
+cluster_setting = cluster_setting_godsmack
 
 
 def test_kubernetes_version(cluster_create):
@@ -81,7 +75,7 @@ def test_kubernetes_version(cluster_create):
     # assert cluster.api.version == ("1", "16")
     assert cluster.api.version in [("1", "16"), ("1", "17"), ("1", "18")]
 
-
+@skip
 def test_kubernetes_chart_museum(cluster_create):
     cluster = cluster_create(**cluster_setting)
 
@@ -138,10 +132,10 @@ def test_helm(cluster_create):
     # FIXME wait for answer on servide port?
 
     # all_masters_initialized = False
-    
+
     # while not all_masters_initialized:
     #     all_masters_initialized = True
-    
+
     #     # does not work if cluster is already up for longer time..
     #     for pod in Pod.objects(cluster.api).filter(selector="statefulset.kubernetes.io/pod-name=helm-test-efk-opendistro-es-master-0"):
     #         # assert "Node 'helm-test-efk-opendistro-es-master-0' initialized" in pod.logs()

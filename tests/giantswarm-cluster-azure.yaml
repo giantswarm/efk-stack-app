@@ -1,7 +1,0 @@
-owner: giantswarm
-scaling:
-  min: 3
-  max: 3
-workers:
-- azure:
-    vm_size: Standard_D4s_v3

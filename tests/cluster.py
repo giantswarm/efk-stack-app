@@ -6,7 +6,6 @@ from contextlib import contextmanager
 from pathlib import Path
 from typing import Generator, Union
 
-# from pytest_kind import KindCluster
 from pytest_kind import KindCluster as KindClusterUpstream
 
 
@@ -30,7 +29,8 @@ class Cluster:
       expected
     """
 
-    def __init__(self, name: str, *args, **kwargs):
+    # def __init__(self, name: str, *args, **kwargs):
+    def __init__(self, name: str):
         self.name = name
 
         # FIXME not sure: could also be a temporary directory?
