@@ -1,36 +1,27 @@
 import logging
 import os
 import subprocess
+import time
 from pathlib import Path
 from tempfile import NamedTemporaryFile
 
-from pykube import Pod
-import pytest
 import requests
-import time
 import yaml
 
-from .giantswarm_cluster import GiantswarmCluster
-from .kind_cluster import KindCluster
+import pytest
+from pykube import Pod
 
+from .giantswarm_cluster_gsctl import GiantswarmClusterGsctl
+from .kind_cluster import KindCluster
 
 # from pytest_kube import KindCluster, GiantswarmCluster
 
 
 skip = pytest.mark.skipif("True")
 
-# cluster_setting = {
-#     "cluster_cls": GiantswarmCluster,
-#     "name": "pytest-cluster",
-#     # "endpoint": "https://api.g8s.ghost.westeurope.azure.gigantic.io",
-#     "endpoint": "https://api.g8s.godsmack.westeurope.azure.gigantic.io",
-#     "email": os.environ['GSCTL_EMAIL'],
-#     "password": os.environ['GSCTL_PASSWORD'],
-#     "config_file": Path(__file__).parent / "giantswarm-cluster-azure.yaml"
-# }
 
 cluster_setting_godsmack = {
-    "cluster_cls": GiantswarmCluster,
+    "cluster_cls": GiantswarmClusterGsctl,
     "name": "pytest-godsmack",
     # "endpoint": "https://api.g8s.ghost.westeurope.azure.gigantic.io",
     "endpoint": "https://api.g8s.godsmack.westeurope.azure.gigantic.io",
@@ -43,14 +34,27 @@ cluster_setting_godsmack = {
     },
 }
 
-
-# cluster_setting = {
-#     "name": "pytest-cluster",
-#     "endpoint": "https://api.g8s.geckon.gridscale.kvm.gigantic.io",
-#     "email": os.environ['GSCTL_EMAIL'],
-#     "password": os.environ['GSCTL_PASSWORD'],
-#     "config_file": Path(__file__).parent / "giantswarm-cluster-kvm.yaml"
-# }
+cluster_setting_gorgoth = {
+    "cluster_cls": GiantswarmClusterGsctl,
+    "name": "pytest-gorgoth",
+    # "endpoint": "https://api.g8s.geckon.gridscale.kvm.gigantic.io",
+    "endpoint": "https://api.g8s.gorgoth.gridscale.kvm.gigantic.io",
+    "email": os.environ["GSCTL_EMAIL"],
+    "password": os.environ["GSCTL_PASSWORD"],
+    # "config_file": Path(__file__).parent / "giantswarm-cluster-kvm.yaml",
+    "config": {
+        # "release": "11.3.1",
+        "owner": "giantswarm",
+        "scaling": {"min": 3, "max": 3},
+        "workers": [
+            {
+                "memory": {"size_gb": 16},
+                "cpu": {"cores": 8},
+                "storage": {"size_gb": 100},
+            }
+        ],
+    },
+}
 
 # cluster_setting = {
 #     "name": "pytest-cluster",
@@ -66,7 +70,7 @@ cluster_setting_kind = {
     "config_file": Path(__file__).parent / "kind-config.yaml",
 }
 
-cluster_setting = cluster_setting_godsmack
+cluster_setting = cluster_setting_gorgoth
 
 
 def test_kubernetes_version(cluster_create):
@@ -74,6 +78,7 @@ def test_kubernetes_version(cluster_create):
 
     # assert cluster.api.version == ("1", "16")
     assert cluster.api.version in [("1", "16"), ("1", "17"), ("1", "18")]
+
 
 @skip
 def test_kubernetes_chart_museum(cluster_create):

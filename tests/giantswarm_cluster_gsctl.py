@@ -20,7 +20,7 @@ from .cluster import Cluster
 # or GiantswarmClusterGsctl
 
 
-class GiantswarmCluster(Cluster):
+class GiantswarmClusterGsctl(Cluster):
     def __init__(
         self,
         name,
