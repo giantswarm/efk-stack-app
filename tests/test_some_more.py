@@ -11,10 +11,10 @@ import yaml
 import pytest
 from pykube import Pod
 
-from .giantswarm_cluster_gsctl import GiantswarmClusterGsctl
-from .kind_cluster import KindCluster
+# from .giantswarm_cluster_gsctl import GiantswarmClusterGsctl
+# from .kind_cluster import KindCluster
 
-# from pytest_kube import KindCluster, GiantswarmCluster
+from pytest_kube import KindCluster, GiantswarmClusterGsctl, ExistingCluster
 
 
 skip = pytest.mark.skipif("True")
@@ -25,8 +25,8 @@ cluster_setting_godsmack = {
     "name": "pytest-godsmack",
     # "endpoint": "https://api.g8s.ghost.westeurope.azure.gigantic.io",
     "endpoint": "https://api.g8s.godsmack.westeurope.azure.gigantic.io",
-    "email": os.environ["GSCTL_EMAIL"],
-    "password": os.environ["GSCTL_PASSWORD"],
+    "email": os.environ.get("GSCTL_EMAIL", ""),
+    "password": os.environ.get("GSCTL_PASSWORD"),
     "config": {
         "owner": "giantswarm",
         "scaling": {"min": 3, "max": 3},
@@ -39,8 +39,8 @@ cluster_setting_gorgoth = {
     "name": "pytest-gorgoth",
     # "endpoint": "https://api.g8s.geckon.gridscale.kvm.gigantic.io",
     "endpoint": "https://api.g8s.gorgoth.gridscale.kvm.gigantic.io",
-    "email": os.environ["GSCTL_EMAIL"],
-    "password": os.environ["GSCTL_PASSWORD"],
+    "email": os.environ.get("GSCTL_EMAIL", ""),
+    "password": os.environ.get("GSCTL_PASSWORD"),
     # "config_file": Path(__file__).parent / "giantswarm-cluster-kvm.yaml",
     "config": {
         # "release": "11.3.1",
@@ -67,10 +67,24 @@ cluster_setting_gorgoth = {
 cluster_setting_kind = {
     "cluster_cls": KindCluster,
     "name": "pytest-kind12",
+    # FIXME config wins over config_file
+    # "config": {
+    # }
     "config_file": Path(__file__).parent / "kind-config.yaml",
 }
 
-cluster_setting = cluster_setting_gorgoth
+cluster_setting_existing1 = {
+    "cluster_cls": ExistingCluster,
+    "name": "pytest-existing1",
+    
+    # "config_file": Path(__file__).parent / "kind-config.yaml",
+    # "kubeconfig_path": Path(".") / ".pytest-kube" / "existing1-config.yaml",
+    # "kubeconfig_path": Path(__file__).parent / "kubeconfig.yaml"
+    "kubeconfig_path": Path(".") / ".pytest-kube" / "kubeconfig_minikube"
+}
+
+
+cluster_setting = cluster_setting_existing1
 
 
 def test_kubernetes_version(cluster_create):
@@ -116,8 +130,6 @@ def test_helm(cluster_create):
         yaml.dump_all(documents=resources, stream=tmp)
         cluster.kubectl("apply", "-f", tmp.name)
 
-    # breakpoint()
-
     namespace = "default"
 
     cluster.kubectl(
@@ -126,13 +138,13 @@ def test_helm(cluster_create):
     """.split()
     )
 
-    cluster.kubectl(
-        "-n",
-        namespace,
-        "rollout",
-        "status",
-        "deployment/helm-test-efk-opendistro-es-kibana",
-    )
+    # cluster.kubectl(
+    #     "-n",
+    #     namespace,
+    #     "rollout",
+    #     "status",
+    #     "deployment/helm-test-efk-opendistro-es-kibana",
+    # )
 
     # FIXME wait for answer on servide port?
 
