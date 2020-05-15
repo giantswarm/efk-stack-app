@@ -20,13 +20,12 @@ from pytest_kube import KindCluster, GiantswarmClusterGsctl, ExistingCluster
 skip = pytest.mark.skipif("True")
 
 
-cluster_setting_godsmack = {
+cluster_setting_azure = {
     "cluster_cls": GiantswarmClusterGsctl,
-    "name": "pytest-godsmack",
-    # "endpoint": "https://api.g8s.ghost.westeurope.azure.gigantic.io",
-    "endpoint": "https://api.g8s.godsmack.westeurope.azure.gigantic.io",
-    "email": os.environ.get("GSCTL_EMAIL", ""),
-    "password": os.environ.get("GSCTL_PASSWORD"),
+    "name": "pytest-gs-azure",
+    "email": os.environ.get("GSCTL_ENDPOINT", None),
+    "email": os.environ.get("GSCTL_EMAIL", None),
+    "password": os.environ.get("GSCTL_PASSWORD", None),
     "config": {
         "owner": "giantswarm",
         "scaling": {"min": 3, "max": 3},
@@ -34,14 +33,13 @@ cluster_setting_godsmack = {
     },
 }
 
-cluster_setting_gorgoth = {
+cluster_setting_kvm = {
     "cluster_cls": GiantswarmClusterGsctl,
-    "name": "pytest-gorgoth",
-    # "endpoint": "https://api.g8s.geckon.gridscale.kvm.gigantic.io",
-    "endpoint": "https://api.g8s.gorgoth.gridscale.kvm.gigantic.io",
-    "email": os.environ.get("GSCTL_EMAIL", ""),
-    "password": os.environ.get("GSCTL_PASSWORD"),
-    # "config_file": Path(__file__).parent / "giantswarm-cluster-kvm.yaml",
+    "name": "pytest-gs-kvm",
+    "email": os.environ.get("GSCTL_ENDPOINT", None),
+    "email": os.environ.get("GSCTL_EMAIL", None),
+    "password": os.environ.get("GSCTL_PASSWORD", None),
+    # "config_file": Path(__file__).parent / "pytest-gs-kvm.yaml",
     "config": {
         # "release": "11.3.1",
         "owner": "giantswarm",
@@ -56,30 +54,36 @@ cluster_setting_gorgoth = {
     },
 }
 
-# cluster_setting = {
-#     "name": "pytest-cluster",
-#     "endpoint": "https://api.g8s.gauss.eu-central-1.aws.gigantic.io",
-#     "email": os.environ['GSCTL_EMAIL'],
-#     "password": os.environ['GSCTL_PASSWORD'],
-#     "config_file": Path(__file__).parent / "giantswarm-cluster-aws.yaml"
-# }
+cluster_setting_aws = {
+    "name": "pytest-gs-aws",
+    "email": os.environ.get("GSCTL_ENDPOINT", None),
+    "email": os.environ.get("GSCTL_EMAIL", None),
+    "password": os.environ.get("GSCTL_PASSWORD", None),
+    # "config_file": Path(__file__).parent / "pytest-gs-aws.yaml"
+    "config": {
+
+    }
+}
 
 cluster_setting_kind = {
     "cluster_cls": KindCluster,
-    "name": "pytest-kind12",
+    "name": "pytest-kind",
+    "config_file": Path(__file__).parent / "pytest-kind.yaml",
     # FIXME config wins over config_file
     # "config": {
     # }
-    "config_file": Path(__file__).parent / "kind-config.yaml",
 }
+
+# export KUBECONFIG=$PWD/.pytest-kube/kubeconfig_minikube
+# minikube start \
+#     --kubernetes-version=v1.18.2 \
+#     --driver=docker \
+#     --embed-certs
+# minikube update-context
 
 cluster_setting_existing1 = {
     "cluster_cls": ExistingCluster,
-    "name": "pytest-existing1",
-    
-    # "config_file": Path(__file__).parent / "kind-config.yaml",
-    # "kubeconfig_path": Path(".") / ".pytest-kube" / "existing1-config.yaml",
-    # "kubeconfig_path": Path(__file__).parent / "kubeconfig.yaml"
+    "name": "pytest-existing",
     "kubeconfig_path": Path(".") / ".pytest-kube" / "kubeconfig_minikube"
 }
 
