@@ -5,9 +5,12 @@ orbs:
 jobs:
   run_pytest_kube:
     machine:
-      image: ubuntu-1604:201903-01
+      # image: ubuntu-1604:201903-01
+      image: ubuntu-1604:202004-01
     steps:
     - checkout
+    - run: |
+        sed -i 's/\[\[ .Version ]]/0.1.0/g' ./helm/efk-stack-app/Chart.yaml
     - run: |
         docker run -ti \
           -v /var/run/docker.sock:/var/run/docker.sock \
