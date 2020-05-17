@@ -20,7 +20,7 @@ jobs:
 workflows:
   build:
     jobs:
-    - run_pykube_test:
+    - run_pytest_kube:
         name: "Run pytest-kube"
   package-and-push-chart-on-tag:
     jobs:
