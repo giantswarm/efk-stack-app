@@ -8,8 +8,7 @@ jobs:
       image: ubuntu-1604:201903-01
     steps:
     - checkout
-    - run:
-      command: |
+    - run: |
         docker run -ti \
           -v /var/run/docker.sock:/var/run/docker.sock \
           --network host \
