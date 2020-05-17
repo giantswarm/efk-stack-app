@@ -18,10 +18,12 @@ jobs:
             python -m pytest ./tests/test_circleci.py
 
 workflows:
-  package-and-push-chart-on-tag:
+  build:
     jobs:
     - run_pykube_test:
         name: "Run pytest-kube"
+  package-and-push-chart-on-tag:
+    jobs:
     - architect/push-to-app-catalog:
         name: "package and push efk-stack-app chart"
         app_catalog: "giantswarm-catalog"
