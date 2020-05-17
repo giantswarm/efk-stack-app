@@ -39,6 +39,7 @@ def test_kubernetes_chart_museum(cluster_create):
 
 def test_helm(cluster_create):
     cluster = cluster_create(**cluster_setting)
+    cluster.api.timeout = 60
 
     assert "The Kubernetes package manager" in subprocess.check_output(
         ["helm", "--help"], encoding="utf-8"
