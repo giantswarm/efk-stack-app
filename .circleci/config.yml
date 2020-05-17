@@ -9,6 +9,8 @@ jobs:
     steps:
     - checkout
     - run: |
+        sed -i 's/\[\[ .Version ]]/0.1.0/g' ./helm/efk-stack-app/Chart.yaml
+    - run: |
         docker run -ti \
           -v /var/run/docker.sock:/var/run/docker.sock \
           --network host \
