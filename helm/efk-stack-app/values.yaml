@@ -20,7 +20,7 @@ elasticsearch-curator:
   image:
     repository: quay.io/giantswarm/bobrik-curator
     tag: 5.8.1@sha256:3aaf4d8aca9ec1d77fc46e99ba119abf4ad4d5ac42eb7e1227c420a8b6927259
-   
+
   configMaps:
     # Delete indices older than 7 days
     action_file_yml: |-
