@@ -1,0 +1,8 @@
+owner: giantswarm
+scaling:
+  min: 3
+  max: 3
+availability_zones: 2
+workers:
+- aws:
+    instance_type: m4.xlarge

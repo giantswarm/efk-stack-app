@@ -2,15 +2,36 @@ version: 2.1
 orbs:
   architect: giantswarm/architect@0.8.5
 
+jobs:
+  pytest_kube:
+    machine:
+      image: ubuntu-1604:202004-01
+    # resource_class: large
+    steps:
+    - checkout
+    - run: |
+        sed -i 's/\[\[ .Version ]]/0.1.0/g' ./helm/efk-stack-app/Chart.yaml
+    - run: |
+        docker run -ti \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          --network host \
+          -v $PWD:/pytest \
+          quay.io/giantswarm/pytest-kube:0.1.1-5db8c5b30f2747c53b0e939452fa4e98fd0b596a \
+            python -m pytest ./tests/test_circleci.py
+
 workflows:
-  package-and-push-chart-on-tag:
+  test-package-and-push-chart-on-tag:
     jobs:
-      - architect/push-to-app-catalog:
-          name: "package and push efk-stack-app chart"
-          app_catalog: "giantswarm-catalog"
-          app_catalog_test: "giantswarm-test-catalog"
-          chart: "efk-stack-app"
-          # Trigger job on git tag.
-          filters:
-            tags:
-              only: /^v.*/
+    - pytest_kube:
+        name: "run pytest-kube"
+    - architect/push-to-app-catalog:
+        requires:
+        - "run pytest-kube"
+        name: "package and push efk-stack-app chart"
+        app_catalog: "giantswarm-catalog"
+        app_catalog_test: "giantswarm-test-catalog"
+        chart: "efk-stack-app"
+        # Trigger job on git tag.
+        filters:
+          tags:
+            only: /^v.*/
