@@ -19,7 +19,8 @@ elasticsearch-curator:
   command: ["/usr/bin/curator"]
   image:
     repository: quay.io/giantswarm/bobrik-curator
-    tag: 5.8.1
+    tag: 5.8.1@sha256:3aaf4d8aca9ec1d77fc46e99ba119abf4ad4d5ac42eb7e1227c420a8b6927259
+
   configMaps:
     # Delete indices older than 7 days
     action_file_yml: |-
@@ -58,7 +59,7 @@ elasticsearch-exporter:
   enabled: true
   image:
     repository: quay.io/giantswarm/elasticsearch_exporter
-    tag: 1.1.0
+    tag: 1.1.0@sha256:0f94474f46a917d85657ee62ad6d01d30128198ed048014caf5471b9b7151b45
   service:
     annotations:
       giantswarm.io/monitoring: "true"
@@ -78,7 +79,7 @@ fluentd-elasticsearch:
     enabled: true
   image:
     repository: quay.io/giantswarm/fluentd
-    tag: v3.0.0
+    tag: v3.0.0@sha256:2cc9334d646b14a002e71f0b0c34eca411e35f07c88f0bac9783805fb13c0190
   elasticsearch:
     host: efk-stack-app-opendistro-es-client-service
     logstashPrefix: "fluentd"
@@ -102,7 +103,7 @@ opendistro-es:
   kibana:
     enabled: true
     image: quay.io/giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.6.0
+    imageTag: 1.6.0@sha256:40c64382e0e7c8936edc95fda1710cf64bfa8bee9feacf0757a7636e3cbda166
 
     config:
       server.name: kibana
@@ -139,8 +140,8 @@ opendistro-es:
         size: 50Gi
 
     initContainer:
-      image: busybox
-      imageTag: 1.31.0
+      image: quay.io/giantswarm/busybox
+      imageTag: 1.31.0@sha256:78560d44615215a1b352338e548d3ee595811fc8d85ff422154416d7d02767f1
 
     data:
       enabled: true
@@ -193,4 +194,4 @@ opendistro-es:
       opendistro_security.ssl.transport.pemtrustedcas_filepath: elk-transport-root-ca.pem
 
     image: quay.io/giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.6.0
+    imageTag: 1.6.0@sha256:a589ea8fd24c2a1c079f9e13ea4664eea86633bfaf129784413ac7798038b5b4
