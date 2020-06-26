@@ -12,24 +12,27 @@
 # express or implied. See the License for the specific language governing
 # permissions and limitations under the License.
 
+# @formatter:off
 {{- if .Values.kibana.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
 {{ include "opendistro-es.labels.standard" . | indent 4 }}
+    role: kibana
   name: {{ template "opendistro-es.fullname" . }}-kibana
   namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.kibana.replicas }}
   selector:
     matchLabels:
-      app: {{ template "opendistro-es.fullname" . }}-kibana
+{{ include "opendistro-es.labels.selector" . | indent 6 }}
+      role: kibana
   template:
     metadata:
       labels:
 {{ include "opendistro-es.labels.standard" . | indent 8 }}
-        app: {{ template "opendistro-es.fullname" . }}-kibana
+        role: kibana
       annotations:
         {{/* This forces a restart if the secret config has changed */}}
         {{- if .Values.kibana.config }}
@@ -75,6 +78,7 @@ spec:
 {{ toYaml .Values.kibana.extraEnvs | indent 8 }}
 {{- end }}
         image: {{ .Values.kibana.image }}:{{ .Values.kibana.imageTag }}
+        imagePullPolicy: {{ .Values.kibana.imagePullPolicy | default "Always" | quote }}
     {{- with .Values.kibana.readinessProbe}}
         readinessProbe:
 {{ toYaml . | indent 10 }}
@@ -95,24 +99,24 @@ spec:
          {{- if and .Values.kibana.ssl.kibana.enabled .Values.kibana.ssl.kibana.existingCertSecret }}
           - mountPath: {{ .Values.kibana.certsDirectory }}/kibana-crt.pem
             name: kibana-certs
-            subPath: kibana-crt.pem
+            subPath: {{ .Values.kibana.ssl.kibana.existingCertSecretCertSubPath }}
           - mountPath: {{ .Values.kibana.certsDirectory }}/kibana-key.pem
             name: kibana-certs
-            subPath: kibana-key.pem
+            subPath: {{ .Values.kibana.ssl.kibana.existingCertSecretKeySubPath }}
           - mountPath: {{ .Values.kibana.certsDirectory }}/kibana-root-ca.pem
             name: kibana-certs
-            subPath: kibana-root-ca.pem
+            subPath: {{ .Values.kibana.ssl.kibana.existingCertSecretRootCASubPath }}
          {{- end }}
          {{- if and .Values.kibana.ssl.elasticsearch.enabled .Values.kibana.ssl.elasticsearch.existingCertSecret }}
           - mountPath: {{ .Values.kibana.certsDirectory }}/elk-rest-crt.pem
             name: elasticsearch-certs
-            subPath: elk-rest-crt.pem
+            subPath: {{ .Values.kibana.ssl.elasticsearch.existingCertSecretCertSubPath }}
           - mountPath: {{ .Values.kibana.certsDirectory }}/elk-rest-key.pem
             name: elasticsearch-certs
-            subPath: elk-rest-key.pem
+            subPath: {{ .Values.kibana.ssl.elasticsearch.existingCertSecretKeySubPath }}
           - mountPath: {{ .Values.kibana.certsDirectory }}/elk-rest-root-ca.pem
             name: elasticsearch-certs
-            subPath: elk-rest-root-ca.pem
+            subPath: {{ .Values.kibana.ssl.elasticsearch.existingCertSecretRootCASubPath }}
          {{- end }}
         ports:
         - containerPort: {{ .Values.kibana.port }}
