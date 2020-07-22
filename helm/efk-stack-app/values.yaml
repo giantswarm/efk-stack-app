@@ -103,7 +103,7 @@ opendistro-es:
   kibana:
     enabled: true
     image: quay.io/giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.6.0@sha256:40c64382e0e7c8936edc95fda1710cf64bfa8bee9feacf0757a7636e3cbda166
+    imageTag: 1.8.0@sha256:4953b3c10116218a4d0e0972dc1331ddd7001cb1c7cd490a11dd31add13ea55a
 
     config:
       server.name: kibana
@@ -194,4 +194,4 @@ opendistro-es:
       opendistro_security.ssl.transport.pemtrustedcas_filepath: elk-transport-root-ca.pem
 
     image: quay.io/giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.6.0@sha256:a589ea8fd24c2a1c079f9e13ea4664eea86633bfaf129784413ac7798038b5b4
+    imageTag: 1.8.0@sha256:59976249b4b8a538e7bf5baad2761ec73706ae0077eaf1dcf9a30e7ca5e6a434

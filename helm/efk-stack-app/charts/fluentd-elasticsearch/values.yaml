@@ -1,9 +1,9 @@
 image:
-  repository: quay.io/fluentd_elasticsearch/fluentd
+  repository: quay.io/giantswarm/fluentd
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
 ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
-  tag: v3.0.0
+  tag: v3.0.2@sha256:7773f9dcabaf1b48d27238c500107aa0498fe04134508548ee537c74598ddfff
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.

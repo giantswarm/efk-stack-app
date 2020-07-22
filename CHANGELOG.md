@@ -27,3 +27,8 @@
 
 ## ElasticSearch Curator
 - Get auth info from secret
+
+# 0.3.0
+
+- Helm Charts are based now on the [official repository](https://github.com/opendistro-for-elasticsearch/opendistro-build/tree/master/helm)
+- OpenDistro is upgraded to [`1.8.0`](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/master/release-notes/opendistro-for-elasticsearch-release-notes-1.8.0.md)
