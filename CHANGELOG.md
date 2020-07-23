@@ -8,10 +8,6 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [Unreleased]
 ### Added
 - Add release workflow
-
-
-## [v0.3.0]
-
 - Helm Charts are based now on the [official repository](https://github.com/opendistro-for-elasticsearch/opendistro-build/tree/master/helm)
 - OpenDistro is upgraded to [`1.8.0`](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/master/release-notes/opendistro-for-elasticsearch-release-notes-1.8.0.md)
 
@@ -45,9 +41,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [v0.1.3]
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.0...HEAD
-[v0.3.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.2.0...v0.3.0
-[v0.2.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.1.5..v0.2.0
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.2.0...HEAD
+[v0.2.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.1.5...v0.2.0
 [v0.1.5]: https://github.com/giantswarm/efk-stack-app/compare/v0.1.4..v0.1.5
 [v0.1.4]: https://github.com/giantswarm/efk-stack-app/compare/v0.1.3..v0.1.4
 
