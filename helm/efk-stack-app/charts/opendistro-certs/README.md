@@ -1,6 +1,6 @@
 # OpenDistro certificate generator
 
-Generates CA needed to enable OpenDistro security pluguin with (certstrap)[https://github.com/square/certstrap].
+Generates CA needed to enable OpenDistro security pluguin with [certstrap](https://github.com/square/certstrap).
 
 The rootCA and the transport certificates will be stored in kubernetes secrets using a Job to create the initial certificates and a cronjob to constantly check that the certificates are present.
 
