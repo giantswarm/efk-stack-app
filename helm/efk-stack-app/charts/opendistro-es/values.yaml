@@ -13,7 +13,7 @@
 
 kibana:
   enabled: true
-  image: amazon/opendistro-for-elasticsearch-kibana
+  image: quay.io/opendistro-for-elasticsearch-kibana
   imageTag: 1.8.0
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
@@ -472,7 +472,7 @@ elasticsearch:
 
   maxMapCount: 262144
 
-  image: amazon/opendistro-for-elasticsearch
+  image: quay.io/opendistro-for-elasticsearch
   imageTag: 1.8.0
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
