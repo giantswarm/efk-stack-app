@@ -1,7 +1,7 @@
 # Default values for elasticsearch-curator.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
+ithub.com/giantswarm/architect/
 cronjob:
   # At 01:00 every day
   schedule: "0 1 * * *"
@@ -30,7 +30,8 @@ psp:
   create: false
 
 image:
-  repository: untergeek/curator
+  registry: quay.io
+  repository: elasticsearch-untergeek-curator
   tag: 5.7.6
   pullPolicy: IfNotPresent
 
