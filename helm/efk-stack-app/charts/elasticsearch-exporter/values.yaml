@@ -8,7 +8,7 @@ restartPolicy: Always
 
 image:
   registry: quay.io
-  repository: elasticsearch_exporter
+  repository: giantswarm/elasticsearch_exporter
   tag: 1.1.0
   pullPolicy: IfNotPresent
   pullSecret: ""

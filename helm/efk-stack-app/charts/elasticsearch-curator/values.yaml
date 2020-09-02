@@ -31,7 +31,7 @@ psp:
 
 image:
   registry: quay.io
-  repository: elasticsearch-untergeek-curator
+  repository: giantswarm/elasticsearch-untergeek-curator
   tag: 5.7.6
   pullPolicy: IfNotPresent
 
