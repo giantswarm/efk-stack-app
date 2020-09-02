@@ -77,7 +77,7 @@ spec:
 {{- if .Values.kibana.extraEnvs }}
 {{ toYaml .Values.kibana.extraEnvs | indent 8 }}
 {{- end }}
-        image: {{ .Values.kibana.image }}:{{ .Values.kibana.imageTag }}
+        image: {{ .Values.kibana.image.registry }}/{{ .Values.kibana.image.repository }}:{{ .Values.kibana.image.tag }}
         imagePullPolicy: {{ .Values.kibana.imagePullPolicy | default "Always" | quote }}
     {{- with .Values.kibana.readinessProbe}}
         readinessProbe:
