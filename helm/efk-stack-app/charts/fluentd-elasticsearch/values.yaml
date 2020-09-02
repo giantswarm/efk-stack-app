@@ -1,5 +1,6 @@
 image:
-  repository: quay.io/giantswarm/fluentd
+  registry: quay.io
+  repository: giantswarm/fluentd
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
 ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
