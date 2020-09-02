@@ -15,7 +15,7 @@ kibana:
   enabled: true
   image:
     registry: quay.io
-    repository: opendistro-for-elasticsearch-kibana
+    repository: giantswarm/opendistro-for-elasticsearch-kibana
     tag: 1.8.0
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
@@ -478,7 +478,7 @@ elasticsearch:
 
   image:
     registry: quay.io
-    repository: opendistro-for-elasticsearch
+    repository: giantswarm/opendistro-for-elasticsearch
     tag: 1.8.0
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
