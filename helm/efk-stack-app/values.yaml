@@ -1,3 +1,7 @@
+global:
+  image:
+    registry: quay.io
+
 opendistro-certs:
   enabled: true
   organization: Giant Swarm

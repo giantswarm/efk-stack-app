@@ -52,7 +52,7 @@ spec:
       {{- end }}
       containers:
       - name: {{ include "fluentd-elasticsearch.fullname" . }}
-        image:  "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image:  "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
         {{- if .Values.additionalPlugins }}
         command:
