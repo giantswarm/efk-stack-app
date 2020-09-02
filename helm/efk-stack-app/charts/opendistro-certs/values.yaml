@@ -4,8 +4,10 @@
 
 enabled: true
 
-image: quay.io/giantswarm/opendistro-certs
-imageTag: v0.0.3
+image:
+  registry: quay.io
+  repository: giantswarm/opendistro-certs
+  tag: v0.0.3
 
 organization: Giant Swarm
 expiration: "5 years"
