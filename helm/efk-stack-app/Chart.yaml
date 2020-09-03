@@ -24,4 +24,4 @@ name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
 - https://raw.githubusercontent.com/giantswarm/efk-stack-app/v[[ .Version ]]/README.md
-version: 1.0.0
+version: [[ .Version ]]
