@@ -13,8 +13,10 @@
 
 kibana:
   enabled: true
-  image: amazon/opendistro-for-elasticsearch-kibana
-  imageTag: 1.8.0
+  image:
+    registry: quay.io
+    repository: giantswarm/opendistro-for-elasticsearch-kibana
+    tag: 1.8.0
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
   imagePullPolicy: ""
@@ -171,8 +173,10 @@ elasticsearch:
   #   readOnly: true
 
   initContainer:
-    image: busybox
-    imageTag: 1.27.2
+    image:
+      registry: quay.io
+      repository: giantswarm/busybox
+      tag: 1.32.0
 
   ## Set optimal sysctl's. This requires privilege. Can be disabled if
   ## the system has already been preconfigured.
@@ -472,8 +476,10 @@ elasticsearch:
 
   maxMapCount: 262144
 
-  image: amazon/opendistro-for-elasticsearch
-  imageTag: 1.8.0
+  image:
+    registry: quay.io
+    repository: giantswarm/opendistro-for-elasticsearch
+    tag: 1.8.0
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
   imagePullPolicy: ""

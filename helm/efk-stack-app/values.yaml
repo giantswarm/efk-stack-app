@@ -1,3 +1,7 @@
+global:
+  image:
+    registry: quay.io
+
 opendistro-certs:
   enabled: true
   organization: Giant Swarm
@@ -18,7 +22,8 @@ elasticsearch-curator:
         key: password
   command: ["/usr/bin/curator"]
   image:
-    repository: quay.io/giantswarm/bobrik-curator
+    registry: quay.io
+    repository: giantswarm/bobrik-curator
     tag: 5.8.1@sha256:3aaf4d8aca9ec1d77fc46e99ba119abf4ad4d5ac42eb7e1227c420a8b6927259
 
   configMaps:
@@ -58,7 +63,8 @@ elasticsearch-curator:
 elasticsearch-exporter:
   enabled: true
   image:
-    repository: quay.io/giantswarm/elasticsearch_exporter
+    registry: quay.io
+    repository: giantswarm/elasticsearch_exporter
     tag: 1.1.0@sha256:0f94474f46a917d85657ee62ad6d01d30128198ed048014caf5471b9b7151b45
   service:
     annotations:
@@ -78,7 +84,8 @@ fluentd-elasticsearch:
   podSecurityPolicy:
     enabled: true
   image:
-    repository: quay.io/giantswarm/fluentd
+    registry: quay.io
+    repository: giantswarm/fluentd
     tag: v3.0.0@sha256:2cc9334d646b14a002e71f0b0c34eca411e35f07c88f0bac9783805fb13c0190
   elasticsearch:
     host: efk-stack-app-opendistro-es-client-service
@@ -102,8 +109,10 @@ opendistro-es:
 
   kibana:
     enabled: true
-    image: quay.io/giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.8.0@sha256:4953b3c10116218a4d0e0972dc1331ddd7001cb1c7cd490a11dd31add13ea55a
+    image:
+      registry: quay.io
+      repository: giantswarm/opendistro-for-elasticsearch-kibana
+      tag: 1.8.0@sha256:4953b3c10116218a4d0e0972dc1331ddd7001cb1c7cd490a11dd31add13ea55a
 
     config:
       server.name: kibana
@@ -140,8 +149,10 @@ opendistro-es:
         size: 50Gi
 
     initContainer:
-      image: quay.io/giantswarm/busybox
-      imageTag: 1.31.0@sha256:78560d44615215a1b352338e548d3ee595811fc8d85ff422154416d7d02767f1
+      image:
+        registry: quay.io
+        repository: giantswarm/busybox
+        tag: 1.31.0@sha256:78560d44615215a1b352338e548d3ee595811fc8d85ff422154416d7d02767f1
 
     data:
       enabled: true
@@ -193,5 +204,7 @@ opendistro-es:
       opendistro_security.ssl.transport.pemkey_filepath: elk-transport-key.pem
       opendistro_security.ssl.transport.pemtrustedcas_filepath: elk-transport-root-ca.pem
 
-    image: quay.io/giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.8.0@sha256:59976249b4b8a538e7bf5baad2761ec73706ae0077eaf1dcf9a30e7ca5e6a434
+    image:
+      registry: quay.io
+      repository: giantswarm/opendistro-for-elasticsearch
+      tag: 1.8.0@sha256:59976249b4b8a538e7bf5baad2761ec73706ae0077eaf1dcf9a30e7ca5e6a434
