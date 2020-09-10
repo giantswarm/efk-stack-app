@@ -4,6 +4,7 @@ metadata:
   name: {{ include "fluentd-elasticsearch.fullname" . }}
   labels:
 {{ include "fluentd-elasticsearch.labels" . | indent 4 }}
+    giantswarm.io/monitoring_basic_sli: "true"
     {{- if semverCompare "> 1.6" .Capabilities.KubeVersion.GitVersion }}
     kubernetes.io/cluster-service: "true"
     {{- end }}

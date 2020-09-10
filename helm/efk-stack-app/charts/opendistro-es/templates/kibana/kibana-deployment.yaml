@@ -20,6 +20,7 @@ metadata:
   labels:
 {{ include "opendistro-es.labels.standard" . | indent 4 }}
     role: kibana
+    giantswarm.io/monitoring_basic_sli: "true"
   name: {{ template "opendistro-es.fullname" . }}-kibana
   namespace: {{ .Release.Namespace }}
 spec:
