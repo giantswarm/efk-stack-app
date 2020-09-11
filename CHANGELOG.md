@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.3.1] - 2020-09-11
+
 ### Added
 
 - Giant Swarm monitoring annotations and labels.
@@ -54,7 +56,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.1...HEAD
+[0.3.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.1.5...v0.2.0
 [0.1.5]: https://github.com/giantswarm/efk-stack-app/compare/v0.1.4..v0.1.5
