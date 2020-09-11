@@ -44,8 +44,12 @@ service:
   httpPort: 9108
   metricsPort:
     name: http
-  annotations: {}
-  labels: {}
+  annotations:
+    giantswarm.io/monitoring: "true"
+    giantswarm.io/monitoring-path: /metrics
+    giantswarm.io/monitoring-port: "9108"
+  labels:
+    giantswarm.io/monitoring: "true"
 
 ## Extra environment variables that will be passed into the exporter pod
 ## example:

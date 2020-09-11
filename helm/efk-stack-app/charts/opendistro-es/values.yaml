@@ -335,7 +335,10 @@ elasticsearch:
     enabled: true
     service:
       type: ClusterIP
-      annotations: {}
+      annotations:
+        giantswarm.io/monitoring: "true"
+        giantswarm.io/monitoring-path: /metrics
+        giantswarm.io/monitoring-port: "9600"
         # # Defined ELB backend protocol as HTTPS to allow connection to Elasticsearch API
         # service.beta.kubernetes.io/aws-load-balancer-backend-protocol: https
 

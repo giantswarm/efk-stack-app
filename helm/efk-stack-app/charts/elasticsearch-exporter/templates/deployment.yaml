@@ -7,6 +7,7 @@ metadata:
     app: {{ template "elasticsearch-exporter.name" . }}
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+    giantswarm.io/monitoring_basic_sli: "true"
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:

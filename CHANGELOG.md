@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- Giant Swarm monitoring annotations and labels.
+
 ## [0.3.0] - 2020-09-04
 
 ### Added

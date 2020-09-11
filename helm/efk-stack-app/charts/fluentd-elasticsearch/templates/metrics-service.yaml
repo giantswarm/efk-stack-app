@@ -10,6 +10,10 @@ metadata:
     kubernetes.io/cluster-service: "true"
     {{- end }}
     addonmanager.kubernetes.io/mode: Reconcile
+  annotations:
+    giantswarm.io/monitoring: "true"
+    giantswarm.io/monitoring-path: /metrics
+    giantswarm.io/monitoring-port: {{ .Values.serviceMonitor.port | quote }}
 spec:
   type: {{ .Values.serviceMonitor.type }}
   ports:
