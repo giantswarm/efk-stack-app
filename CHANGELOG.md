@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.3.2] - 2020-09-15
+
 ### Changed
 
 - Reverted label selector changes originally added in [#10](https://github.com/giantswarm/efk-stack-app/pull/10) to not block upgrades ([#20](https://github.com/giantswarm/efk-stack-app/pull/20))
@@ -60,7 +62,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.1...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.2...HEAD
+[0.3.2]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.1.5...v0.2.0
