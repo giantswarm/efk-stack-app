@@ -53,11 +53,11 @@ heritage: "{{ .Release.Service }}"
 {{/*
 Define labels for deployment/statefulset selectors.
 We cannot have the chart label here as it will prevent upgrades.
+
+If these labels are changed then upgrades will fail as label selectors are immutable.
 */}}
 {{- define "opendistro-es.labels.selector" -}}
 app: {{ template "opendistro-es.fullname" . }}
-release: "{{ .Release.Name }}"
-heritage: "{{ .Release.Service }}"
 {{- end -}}
 
 {{/*
