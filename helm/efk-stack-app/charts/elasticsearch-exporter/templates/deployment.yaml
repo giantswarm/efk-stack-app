@@ -65,7 +65,7 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["elasticsearch_exporter",
                     {{- if .Values.es.uri }}
-                    "--es.uri={{ .Values.es.uri }}",
+                    "--es.uri=http://$(username):$(password)@{{ .Values.global.opendistro.es.client.uri }}:9200",
                     {{- end }}
                     {{- if .Values.es.all }}
                     "--es.all",

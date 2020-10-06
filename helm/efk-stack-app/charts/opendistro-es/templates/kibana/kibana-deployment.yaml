@@ -48,7 +48,7 @@ spec:
         # If no custom configuration provided, default to internal DNS
         {{- if not .Values.kibana.config }}
         - name: ELASTICSEARCH_HOSTS
-          value: https://{{ template "opendistro-es.fullname" . }}-client-service:9200
+          value: https://{{ .Values.global.opendistro.es.client.uri }}:9200
         {{- end }}
         {{- if .Values.kibana.elasticsearchAccount.secret }}
         - name: ELASTICSEARCH_USERNAME
