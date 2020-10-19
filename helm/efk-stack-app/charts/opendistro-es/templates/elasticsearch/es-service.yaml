@@ -22,7 +22,7 @@ metadata:
   labels:
 {{ include "opendistro-es.labels.standard" . | indent 4 }}
     role: client
-  name: {{ template "opendistro-es.fullname" . }}-client-service
+  name: {{ .Values.global.opendistro.es.client.uri }}
   namespace: {{ .Release.Namespace }}
 spec:
   ports:
