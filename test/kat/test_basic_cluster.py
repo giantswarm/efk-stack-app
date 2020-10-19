@@ -67,14 +67,14 @@ def test_app(kube_cluster: Cluster, app_factory: AppFactoryFunc, cluster_type: s
         }
         pykube.Namespace(api, obj).create()
 
-    # app = app_factory(
-    #     "efk-stack-app",
-    #     "0.3.2-19bb12f72fd3cf2ec9e95130cf2496f5c81b537a",
-    #     namespace_name,
-    #     "http://chart-museum.giantswarm.svc:8080/charts",
-    #     namespace_name,
-    #     config_values,
-    # )
+    app = app_factory(
+        "efk-stack-app",
+        "0.3.2-19bb12f72fd3cf2ec9e95130cf2496f5c81b537a",
+        namespace_name,
+        "http://chart-museum.giantswarm.svc:8080/charts",
+        namespace_name,
+        config_values,
+    )
 
     # wait for deployment
     # time.sleep(600)
