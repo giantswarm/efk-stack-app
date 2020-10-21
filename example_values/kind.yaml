@@ -1,0 +1,31 @@
+opendistro-es:
+  kibana:
+    ingress:
+      enabled: false
+  elasticsearch:
+    client:
+      javaOpts: -Xms1g -Xmx1g
+      resources:
+        limits:
+          cpu: 1
+          memory: 2Gi
+        requests:
+          cpu: 500m
+          memory: 2Gi
+    master:
+      persistence:
+        storageClass: standard
+        size: 1Gi
+    data:
+      javaOpts: -Xms2g -Xmx2g
+      resources:
+        limits:
+          cpu: 1
+          memory: 4Gi
+        requests:
+          cpu: 500m
+          memory: 4Gi
+      persistence:
+        storageClass: standard
+        size: 1Gi
+    
