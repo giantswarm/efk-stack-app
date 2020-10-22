@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  architect: giantswarm/architect@0.10.0
+  architect: giantswarm/architect@0.14.0
 
 # jobs:
 #   pytest_kube:
@@ -18,7 +18,7 @@ orbs:
 #           -v $PWD:/pytest \
 #           quay.io/giantswarm/pytest-kube:0.1.1-5db8c5b30f2747c53b0e939452fa4e98fd0b596a \
 #             python -m pytest ./tests/test_circleci.py
-# 
+#
 # workflows:
 #   test-package-and-push-chart-on-tag:
 #     jobs:
@@ -46,6 +46,26 @@ workflows:
           app_catalog_test: "giantswarm-test-catalog"
           chart: "efk-stack-app"
           # Trigger job on git tag.
+          filters:
+            tags:
+              only: /^v.*/
+
+      # Require manual approval for running pytests in kind.
+      - hold-run-perf-tests:
+          type: approval
+          filters:
+            # Do not trigger the job on master branch or release tags.
+            branches:
+              ignore:
+                - master
+            tags:
+              ignore: /^v.*/
+
+      - architect/run-kat-tests:
+          requires:
+            - hold-run-perf-tests
+          name: "test the chart with kat"
+          chart: "efk-stack-app"
           filters:
             tags:
               only: /^v.*/
