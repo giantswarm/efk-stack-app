@@ -7,7 +7,7 @@ import pykube
 import pytest
 
 from pytest_helm_charts.fixtures import Cluster
-from pytest_helm_charts.utils import wait_for_namespaced_objects_condition
+from pytest_helm_charts.utils import wait_for_namespaced_objects_condition, wait_for_jobs_to_complete
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ app_name = "efk-stack-app"
 namespace_name = "default"
 catalog_name = "chartmuseum"
 
-timeout: int = 90
+timeout: int = 180
 
 
 def test_api_working(kube_cluster: Cluster) -> None:
@@ -67,56 +67,45 @@ def test_masters_green(kube_cluster: Cluster, stateful_sets: List[pykube.Statefu
     masters = [s for s in stateful_sets if s.name == f"{app_name}-opendistro-es-master"]
     assert len(masters) == 1
 
-    pod = pykube.Pod(
+    job = pykube.Job(
         kube_cluster.kube_client,
         {
-            "apiVersion": "v1",
-            "kind": "Pod",
-            "metadata": {"name": "check-green", "namespace": namespace_name},
+            "apiVersion": "batch/v1",
+            "kind": "Job",
+            "metadata": {"generateName": "check-efk-green-", "namespace": namespace_name},
             "spec": {
-                "containers": [
-                    {
-                        "name": "query-health-endpoint",
-                        "image": "quay.io/giantswarm/busybox:1.32.0",
-                        "command": [
-                            "sh",
-                            "-c",
-                            f"wget -O - -q http://admin:admin@{app_name}-opendistro-es-client-service:9200/_cat/health",
+                "template": {
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": "query-health-endpoint",
+                                "image": "quay.io/giantswarm/busybox:1.32.0",
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    (
+                                        "wget -O - -q "
+                                        f"http://admin:admin@{app_name}-opendistro-es-client-service:9200/_cat/health"
+                                        " | grep green"
+                                    ),
+                                ],
+                            }
                         ],
-                    }
-                ],
-                "restartPolicy": "OnFailure",
+                        "restartPolicy": "OnFailure",
+                    },
+                },
             },
         },
     )
-    pod.create()
+    job.create()
 
-    wait_for_namespaced_objects_condition(
+    wait_for_jobs_to_complete(
         kube_cluster.kube_client,
-        pykube.Pod,
-        [pod.name],
+        [job.name],
         namespace_name,
-        (
-            lambda pod: (
-                "status" in pod.obj
-                and "conditions" in pod.obj["status"]
-                and len(pod.obj["status"]["conditions"]) > 0
-                and "reason" in pod.obj["status"]["conditions"][0]
-                and pod.obj["status"]["conditions"][0]["reason"] == "PodCompleted"
-                and pod.obj["status"]["conditions"][0]["status"] == "True"
-            )
-        ),
         timeout,
         missing_ok=False,
     )
-
-    logs = pod.logs()
-
-    assert "green" in logs
-    assert "100.0%" in logs
-
-    # cleanup
-    pod.delete()
 
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
