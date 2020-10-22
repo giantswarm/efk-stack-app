@@ -8,3 +8,4 @@ __pycache__
 .vscode
 test/kat/.idea/
 **/.python-version
+efk-stack-app*.tgz
