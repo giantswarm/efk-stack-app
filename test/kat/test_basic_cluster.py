@@ -5,14 +5,8 @@ from typing import Dict, List
 
 import pykube
 import pytest
-
 from pytest_helm_charts.fixtures import Cluster
-
-from pytest_helm_charts.giantswarm_app_platform.app import AppFactoryFunc, ConfiguredApp
-from pytest_helm_charts.utils import YamlDict, wait_for_deployments_to_run, wait_for_namespaced_objects_condition
-from pytest_helm_charts.giantswarm_app_platform.custom_resources import AppCR
-
-import time
+from pytest_helm_charts.utils import wait_for_namespaced_objects_condition
 
 logger = logging.getLogger(__name__)
 
@@ -44,10 +38,9 @@ def test_cluster_info(kube_cluster: Cluster, cluster_type: str, chart_extra_info
     assert kube_cluster.kube_client is not None
     assert cluster_type != ""
 
+
 def _statefulset_ready(s: pykube.StatefulSet) -> bool:
-    complete = (
-        "readyReplicas" in s.obj["status"] and s.replicas == int(s.obj["status"]["readyReplicas"])
-    )
+    complete = "readyReplicas" in s.obj["status"] and s.replicas == int(s.obj["status"]["readyReplicas"])
     return complete
 
 
@@ -56,18 +49,18 @@ def statefulSets(kube_cluster: Cluster) -> List[pykube.StatefulSet]:
     return wait_for_namespaced_objects_condition(
         kube_cluster.kube_client,
         pykube.StatefulSet,
-        [f'{app_name}-opendistro-es-data', f'{app_name}-opendistro-es-master'],
+        [f"{app_name}-opendistro-es-data", f"{app_name}-opendistro-es-master"],
         namespace_name,
         _statefulset_ready,
         timeout,
-        missing_ok=False
+        missing_ok=False,
     )
+
 
 @pytest.mark.usefixtures("statefulSets")
 def test_pods_available(kube_cluster: Cluster, statefulSets: List[pykube.StatefulSet]):
     for s in statefulSets:
         assert int(s.obj["status"]["readyReplicas"]) > 0
-
 
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
@@ -142,7 +135,8 @@ def test_pods_available(kube_cluster: Cluster, statefulSets: List[pykube.Statefu
 
 #     logger.info("Waiting for elasticsearch client pods")
 #     while True:
-#         r = pykube.Deployment.objects(api, namespace=namespace_name).get_or_none(name="efk-stack-app-opendistro-es-client")
+#         r = pykube.Deployment.objects(api, namespace=namespace_name).get_or_none(
+#         name="efk-stack-app-opendistro-es-client")
 #         try:
 #             if r and r.obj["status"]["readyReplicas"] > 0:
 #                 break
@@ -156,7 +150,8 @@ def test_pods_available(kube_cluster: Cluster, statefulSets: List[pykube.Statefu
 
 #     print("waiting for master")
 #     while True:
-#         r = pykube.StatefulSet.objects(api, namespace=namespace_name).get_or_none(name="efk-stack-app-opendistro-es-master")
+#         r = pykube.StatefulSet.objects(api, namespace=namespace_name).get_or_none(
+#         name="efk-stack-app-opendistro-es-master")
 #         try:
 #             if r and r.obj["status"]["readyReplicas"] > 0:
 #                 break

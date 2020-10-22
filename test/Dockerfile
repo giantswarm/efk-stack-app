@@ -2,7 +2,7 @@ FROM python:3.9-slim
 RUN pip install pytest-helm-charts
 
 CMD pytest
- 
+
 # docker build -t local/pytest-helm-charts .
 #
 # run from git-root:
@@ -12,4 +12,3 @@ CMD pytest
 #   --mount type=bind,source=$PWD,target=$PWD \
 #   --workdir $PWD \
 #   local/pytest-helm-charts
-
