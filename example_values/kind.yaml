@@ -4,7 +4,7 @@ opendistro-es:
       enabled: false
   elasticsearch:
     sysctl:
-      enabled: true 
+      enabled: true
     master:
       replicas: 2
       persistence:
@@ -15,4 +15,3 @@ opendistro-es:
       persistence:
         storageClass: standard
         size: 1Gi
-    
