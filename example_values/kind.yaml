@@ -3,6 +3,8 @@ opendistro-es:
     ingress:
       enabled: false
   elasticsearch:
+    sysctl:
+      enabled: true 
     master:
       replicas: 2
       persistence:
