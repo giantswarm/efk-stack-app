@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.3.3] - 2020-10-22
+
 ### Changed
 
 - Set `es-client` URI to a static value to avoid issues when templating across multiple subcharts. ([#24](https://github.com/giantswarm/efk-stack-app/pull/24))
@@ -66,7 +68,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.2...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.3...HEAD
+[0.3.3]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.0...v0.3.1
 [0.3.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.2.0...v0.3.0
