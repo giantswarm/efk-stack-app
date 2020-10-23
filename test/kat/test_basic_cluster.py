@@ -1,14 +1,13 @@
 """This module shows some very basic examples of how to use fixtures in pytest-helm-charts.
 """
 import logging
-
-from typing import Dict, List
+from typing import Dict
 
 import pykube
-import pytest
-
 from pytest_helm_charts.fixtures import Cluster
-from pytest_helm_charts.utils import wait_for_namespaced_objects_condition, wait_for_jobs_to_complete
+from pytest_helm_charts.utils import wait_for_jobs_to_complete
+
+from helpers import wait_for_stateful_sets_to_run, make_job
 
 logger = logging.getLogger(__name__)
 
@@ -41,62 +40,40 @@ def test_cluster_info(kube_cluster: Cluster, cluster_type: str, chart_extra_info
     assert cluster_type != ""
 
 
-def _statefulset_ready(s: pykube.StatefulSet) -> bool:
-    complete = "readyReplicas" in s.obj["status"] and s.replicas == int(s.obj["status"]["readyReplicas"])
-    return complete
-
-
-@pytest.fixture(scope="function")
-def stateful_sets(kube_cluster: Cluster) -> List[pykube.StatefulSet]:
-    return wait_for_namespaced_objects_condition(
+def test_pods_available(kube_cluster: Cluster):
+    stateful_sets = wait_for_stateful_sets_to_run(
         kube_cluster.kube_client,
-        pykube.StatefulSet,
         [f"{app_name}-opendistro-es-data", f"{app_name}-opendistro-es-master"],
         namespace_name,
-        _statefulset_ready,
         timeout,
-        missing_ok=False,
     )
-
-
-def test_pods_available(kube_cluster: Cluster, stateful_sets: List[pykube.StatefulSet]):
     for s in stateful_sets:
         assert int(s.obj["status"]["readyReplicas"]) > 0
 
 
-def test_masters_green(kube_cluster: Cluster, stateful_sets: List[pykube.StatefulSet]):
+def test_masters_green(kube_cluster: Cluster):
+    stateful_sets = wait_for_stateful_sets_to_run(
+        kube_cluster.kube_client,
+        [f"{app_name}-opendistro-es-data", f"{app_name}-opendistro-es-master"],
+        namespace_name,
+        timeout,
+    )
     masters = [s for s in stateful_sets if s.name == f"{app_name}-opendistro-es-master"]
     assert len(masters) == 1
 
-    job = pykube.Job(
+    job = make_job(
         kube_cluster.kube_client,
-        {
-            "apiVersion": "batch/v1",
-            "kind": "Job",
-            "metadata": {"generateName": "check-efk-green-", "namespace": namespace_name},
-            "spec": {
-                "template": {
-                    "spec": {
-                        "containers": [
-                            {
-                                "name": "query-health-endpoint",
-                                "image": "quay.io/giantswarm/busybox:1.32.0",
-                                "command": [
-                                    "sh",
-                                    "-c",
-                                    (
-                                        "wget -O - -q "
-                                        f"http://admin:admin@{app_name}-opendistro-es-client-service:9200/_cat/health"
-                                        " | grep green"
-                                    ),
-                                ],
-                            }
-                        ],
-                        "restartPolicy": "OnFailure",
-                    },
-                },
-            },
-        },
+        "check-efk-green-",
+        namespace_name,
+        [
+            "sh",
+            "-c",
+            (
+                "wget -O - -q "
+                f"http://admin:admin@{app_name}-opendistro-es-client-service:9200/_cat/health"
+                " | grep green"
+            ),
+        ],
     )
     job.create()
 
@@ -109,8 +86,13 @@ def test_masters_green(kube_cluster: Cluster, stateful_sets: List[pykube.Statefu
     )
 
 
-@pytest.mark.usefixtures("stateful_sets")
 def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
+    wait_for_stateful_sets_to_run(
+        kube_cluster.kube_client,
+        [f"{app_name}-opendistro-es-data", f"{app_name}-opendistro-es-master"],
+        namespace_name,
+        timeout,
+    )
     # create a new namespace
     # fluentd is configured to ignore certain namespaces
     logs_ns_name = "logs-ns"
@@ -126,32 +108,15 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
         }
         pykube.Namespace(kube_cluster.kube_client, obj).create()
 
-    generate_logs_job = pykube.Job(
+    generate_logs_job = make_job(
         kube_cluster.kube_client,
-        {
-            "apiVersion": "batch/v1",
-            "kind": "Job",
-            "metadata": {"generateName": "generate-logs-", "namespace": logs_ns_name},
-            "spec": {
-                "completions": 1,
-                "template": {
-                    "spec": {
-                        "containers": [
-                            {
-                                "name": "generate-logs",
-                                "image": "quay.io/giantswarm/busybox:1.32.0",
-                                "command": [
-                                    "sh",
-                                    "-c",
-                                    'seq 1 100 | xargs printf "generating-logs-ding-dong-%03d\n"',
-                                ],
-                            }
-                        ],
-                        "restartPolicy": "OnFailure",
-                    },
-                },
-            },
-        },
+        "generate-logs-",
+        logs_ns_name,
+        [
+            "sh",
+            "-c",
+            'seq 1 100 | xargs printf "generating-logs-ding-dong-%03d\n"',
+        ],
     )
     generate_logs_job.create()
 
@@ -163,36 +128,20 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
         missing_ok=False,
     )
 
-    query_logs_job = pykube.Job(
+    query_logs_job = make_job(
         kube_cluster.kube_client,
-        {
-            "apiVersion": "batch/v1",
-            "kind": "Job",
-            "metadata": {"generateName": "query-logs-", "namespace": namespace_name},
-            "spec": {
-                "completions": 1,
-                "template": {
-                    "spec": {
-                        "containers": [
-                            {
-                                "name": "query-logs",
-                                "image": "docker.io/giantswarm/tiny-tools:3.10",
-                                "command": [
-                                    "sh",
-                                    "-c",
-                                    (
-                                        f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
-                                        "_search?q=ding-dong&size=1000' "  # query more than we're expecting
-                                        "| jq --exit-status '.hits.total.value >= 100'"
-                                    ),
-                                ],
-                            }
-                        ],
-                        "restartPolicy": "OnFailure",
-                    },
-                },
-            },
-        },
+        "query-logs-",
+        namespace_name,
+        [
+            "sh",
+            "-c",
+            (
+                f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
+                "_search?q=ding-dong&size=1000' "  # query more than we're expecting
+                "| jq --exit-status '.hits.total.value >= 100'"
+            ),
+        ],
+        image="docker.io/giantswarm/tiny-tools:3.10",
     )
     query_logs_job.create()
 
