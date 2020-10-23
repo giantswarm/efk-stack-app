@@ -1,7 +1,9 @@
 """This module shows some very basic examples of how to use fixtures in pytest-helm-charts.
 """
 import logging
+
 from typing import Dict, List
+from json import loads as loads_json
 
 import pykube
 import pytest
@@ -106,6 +108,113 @@ def test_masters_green(kube_cluster: Cluster, stateful_sets: List[pykube.Statefu
         timeout,
         missing_ok=False,
     )
+
+
+@pytest.mark.usefixtures("stateful_sets")
+def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
+    # create a new namespace
+    # fluentd is configured to ignore certain namespaces
+    logs_ns_name = "logs-ns"
+    try:
+        pykube.Namespace.objects(kube_cluster.kube_client).get(name=logs_ns_name)
+    except pykube.exceptions.ObjectDoesNotExist:
+        obj = {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "name": logs_ns_name,
+            },
+        }
+        pykube.Namespace(kube_cluster.kube_client, obj).create()
+
+    generate_logs_job = pykube.Job(
+        kube_cluster.kube_client,
+        {
+            "apiVersion": "batch/v1",
+            "kind": "Job",
+            "metadata": {"generateName": "generate-logs-", "namespace": logs_ns_name},
+            "spec": {
+                "completions": 1,
+                "template": {
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": "generate-logs",
+                                "image": "quay.io/giantswarm/busybox:1.32.0",
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    'seq 1 100 | xargs printf "generating-logs-ding-dong-%03d\n"',
+                                ],
+                            }
+                        ],
+                        "restartPolicy": "OnFailure",
+                    },
+                },
+            },
+        },
+    )
+    generate_logs_job.create()
+
+    wait_for_jobs_to_complete(
+        kube_cluster.kube_client,
+        [generate_logs_job.name],
+        logs_ns_name,
+        timeout,
+        missing_ok=False,
+    )
+
+    # execute a pod to query elasticsearch
+    pod = pykube.Pod(
+        kube_cluster.kube_client,
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {"generateName": "query-logs-", "namespace": namespace_name},
+            "spec": {
+                "containers": [
+                    {
+                        "name": "query-elasticsearch",
+                        "image": "quay.io/giantswarm/curl:7.67.0",
+                        "args": [
+                            "-s",
+                            (
+                                f"http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
+                                "_search?q=ding-dong&size=1000"
+                            ),
+                        ],
+                    }
+                ],
+                "restartPolicy": "OnFailure",
+            },
+        },
+    )
+    pod.create()
+
+    wait_for_namespaced_objects_condition(
+        kube_cluster.kube_client,
+        pykube.Pod,
+        [pod.name],
+        namespace_name,
+        (
+            lambda pod: (
+                "status" in pod.obj
+                and "conditions" in pod.obj["status"]
+                and len(pod.obj["status"]["conditions"]) > 0
+                and "reason" in pod.obj["status"]["conditions"][0]
+                and pod.obj["status"]["conditions"][0]["reason"] == "PodCompleted"
+                and pod.obj["status"]["conditions"][0]["status"] == "True"
+            )
+        ),
+        timeout,
+        missing_ok=False,
+    )
+
+    logs = pod.logs()
+
+    query_result = loads_json(logs)
+
+    assert query_result["hits"]["total"]["value"] >= 100
 
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
