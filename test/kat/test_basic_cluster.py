@@ -3,7 +3,6 @@
 import logging
 
 from typing import Dict, List
-from json import loads as loads_json
 
 import pykube
 import pytest
@@ -164,57 +163,46 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
         missing_ok=False,
     )
 
-    # execute a pod to query elasticsearch
-    pod = pykube.Pod(
+    query_logs_job = pykube.Job(
         kube_cluster.kube_client,
         {
-            "apiVersion": "v1",
-            "kind": "Pod",
+            "apiVersion": "batch/v1",
+            "kind": "Job",
             "metadata": {"generateName": "query-logs-", "namespace": namespace_name},
             "spec": {
-                "containers": [
-                    {
-                        "name": "query-elasticsearch",
-                        "image": "quay.io/giantswarm/curl:7.67.0",
-                        "args": [
-                            "-s",
-                            (
-                                f"http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
-                                "_search?q=ding-dong&size=1000"
-                            ),
+                "completions": 1,
+                "template": {
+                    "spec": {
+                        "containers": [
+                            {
+                                "name": "query-logs",
+                                "image": "docker.io/giantswarm/tiny-tools:3.10",
+                                "command": [
+                                    "sh",
+                                    "-c",
+                                    (
+                                        f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
+                                        "_search?q=ding-dong&size=1000' "  # query more than we're expecting
+                                        "| jq --exit-status '.hits.total.value >= 100'"
+                                    ),
+                                ],
+                            }
                         ],
-                    }
-                ],
-                "restartPolicy": "OnFailure",
+                        "restartPolicy": "OnFailure",
+                    },
+                },
             },
         },
     )
-    pod.create()
+    query_logs_job.create()
 
-    wait_for_namespaced_objects_condition(
+    wait_for_jobs_to_complete(
         kube_cluster.kube_client,
-        pykube.Pod,
-        [pod.name],
+        [query_logs_job.name],
         namespace_name,
-        (
-            lambda pod: (
-                "status" in pod.obj
-                and "conditions" in pod.obj["status"]
-                and len(pod.obj["status"]["conditions"]) > 0
-                and "reason" in pod.obj["status"]["conditions"][0]
-                and pod.obj["status"]["conditions"][0]["reason"] == "PodCompleted"
-                and pod.obj["status"]["conditions"][0]["status"] == "True"
-            )
-        ),
         timeout,
         missing_ok=False,
     )
-
-    logs = pod.logs()
-
-    query_result = loads_json(logs)
-
-    assert query_result["hits"]["total"]["value"] >= 100
 
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
