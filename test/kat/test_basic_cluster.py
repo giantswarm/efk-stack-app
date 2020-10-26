@@ -79,6 +79,39 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
     )
 
 
+def generate_logs(kube_client: pykube.HTTPClient, logs_namespace: str) -> pykube.Job:
+    return run_job_to_completion(
+        kube_client,
+        "generate-logs-",
+        logs_namespace,
+        [
+            "sh",
+            "-c",
+            'seq 1 100 | xargs printf "generating-logs-ding-dong-%03d\n"',
+        ],
+        timeout_sec=timeout,
+    )
+
+
+def query_logs(kube_client: pykube.HTTPClient, logs_namespace: str) -> pykube.Job:
+    return run_job_to_completion(
+        kube_client,
+        "query-logs-",
+        logs_namespace,
+        [
+            "sh",
+            "-c",
+            (
+                f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
+                "_search?q=ding-dong&size=1000' "  # query more than we're expecting
+                "| jq --exit-status '.hits.total.value >= 100'"
+            ),
+        ],
+        image="docker.io/giantswarm/tiny-tools:3.10",
+        timeout_sec=timeout,
+    )
+
+
 @pytest.mark.usefixtures("efk_stateful_sets")
 def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
     # create a new namespace
@@ -96,34 +129,8 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
         }
         pykube.Namespace(kube_cluster.kube_client, obj).create()
 
-    run_job_to_completion(
-        kube_cluster.kube_client,
-        "generate-logs-",
-        logs_ns_name,
-        [
-            "sh",
-            "-c",
-            'seq 1 100 | xargs printf "generating-logs-ding-dong-%03d\n"',
-        ],
-        timeout_sec=timeout,
-    )
-
-    run_job_to_completion(
-        kube_cluster.kube_client,
-        "query-logs-",
-        namespace_name,
-        [
-            "sh",
-            "-c",
-            (
-                f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
-                "_search?q=ding-dong&size=1000' "  # query more than we're expecting
-                "| jq --exit-status '.hits.total.value >= 100'"
-            ),
-        ],
-        image="docker.io/giantswarm/tiny-tools:3.10",
-        timeout_sec=timeout,
-    )
+    generate_logs(kube_cluster.kube_client, logs_ns_name)
+    query_logs(kube_cluster.kube_client, logs_ns_name)
 
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
