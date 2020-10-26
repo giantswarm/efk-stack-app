@@ -7,7 +7,7 @@ import pykube
 import pytest
 from pytest_helm_charts.fixtures import Cluster
 
-from helpers import wait_for_stateful_sets_to_run, run_job_to_completion
+from helpers import wait_for_stateful_sets_to_run, run_job_to_completion, ensure_namespace_exists
 
 logger = logging.getLogger(__name__)
 
@@ -117,20 +117,23 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
     # create a new namespace
     # fluentd is configured to ignore certain namespaces
     logs_ns_name = "logs-ns"
-    try:
-        pykube.Namespace.objects(kube_cluster.kube_client).get(name=logs_ns_name)
-    except pykube.exceptions.ObjectDoesNotExist:
-        obj = {
-            "apiVersion": "v1",
-            "kind": "Namespace",
-            "metadata": {
-                "name": logs_ns_name,
-            },
-        }
-        pykube.Namespace(kube_cluster.kube_client, obj).create()
+    ensure_namespace_exists(kube_cluster.kube_client, logs_ns_name)
 
     generate_logs(kube_cluster.kube_client, logs_ns_name)
     query_logs(kube_cluster.kube_client, logs_ns_name)
+
+
+@pytest.mark.usefixtures("efk_stateful_sets")
+def test_can_survive_pod_restart(kube_cluster: Cluster) -> None:
+    logs_ns_name = "logs-ns"
+    ensure_namespace_exists(kube_cluster.kube_client, logs_ns_name)
+
+    generate_logs(kube_cluster.kube_client, logs_ns_name)
+    query_logs(kube_cluster.kube_client, logs_ns_name)
+
+    # find and remove pods
+    # wait for pods to run
+    # assert again
 
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:

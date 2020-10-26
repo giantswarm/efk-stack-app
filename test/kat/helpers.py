@@ -82,3 +82,19 @@ def run_job_to_completion(
     )
 
     return job
+
+
+def ensure_namespace_exists(kube_client: pykube.HTTPClient, namespace_name: str) -> pykube.Namespace:
+    try:
+        pykube.Namespace.objects(kube_client).get(name=namespace_name)
+    except pykube.exceptions.ObjectDoesNotExist:
+        obj = {
+            "apiVersion": "v1",
+            "kind": "Namespace",
+            "metadata": {
+                "name": namespace_name,
+            },
+        }
+        ns = pykube.Namespace(kube_client, obj)
+        ns.create()
+        return ns
