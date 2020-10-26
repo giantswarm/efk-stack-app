@@ -44,6 +44,10 @@ def test_cluster_info(kube_cluster: Cluster, cluster_type: str, chart_extra_info
 # if you want to assert this multiple times
 @pytest.fixture(scope="module")
 def efk_stateful_sets(kube_cluster: Cluster) -> List[pykube.StatefulSet]:
+    return wait_for_efk_stateful_sets(kube_cluster)
+
+
+def wait_for_efk_stateful_sets(kube_cluster: Cluster) -> List[pykube.StatefulSet]:
     stateful_sets = wait_for_stateful_sets_to_run(
         kube_cluster.kube_client,
         [f"{app_name}-opendistro-es-data", f"{app_name}-opendistro-es-master"],
@@ -79,7 +83,9 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
     )
 
 
-def generate_logs(kube_client: pykube.HTTPClient, logs_namespace: str) -> pykube.Job:
+def generate_logs(
+    kube_client: pykube.HTTPClient, logs_namespace: str, range_start: int = 1, range_end: int = 100
+) -> pykube.Job:
     return run_job_to_completion(
         kube_client,
         "generate-logs-",
@@ -87,13 +93,15 @@ def generate_logs(kube_client: pykube.HTTPClient, logs_namespace: str) -> pykube
         [
             "sh",
             "-c",
-            'seq 1 100 | xargs printf "generating-logs-ding-dong-%03d\n"',
+            f'seq {range_start} {range_end} | xargs printf "generating-logs-ding-dong-%03d\n"',
         ],
         timeout_sec=timeout,
     )
 
 
-def query_logs(kube_client: pykube.HTTPClient, logs_namespace: str) -> pykube.Job:
+def query_logs(
+    kube_client: pykube.HTTPClient, logs_namespace: str, expected_no_log_entries_lower_bound: int
+) -> pykube.Job:
     return run_job_to_completion(
         kube_client,
         "query-logs-",
@@ -104,7 +112,7 @@ def query_logs(kube_client: pykube.HTTPClient, logs_namespace: str) -> pykube.Jo
             (
                 f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
                 "_search?q=ding-dong&size=1000' "  # query more than we're expecting
-                "| jq --exit-status '.hits.total.value >= 100'"
+                f"| jq --exit-status '.hits.total.value >= {expected_no_log_entries_lower_bound}'"
             ),
         ],
         image="docker.io/giantswarm/tiny-tools:3.10",
@@ -120,20 +128,35 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
     ensure_namespace_exists(kube_cluster.kube_client, logs_ns_name)
 
     generate_logs(kube_cluster.kube_client, logs_ns_name)
-    query_logs(kube_cluster.kube_client, logs_ns_name)
+    query_logs(kube_cluster.kube_client, logs_ns_name, expected_no_log_entries_lower_bound=100)
 
 
 @pytest.mark.usefixtures("efk_stateful_sets")
-def test_can_survive_pod_restart(kube_cluster: Cluster) -> None:
+def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[pykube.StatefulSet]) -> None:
     logs_ns_name = "logs-ns"
     ensure_namespace_exists(kube_cluster.kube_client, logs_ns_name)
 
     generate_logs(kube_cluster.kube_client, logs_ns_name)
-    query_logs(kube_cluster.kube_client, logs_ns_name)
+    query_logs(kube_cluster.kube_client, logs_ns_name, expected_no_log_entries_lower_bound=100)
 
-    # find and remove pods
-    # wait for pods to run
+    # find 1st pod of each of the core stateful sets, then delete it
+    pods_to_delete = []
+    for sts in efk_stateful_sets:
+        pod_selector = sts.obj["spec"]["selector"]
+        pods = pykube.Pod.objects(kube_cluster.kube_client).filter(
+            namespace=namespace_name,
+            selector=pod_selector["matchLabels"],
+        )
+        pods_to_delete.append(pykube.Pod(kube_cluster.kube_client, pods.response["items"][0]))
+    for pod in pods_to_delete:
+        pod.delete()
+
+    # wait for pods to get back up
+    wait_for_efk_stateful_sets(kube_cluster)
+
     # assert again
+    generate_logs(kube_cluster.kube_client, logs_ns_name, range_start=101, range_end=200)
+    query_logs(kube_cluster.kube_client, logs_ns_name, 200)
 
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
