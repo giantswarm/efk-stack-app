@@ -1,9 +1,10 @@
 """This module shows some very basic examples of how to use fixtures in pytest-helm-charts.
 """
 import logging
-from typing import Dict
+from typing import Dict, List
 
 import pykube
+import pytest
 from pytest_helm_charts.fixtures import Cluster
 from pytest_helm_charts.utils import wait_for_jobs_to_complete
 
@@ -40,25 +41,26 @@ def test_cluster_info(kube_cluster: Cluster, cluster_type: str, chart_extra_info
     assert cluster_type != ""
 
 
-def test_pods_available(kube_cluster: Cluster):
+# scope "module" means this is run only once, for the first test case requesting! It might be tricky
+# if you want to assert this multiple times
+@pytest.fixture(scope="module")
+def efk_stateful_sets(kube_cluster: Cluster) -> List[pykube.StatefulSet]:
     stateful_sets = wait_for_stateful_sets_to_run(
         kube_cluster.kube_client,
         [f"{app_name}-opendistro-es-data", f"{app_name}-opendistro-es-master"],
         namespace_name,
         timeout,
     )
-    for s in stateful_sets:
+    return stateful_sets
+
+
+def test_pods_available(kube_cluster: Cluster, efk_stateful_sets: List[pykube.StatefulSet]):
+    for s in efk_stateful_sets:
         assert int(s.obj["status"]["readyReplicas"]) > 0
 
 
-def test_masters_green(kube_cluster: Cluster):
-    stateful_sets = wait_for_stateful_sets_to_run(
-        kube_cluster.kube_client,
-        [f"{app_name}-opendistro-es-data", f"{app_name}-opendistro-es-master"],
-        namespace_name,
-        timeout,
-    )
-    masters = [s for s in stateful_sets if s.name == f"{app_name}-opendistro-es-master"]
+def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.StatefulSet]):
+    masters = [s for s in efk_stateful_sets if s.name == f"{app_name}-opendistro-es-master"]
     assert len(masters) == 1
 
     job = make_job(
@@ -86,13 +88,8 @@ def test_masters_green(kube_cluster: Cluster):
     )
 
 
+@pytest.mark.usefixtures("efk_stateful_sets")
 def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
-    wait_for_stateful_sets_to_run(
-        kube_cluster.kube_client,
-        [f"{app_name}-opendistro-es-data", f"{app_name}-opendistro-es-master"],
-        namespace_name,
-        timeout,
-    )
     # create a new namespace
     # fluentd is configured to ignore certain namespaces
     logs_ns_name = "logs-ns"
