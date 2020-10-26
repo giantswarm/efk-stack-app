@@ -2,7 +2,7 @@ from typing import List
 
 import pykube
 from pykube import HTTPClient
-from pytest_helm_charts.utils import wait_for_namespaced_objects_condition
+from pytest_helm_charts.utils import wait_for_namespaced_objects_condition, wait_for_jobs_to_complete
 
 
 def _statefulset_ready(s: pykube.StatefulSet) -> bool:
@@ -58,3 +58,27 @@ def make_job(
             },
         },
     )
+
+
+def run_job_to_completion(
+    kube_client: pykube.HTTPClient,
+    name_prefix: str,
+    namespace: str,
+    command: List[str],
+    timeout_sec: int = 60,
+    missing_ok: bool = False,
+    image: str = "quay.io/giantswarm/busybox:1.32.0",
+    restart_policy: str = "OnFailure",
+) -> pykube.Job:
+    job = make_job(kube_client, name_prefix, namespace, command, image=image, restart_policy=restart_policy)
+    job.create()
+
+    wait_for_jobs_to_complete(
+        kube_client,
+        [job.name],
+        namespace,
+        timeout_sec,
+        missing_ok=missing_ok,
+    )
+
+    return job

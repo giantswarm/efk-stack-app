@@ -6,9 +6,8 @@ from typing import Dict, List
 import pykube
 import pytest
 from pytest_helm_charts.fixtures import Cluster
-from pytest_helm_charts.utils import wait_for_jobs_to_complete
 
-from helpers import wait_for_stateful_sets_to_run, make_job
+from helpers import wait_for_stateful_sets_to_run, run_job_to_completion
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +62,7 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
     masters = [s for s in efk_stateful_sets if s.name == f"{app_name}-opendistro-es-master"]
     assert len(masters) == 1
 
-    job = make_job(
+    run_job_to_completion(
         kube_cluster.kube_client,
         "check-efk-green-",
         namespace_name,
@@ -76,15 +75,7 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
                 " | grep green"
             ),
         ],
-    )
-    job.create()
-
-    wait_for_jobs_to_complete(
-        kube_cluster.kube_client,
-        [job.name],
-        namespace_name,
-        timeout,
-        missing_ok=False,
+        timeout_sec=timeout,
     )
 
 
@@ -105,7 +96,7 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
         }
         pykube.Namespace(kube_cluster.kube_client, obj).create()
 
-    generate_logs_job = make_job(
+    run_job_to_completion(
         kube_cluster.kube_client,
         "generate-logs-",
         logs_ns_name,
@@ -114,18 +105,10 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
             "-c",
             'seq 1 100 | xargs printf "generating-logs-ding-dong-%03d\n"',
         ],
-    )
-    generate_logs_job.create()
-
-    wait_for_jobs_to_complete(
-        kube_cluster.kube_client,
-        [generate_logs_job.name],
-        logs_ns_name,
-        timeout,
-        missing_ok=False,
+        timeout_sec=timeout,
     )
 
-    query_logs_job = make_job(
+    run_job_to_completion(
         kube_cluster.kube_client,
         "query-logs-",
         namespace_name,
@@ -139,15 +122,7 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
             ),
         ],
         image="docker.io/giantswarm/tiny-tools:3.10",
-    )
-    query_logs_job.create()
-
-    wait_for_jobs_to_complete(
-        kube_cluster.kube_client,
-        [query_logs_job.name],
-        namespace_name,
-        timeout,
-        missing_ok=False,
+        timeout_sec=timeout,
     )
 
 
