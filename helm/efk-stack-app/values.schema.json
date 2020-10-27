@@ -1,0 +1,560 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "properties": {
+        "elasticsearch-curator": {
+            "type": "object",
+            "properties": {
+                "command": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "configMaps": {
+                    "type": "object",
+                    "properties": {
+                        "action_file_yml": {
+                            "type": "string"
+                        },
+                        "config_yml": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "env": {
+                    "type": "object",
+                    "properties": {
+                        "ELASTIC_CREDS": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "envFromSecrets": {
+                    "type": "object",
+                    "properties": {
+                        "ELASTIC_PASS": {
+                            "type": "object",
+                            "properties": {
+                                "from": {
+                                    "type": "object",
+                                    "properties": {
+                                        "key": {
+                                            "type": "string"
+                                        },
+                                        "secret": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "ELASTIC_USER": {
+                            "type": "object",
+                            "properties": {
+                                "from": {
+                                    "type": "object",
+                                    "properties": {
+                                        "key": {
+                                            "type": "string"
+                                        },
+                                        "secret": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string"
+                        },
+                        "repository": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "elasticsearch-exporter": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "envFromSecret": {
+                    "type": "string"
+                },
+                "es": {
+                    "type": "object",
+                    "properties": {
+                        "uri": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string"
+                        },
+                        "repository": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "annotations": {
+                            "type": "object",
+                            "properties": {
+                                "giantswarm.io/monitoring": {
+                                    "type": "string"
+                                },
+                                "giantswarm.io/monitoring-path": {
+                                    "type": "string"
+                                },
+                                "giantswarm.io/monitoring-port": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "fluentd-elasticsearch": {
+            "type": "object",
+            "properties": {
+                "configMaps": {
+                    "type": "object",
+                    "properties": {
+                        "useDefaults": {
+                            "type": "object",
+                            "properties": {
+                                "systemConf": {
+                                    "type": "boolean"
+                                },
+                                "systemInputConf": {
+                                    "type": "boolean"
+                                }
+                            }
+                        }
+                    }
+                },
+                "elasticsearch": {
+                    "type": "object",
+                    "properties": {
+                        "auth": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "host": {
+                            "type": "string"
+                        },
+                        "logstashPrefix": {
+                            "type": "string"
+                        },
+                        "scheme": {
+                            "type": "string"
+                        },
+                        "sslVerify": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "env": {
+                    "type": "object",
+                    "properties": {
+                        "LD_PRELOAD": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string"
+                        },
+                        "repository": {
+                            "type": "string"
+                        },
+                        "tag": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "podSecurityPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
+                },
+                "secret": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "secret_key": {
+                                "type": "string"
+                            },
+                            "secret_name": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "global": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "opendistro": {
+                    "type": "object",
+                    "properties": {
+                        "es": {
+                            "type": "object",
+                            "properties": {
+                                "client": {
+                                    "type": "object",
+                                    "properties": {
+                                        "uri": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "opendistro-certs": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "expiration": {
+                    "type": "string"
+                },
+                "organization": {
+                    "type": "string"
+                }
+            }
+        },
+        "opendistro-es": {
+            "type": "object",
+            "properties": {
+                "elasticsearch": {
+                    "type": "object",
+                    "properties": {
+                        "client": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "ingress": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "config": {
+                            "type": "object",
+                            "properties": {
+                                "http": {
+                                    "type": "object",
+                                    "properties": {
+                                        "compression": {
+                                            "type": "boolean"
+                                        }
+                                    }
+                                },
+                                "node": {
+                                    "type": "object",
+                                    "properties": {
+                                        "attr.box_type": {
+                                            "type": "string"
+                                        },
+                                        "max_local_storage_nodes": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                },
+                                "opendistro_security.allow_default_init_securityindex": {
+                                    "type": "boolean"
+                                },
+                                "opendistro_security.allow_unsafe_democertificates": {
+                                    "type": "boolean"
+                                },
+                                "opendistro_security.audit.ignore_users": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "opendistro_security.audit.type": {
+                                    "type": "string"
+                                },
+                                "opendistro_security.nodes_dn": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "opendistro_security.restapi.roles_enabled": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "opendistro_security.roles_mapping_resolution": {
+                                    "type": "string"
+                                },
+                                "opendistro_security.ssl.transport.enforce_hostname_verification": {
+                                    "type": "boolean"
+                                },
+                                "opendistro_security.ssl.transport.pemcert_filepath": {
+                                    "type": "string"
+                                },
+                                "opendistro_security.ssl.transport.pemkey_filepath": {
+                                    "type": "string"
+                                },
+                                "opendistro_security.ssl.transport.pemtrustedcas_filepath": {
+                                    "type": "string"
+                                },
+                                "processors": {
+                                    "type": "string"
+                                },
+                                "thread_pool.write.queue_size": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "data": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "persistence": {
+                                    "type": "object",
+                                    "properties": {
+                                        "size": {
+                                            "type": "string"
+                                        },
+                                        "storageClassName": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "replicas": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "image": {
+                            "type": "object",
+                            "properties": {
+                                "registry": {
+                                    "type": "string"
+                                },
+                                "repository": {
+                                    "type": "string"
+                                },
+                                "tag": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "initContainer": {
+                            "type": "object",
+                            "properties": {
+                                "image": {
+                                    "type": "object",
+                                    "properties": {
+                                        "registry": {
+                                            "type": "string"
+                                        },
+                                        "repository": {
+                                            "type": "string"
+                                        },
+                                        "tag": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "master": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "persistence": {
+                                    "type": "object",
+                                    "properties": {
+                                        "size": {
+                                            "type": "string"
+                                        },
+                                        "storageClassName": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "replicas": {
+                                    "type": "integer"
+                                }
+                            }
+                        },
+                        "ssl": {
+                            "type": "object",
+                            "properties": {
+                                "transport": {
+                                    "type": "object",
+                                    "properties": {
+                                        "enabled": {
+                                            "type": "boolean"
+                                        },
+                                        "existingCertSecret": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "kibana": {
+                    "type": "object",
+                    "properties": {
+                        "config": {
+                            "type": "object",
+                            "properties": {
+                                "elasticsearch.hosts": {
+                                    "type": "string"
+                                },
+                                "elasticsearch.password": {
+                                    "type": "string"
+                                },
+                                "elasticsearch.requestHeadersWhitelist": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "elasticsearch.requestTimeout": {
+                                    "type": "integer"
+                                },
+                                "elasticsearch.username": {
+                                    "type": "string"
+                                },
+                                "logging.verbose": {
+                                    "type": "boolean"
+                                },
+                                "opendistro_security.cookie.password": {
+                                    "type": "string"
+                                },
+                                "opendistro_security.cookie.secure": {
+                                    "type": "boolean"
+                                },
+                                "opendistro_security.multitenancy.enabled": {
+                                    "type": "boolean"
+                                },
+                                "opendistro_security.multitenancy.tenants.enable_global": {
+                                    "type": "boolean"
+                                },
+                                "opendistro_security.multitenancy.tenants.enable_private": {
+                                    "type": "boolean"
+                                },
+                                "opendistro_security.readonly_mode.roles": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                },
+                                "server.host": {
+                                    "type": "string"
+                                },
+                                "server.name": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "elasticsearchAccount": {
+                            "type": "object",
+                            "properties": {
+                                "secret": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "image": {
+                            "type": "object",
+                            "properties": {
+                                "registry": {
+                                    "type": "string"
+                                },
+                                "repository": {
+                                    "type": "string"
+                                },
+                                "tag": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
