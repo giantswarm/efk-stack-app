@@ -64,6 +64,7 @@ workflows:
       - architect/run-kat-tests:
           requires:
             - hold-run-perf-tests
+          resource_class: large
           name: "test the chart with kat"
           chart: "efk-stack-app"
           kube-app-testing-version: "use-gsctl"
