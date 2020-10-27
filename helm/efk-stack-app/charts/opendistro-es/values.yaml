@@ -257,13 +257,13 @@ elasticsearch:
     nodeSelector: {}
     tolerations: []
     ## Anti-affinity to disallow deploying client and master nodes on the same worker node
-    affinity: {}
-    #  podAntiAffinity:
-    #    requiredDuringSchedulingIgnoredDuringExecution:
-    #      - topologyKey: "kubernetes.io/hostname"
-    #        labelSelector:
-    #          matchLabels:
-    #            role: master
+    affinity: # {}
+      podAntiAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          - topologyKey: "kubernetes.io/hostname"
+            labelSelector:
+              matchLabels:
+                role: master
     podAnnotations: {}
 
   data:
@@ -320,15 +320,15 @@ elasticsearch:
     nodeSelector: {}
     tolerations: []
     ## Anti-affinity to disallow deploying client and master nodes on the same worker node
-    affinity: {}
-    #  podAntiAffinity:
-    #    preferredDuringSchedulingIgnoredDuringExecution:
-    #      - weight: 1
-    #        podAffinityTerm:
-    #          topologyKey: "kubernetes.io/hostname"
-    #          labelSelector:
-    #            matchLabels:
-    #              role: data
+    affinity: # {}
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  role: data
     podAnnotations: {}
 
   client:
@@ -388,15 +388,15 @@ elasticsearch:
     nodeSelector: {}
     tolerations: []
     ## Weighted anti-affinity to disallow deploying client node to the same worker node as master node
-    affinity: {}
-    #  podAntiAffinity:
-    #    preferredDuringSchedulingIgnoredDuringExecution:
-    #      - weight: 1
-    #        podAffinityTerm:
-    #          topologyKey: "kubernetes.io/hostname"
-    #          labelSelector:
-    #            matchLabels:
-    #              role: client
+    affinity: # {}
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  role: client
     podAnnotations: {}
 
   config: {}
