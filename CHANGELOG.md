@@ -7,6 +7,11 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- enabled antiAffinity to spread `master`, `data` and `client` nodes across `hostname`s
+- enabled PDBs for `master` and `data`: `minAvailable=66%` and for `client`: `minavailable=1`
+
 ## [0.3.3] - 2020-10-22
 
 ### Changed
