@@ -1,7 +1,8 @@
 """This module shows some very basic examples of how to use fixtures in pytest-helm-charts.
 """
+import datetime
 import logging
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import pykube
 import pytest
@@ -84,9 +85,9 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
 
 
 def generate_logs(
-    kube_client: pykube.HTTPClient, logs_namespace: str, range_start: int = 1, range_end: int = 100
+        kube_client: pykube.HTTPClient, logs_namespace: str, range_start: int = 1, range_end: int = 100
 ) -> pykube.Job:
-    return run_job_to_completion(
+    gen_job = run_job_to_completion(
         kube_client,
         "generate-logs-",
         logs_namespace,
@@ -97,27 +98,53 @@ def generate_logs(
         ],
         timeout_sec=timeout,
     )
+    flush_index(kube_client)
+    return gen_job
 
 
-def query_logs(
-    kube_client: pykube.HTTPClient, logs_namespace: str, expected_no_log_entries_lower_bound: int
+def run_shell_against_efk(
+        kube_client: pykube.HTTPClient, pod_name_prefix: str, namespace: str, command: str
 ) -> pykube.Job:
     return run_job_to_completion(
         kube_client,
-        "query-logs-",
-        logs_namespace,
+        pod_name_prefix,
+        namespace,
         [
             "sh",
             "-c",
-            (
-                f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
-                "_search?q=ding-dong&size=1000' "  # query more than we're expecting
-                f"| jq --exit-status '.hits.total.value >= {expected_no_log_entries_lower_bound}'"
-            ),
+            command,
         ],
         image="docker.io/giantswarm/tiny-tools:3.10",
         timeout_sec=timeout,
     )
+
+
+def query_logs(
+        kube_client: pykube.HTTPClient, expected_no_log_entries_lower_bound: int
+) -> pykube.Job:
+    command = (
+        f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
+        "_search?q=ding-dong&size=1000' "  # query more than we're expecting
+        f"| jq --exit-status '.hits.total.value >= {expected_no_log_entries_lower_bound}'"
+    )
+    return run_shell_against_efk(kube_client, "query-logs-", namespace_name, command)
+
+
+def flush_index(kube_client: pykube.HTTPClient) -> pykube.Job:
+    command = f"curl 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/_flush'"
+    return run_shell_against_efk(kube_client, "flush-index-", namespace_name, command)
+
+
+def delete_logs(
+        kube_client: pykube.HTTPClient, index_date: Optional[datetime.datetime] = None
+) -> pykube.Job:
+    # FIXME: This index name generation will work only for data generated on the same single day!
+    # Better way to do it is to check index names by running
+    # curl -s 'http://admin:admin@127.0.0.1:9200/_search?q=ding-dong&size=1000' | jq '[.hits.hits[]._index] | unique'
+    fluentd_index_date = index_date if index_date is not None else datetime.datetime.now()
+    index_name = f"fluentd-{fluentd_index_date.strftime('%Y.%m.%d')}"
+    command = f"curl -XDELETE 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/{index_name}'"
+    return run_shell_against_efk(kube_client, "delete-logs-", namespace_name, command)
 
 
 @pytest.mark.usefixtures("efk_stateful_sets")
@@ -127,8 +154,11 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
     logs_ns_name = "logs-ns"
     ensure_namespace_exists(kube_cluster.kube_client, logs_ns_name)
 
-    generate_logs(kube_cluster.kube_client, logs_ns_name)
-    query_logs(kube_cluster.kube_client, logs_ns_name, expected_no_log_entries_lower_bound=100)
+    try:
+        generate_logs(kube_cluster.kube_client, logs_ns_name)
+        query_logs(kube_cluster.kube_client, expected_no_log_entries_lower_bound=100)
+    finally:
+        delete_logs(kube_cluster.kube_client)
 
 
 @pytest.mark.usefixtures("efk_stateful_sets")
@@ -136,28 +166,30 @@ def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[
     logs_ns_name = "logs-ns"
     ensure_namespace_exists(kube_cluster.kube_client, logs_ns_name)
 
-    generate_logs(kube_cluster.kube_client, logs_ns_name)
-    query_logs(kube_cluster.kube_client, logs_ns_name, expected_no_log_entries_lower_bound=100)
+    try:
+        generate_logs(kube_cluster.kube_client, logs_ns_name)
+        query_logs(kube_cluster.kube_client, expected_no_log_entries_lower_bound=100)
 
-    # find 1st pod of each of the core stateful sets, then delete it
-    pods_to_delete = []
-    for sts in efk_stateful_sets:
-        pod_selector = sts.obj["spec"]["selector"]
-        pods = pykube.Pod.objects(kube_cluster.kube_client).filter(
-            namespace=namespace_name,
-            selector=pod_selector["matchLabels"],
-        )
-        pods_to_delete.append(pykube.Pod(kube_cluster.kube_client, pods.response["items"][0]))
-    for pod in pods_to_delete:
-        pod.delete()
+        # find 1st pod of each of the core stateful sets, then delete it
+        pods_to_delete = []
+        for sts in efk_stateful_sets:
+            pod_selector = sts.obj["spec"]["selector"]
+            pods = pykube.Pod.objects(kube_cluster.kube_client).filter(
+                namespace=namespace_name,
+                selector=pod_selector["matchLabels"],
+            )
+            pods_to_delete.append(pykube.Pod(kube_cluster.kube_client, pods.response["items"][0]))
+        for pod in pods_to_delete:
+            pod.delete()
 
-    # wait for pods to get back up
-    wait_for_efk_stateful_sets(kube_cluster)
+        # wait for pods to get back up
+        wait_for_efk_stateful_sets(kube_cluster)
 
-    # assert again
-    generate_logs(kube_cluster.kube_client, logs_ns_name, range_start=101, range_end=200)
-    query_logs(kube_cluster.kube_client, logs_ns_name, 200)
-
+        # assert again
+        generate_logs(kube_cluster.kube_client, logs_ns_name, range_start=101, range_end=200)
+        query_logs(kube_cluster.kube_client, 200)
+    finally:
+        delete_logs(kube_cluster.kube_client)
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
 #     cr_name = f"{app_name}-test"
