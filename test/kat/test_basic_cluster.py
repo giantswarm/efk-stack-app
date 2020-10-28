@@ -66,6 +66,7 @@ def wait_for_efk_stateful_sets(kube_cluster: Cluster) -> List[pykube.StatefulSet
     return stateful_sets
 
 
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 def test_pods_available(kube_cluster: Cluster, efk_stateful_sets: List[pykube.StatefulSet]):
     for s in efk_stateful_sets:
         assert int(s.obj["status"]["readyReplicas"]) > 0
