@@ -2,6 +2,7 @@
 """
 import datetime
 import logging
+from contextlib import contextmanager
 from typing import Dict, List, Optional
 
 import pykube
@@ -18,6 +19,12 @@ namespace_name = "default"
 catalog_name = "chartmuseum"
 
 timeout: int = 360
+
+
+@contextmanager
+def delete_logs_scope(kube_cluster: Cluster):
+    yield
+    delete_logs(kube_cluster.kube_client)
 
 
 def test_api_working(kube_cluster: Cluster) -> None:
@@ -75,7 +82,7 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
         [
             "sh",
             "-c",
-            ("wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green"),
+            "wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green",
         ],
         timeout_sec=timeout,
     )
@@ -148,11 +155,9 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
     logs_ns_name = "logs-ns"
     ensure_namespace_exists(kube_cluster.kube_client, logs_ns_name)
 
-    try:
+    with delete_logs_scope(kube_cluster):
         generate_logs(kube_cluster.kube_client, logs_ns_name)
         query_logs(kube_cluster.kube_client, expected_no_log_entries_lower_bound=100)
-    finally:
-        delete_logs(kube_cluster.kube_client)
 
 
 @pytest.mark.usefixtures("efk_stateful_sets")
@@ -160,7 +165,7 @@ def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[
     logs_ns_name = "logs-ns"
     ensure_namespace_exists(kube_cluster.kube_client, logs_ns_name)
 
-    try:
+    with delete_logs_scope(kube_cluster):
         generate_logs(kube_cluster.kube_client, logs_ns_name)
         query_logs(kube_cluster.kube_client, expected_no_log_entries_lower_bound=100)
 
@@ -182,8 +187,6 @@ def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[
         # assert again
         generate_logs(kube_cluster.kube_client, logs_ns_name, range_start=101, range_end=200)
         query_logs(kube_cluster.kube_client, 200)
-    finally:
-        delete_logs(kube_cluster.kube_client)
 
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
