@@ -69,7 +69,7 @@ workflows:
           chart: "efk-stack-app"
           kube-app-testing-version: "use-gsctl"
           kind-version: "0.9.0"
-          additional_kube-app-testing_flags: "--python-container-tag 3.8-slim"
+          additional_kube-app-testing_flags: "--python-container-tag 3.8-slim --kind-config-file test/kind_config.yaml"
           filters:
             tags:
               only: /^v.*/
