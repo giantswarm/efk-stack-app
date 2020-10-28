@@ -144,7 +144,7 @@ def delete_logs(kube_client: pykube.HTTPClient, index_date: Optional[datetime.da
     # curl -s 'http://admin:admin@127.0.0.1:9200/_search?q=ding-dong&size=1000' | jq '[.hits.hits[]._index] | unique'
     fluentd_index_date = index_date if index_date is not None else datetime.datetime.now()
     index_name = f"fluentd-{fluentd_index_date.strftime('%Y.%m.%d')}"
-    command = f"curl -XDELETE '{client_service_base_url}/{index_name}'"
+    command = f"curl -X DELETE '{client_service_base_url}/{index_name}'"
     return run_shell_against_efk(kube_client, "delete-logs-", namespace_name, command)
 
 
