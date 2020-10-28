@@ -13,10 +13,11 @@ from helpers import wait_for_stateful_sets_to_run, run_job_to_completion, ensure
 logger = logging.getLogger(__name__)
 
 app_name = "efk-stack-app"
+client_service_base_url = "http://admin:admin@opendistro-es-client-service:9200"
 namespace_name = "default"
 catalog_name = "chartmuseum"
 
-timeout: int = 180
+timeout: int = 360
 
 
 def test_api_working(kube_cluster: Cluster) -> None:
@@ -76,7 +77,7 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
             "-c",
             (
                 "wget -O - -q "
-                f"http://admin:admin@{app_name}-opendistro-es-client-service:9200/_cat/health"
+                f"{client_service_base_url}/_cat/health"
                 " | grep green"
             ),
         ],
@@ -97,6 +98,7 @@ def generate_logs(
             f'seq {range_start} {range_end} | xargs printf "generating-logs-ding-dong-%03d\n"',
         ],
         timeout_sec=timeout,
+        restart_policy="Never",
     )
     flush_index(kube_client)
     return gen_job
@@ -123,15 +125,14 @@ def query_logs(
         kube_client: pykube.HTTPClient, expected_no_log_entries_lower_bound: int
 ) -> pykube.Job:
     command = (
-        f"curl -s 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/"
-        "_search?q=ding-dong&size=1000' "  # query more than we're expecting
+        f"curl -s '{client_service_base_url}/_search?q=ding-dong&size=1000' "  # query more than we're expecting
         f"| jq --exit-status '.hits.total.value >= {expected_no_log_entries_lower_bound}'"
     )
     return run_shell_against_efk(kube_client, "query-logs-", namespace_name, command)
 
 
 def flush_index(kube_client: pykube.HTTPClient) -> pykube.Job:
-    command = f"curl 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/_flush'"
+    command = f"curl '{client_service_base_url}/_flush'"
     return run_shell_against_efk(kube_client, "flush-index-", namespace_name, command)
 
 
@@ -143,7 +144,7 @@ def delete_logs(
     # curl -s 'http://admin:admin@127.0.0.1:9200/_search?q=ding-dong&size=1000' | jq '[.hits.hits[]._index] | unique'
     fluentd_index_date = index_date if index_date is not None else datetime.datetime.now()
     index_name = f"fluentd-{fluentd_index_date.strftime('%Y.%m.%d')}"
-    command = f"curl -XDELETE 'http://admin:admin@{app_name}-opendistro-es-client-service:9200/{index_name}'"
+    command = f"curl -XDELETE '{client_service_base_url}/{index_name}'"
     return run_shell_against_efk(kube_client, "delete-logs-", namespace_name, command)
 
 
