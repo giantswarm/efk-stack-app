@@ -128,7 +128,7 @@ def run_shell_against_efk(
 def query_logs(kube_client: pykube.HTTPClient, expected_no_log_entries_lower_bound: int) -> pykube.Job:
     command = (
         f"curl -s '{client_service_base_url}/_search?q=ding-dong&size=1000' "  # query more than we're expecting
-        f"| jq --exit-status '.hits.total.value >= {expected_no_log_entries_lower_bound}'"
+        f"| jq --exit-status '.hits.total.value == {expected_no_log_entries_lower_bound}'"
     )
     return run_shell_against_efk(kube_client, "query-logs-", namespace_name, command)
 
