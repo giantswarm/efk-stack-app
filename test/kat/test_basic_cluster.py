@@ -75,18 +75,14 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
         [
             "sh",
             "-c",
-            (
-                "wget -O - -q "
-                f"{client_service_base_url}/_cat/health"
-                " | grep green"
-            ),
+            ("wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green"),
         ],
         timeout_sec=timeout,
     )
 
 
 def generate_logs(
-        kube_client: pykube.HTTPClient, logs_namespace: str, range_start: int = 1, range_end: int = 100
+    kube_client: pykube.HTTPClient, logs_namespace: str, range_start: int = 1, range_end: int = 100
 ) -> pykube.Job:
     gen_job = run_job_to_completion(
         kube_client,
@@ -105,7 +101,7 @@ def generate_logs(
 
 
 def run_shell_against_efk(
-        kube_client: pykube.HTTPClient, pod_name_prefix: str, namespace: str, command: str
+    kube_client: pykube.HTTPClient, pod_name_prefix: str, namespace: str, command: str
 ) -> pykube.Job:
     return run_job_to_completion(
         kube_client,
@@ -121,9 +117,7 @@ def run_shell_against_efk(
     )
 
 
-def query_logs(
-        kube_client: pykube.HTTPClient, expected_no_log_entries_lower_bound: int
-) -> pykube.Job:
+def query_logs(kube_client: pykube.HTTPClient, expected_no_log_entries_lower_bound: int) -> pykube.Job:
     command = (
         f"curl -s '{client_service_base_url}/_search?q=ding-dong&size=1000' "  # query more than we're expecting
         f"| jq --exit-status '.hits.total.value >= {expected_no_log_entries_lower_bound}'"
@@ -136,9 +130,7 @@ def flush_index(kube_client: pykube.HTTPClient) -> pykube.Job:
     return run_shell_against_efk(kube_client, "flush-index-", namespace_name, command)
 
 
-def delete_logs(
-        kube_client: pykube.HTTPClient, index_date: Optional[datetime.datetime] = None
-) -> pykube.Job:
+def delete_logs(kube_client: pykube.HTTPClient, index_date: Optional[datetime.datetime] = None) -> pykube.Job:
     # FIXME: This index name generation will work only for data generated on the same single day!
     # Better way to do it is to check index names by running
     # curl -s 'http://admin:admin@127.0.0.1:9200/_search?q=ding-dong&size=1000' | jq '[.hits.hits[]._index] | unique'
@@ -191,6 +183,7 @@ def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[
         query_logs(kube_cluster.kube_client, 200)
     finally:
         delete_logs(kube_cluster.kube_client)
+
 
 # def make_app_cr(kube_client: pykube.HTTPClient, chart_version: str) -> None:
 #     cr_name = f"{app_name}-test"
