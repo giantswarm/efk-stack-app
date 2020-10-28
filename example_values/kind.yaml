@@ -6,12 +6,12 @@ opendistro-es:
     sysctl:
       enabled: true
     master:
-      replicas: 2
+      replicas: 3
       persistence:
         storageClass: standard
         size: 1Gi
     data:
-      replicas: 2
+      replicas: 3
       persistence:
         storageClass: standard
         size: 1Gi
