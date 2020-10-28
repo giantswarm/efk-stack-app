@@ -95,6 +95,7 @@ def generate_logs(
         ],
         timeout_sec=timeout,
         restart_policy="Never",
+        backoffLimit=0,
     )
     flush_index(kube_client)
     return gen_job

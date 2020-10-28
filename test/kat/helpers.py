@@ -35,6 +35,7 @@ def make_job(
     command: List[str],
     image: str = "quay.io/giantswarm/busybox:1.32.0",
     restart_policy: str = "OnFailure",
+    backoffLimit: int = 6,  # 6 is the default from k8s
 ) -> pykube.Job:
     return pykube.Job(
         kube_client,
@@ -43,6 +44,7 @@ def make_job(
             "kind": "Job",
             "metadata": {"generateName": name_prefix, "namespace": namespace},
             "spec": {
+                "backoffLimit": backoffLimit,
                 "template": {
                     "spec": {
                         "containers": [
@@ -69,8 +71,17 @@ def run_job_to_completion(
     missing_ok: bool = False,
     image: str = "quay.io/giantswarm/busybox:1.32.0",
     restart_policy: str = "OnFailure",
+    backoffLimit: int = 6,  # 6 is the default from k8s
 ) -> pykube.Job:
-    job = make_job(kube_client, name_prefix, namespace, command, image=image, restart_policy=restart_policy)
+    job = make_job(
+        kube_client,
+        name_prefix,
+        namespace,
+        command,
+        image=image,
+        restart_policy=restart_policy,
+        backoffLimit=backoffLimit,
+    )
     job.create()
 
     wait_for_jobs_to_complete(
