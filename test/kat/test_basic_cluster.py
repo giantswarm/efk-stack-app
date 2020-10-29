@@ -8,8 +8,12 @@ from typing import Dict, List, Optional
 import pykube
 import pytest
 from pytest_helm_charts.fixtures import Cluster
-
-from helpers import wait_for_stateful_sets_to_run, run_job_to_completion, ensure_namespace_exists
+from pytest_helm_charts.utils import (
+    wait_for_stateful_sets_to_run,
+    create_job_and_run_to_completion,
+    make_job_object,
+    ensure_namespace_exists,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -78,15 +82,19 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
     masters = [s for s in efk_stateful_sets if s.name == f"{app_name}-opendistro-es-master"]
     assert len(masters) == 1
 
-    run_job_to_completion(
+    create_job_and_run_to_completion(
         kube_cluster.kube_client,
-        "check-efk-green-",
         namespace_name,
-        [
-            "sh",
-            "-c",
-            "wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green",
-        ],
+        make_job_object(
+            kube_cluster.kube_client,
+            "check-efk-green-",
+            namespace_name,
+            [
+                "sh",
+                "-c",
+                "wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green",
+            ],
+        ),
         timeout_sec=timeout,
     )
 
@@ -94,18 +102,22 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
 def generate_logs(
     kube_client: pykube.HTTPClient, logs_namespace: str, range_start: int = 1, range_end: int = 100
 ) -> pykube.Job:
-    gen_job = run_job_to_completion(
+    gen_job = create_job_and_run_to_completion(
         kube_client,
-        "generate-logs-",
         logs_namespace,
-        [
-            "sh",
-            "-c",
-            f'seq {range_start} {range_end} | xargs printf "generating-logs-ding-dong-%03d\n"',
-        ],
+        make_job_object(
+            kube_client,
+            "generate-logs-",
+            logs_namespace,
+            [
+                "sh",
+                "-c",
+                f'seq {range_start} {range_end} | xargs printf "generating-logs-ding-dong-%03d\n"',
+            ],
+            restart_policy="Never",
+            backoff_limit=0,
+        ),
         timeout_sec=timeout,
-        restart_policy="Never",
-        backoffLimit=0,
     )
     flush_index(kube_client)
     return gen_job
@@ -114,16 +126,20 @@ def generate_logs(
 def run_shell_against_efk(
     kube_client: pykube.HTTPClient, pod_name_prefix: str, namespace: str, command: str
 ) -> pykube.Job:
-    return run_job_to_completion(
+    return create_job_and_run_to_completion(
         kube_client,
-        pod_name_prefix,
         namespace,
-        [
-            "sh",
-            "-c",
-            command,
-        ],
-        image="docker.io/giantswarm/tiny-tools:3.10",
+        make_job_object(
+            kube_client,
+            pod_name_prefix,
+            namespace,
+            [
+                "sh",
+                "-c",
+                command,
+            ],
+            image="docker.io/giantswarm/tiny-tools:3.10",
+        ),
         timeout_sec=timeout,
     )
 
