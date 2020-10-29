@@ -49,7 +49,7 @@ Manages ElasticSearch indexes lifecycle, by default is configured to delete indi
 ### FluentD
 Log collector and parser that will send pod logs to ElasticSearch.
 
-[Additional info](./helm/efk-stack-app/charts/fluentd/README.md)
+[Additional info](./helm/efk-stack-app/charts/fluentd-elasticsearch/README.md)
 
 
 ## Configuration

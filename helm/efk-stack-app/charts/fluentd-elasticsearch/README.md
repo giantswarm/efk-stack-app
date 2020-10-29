@@ -162,7 +162,7 @@ AWS Elasticsearch requires requests to upload data to be signed using [AWS Signa
 
 ## Upgrading
 
-### From a version < 2.0.0 
+### From a version < 2.0.0
 
 When you upgrade this chart you have to add the "--force" parameter to your helm upgrade command as there have been changes to the lables which makes a normal upgrade impossible.
 
@@ -172,13 +172,13 @@ When upgrading this chart you need to rename `livenessProbe.command` parameter t
 
 ### From a version &lt; 6.0.0 to version &ge; 6.0.0
 
-When upgrading this chart  you have to perform updates for any system that 
+When upgrading this chart  you have to perform updates for any system that
 uses fluentd output from systemd logs, because now:
 
 - field names have removed leading underscores (`_pid` becomes `pid`)
 - field names from systemd are now lowercase (`PROCESS` becomes `process`)
 
-This means any system that uses fluend output needs to be updated,
+This means any system that uses fluentd output needs to be updated,
 especially:
 
 - in Kibana go to `Management > Index Patterns`, for each index click on
@@ -186,7 +186,7 @@ especially:
 - fix renamed fields in other places - such as Kibana or Grafana, in items
   such as dashboards queries/vars/annotations
 
-It is strongly suggested to set up temporarily new fluend instance with output 
+It is strongly suggested to set up temporarily new fluentd instance with output
 to another elasticsearch index prefix to see the differences and then apply changes. The amount of fields altered can be noticeable and hard to list them all in this document.
 
 Some dashboards can be easily fixed with sed:
@@ -231,5 +231,3 @@ TIMESTAMP_BOOTTIME
 TIMESTAMP_MONOTONIC
 UNIT
 ```
-
-

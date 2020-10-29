@@ -1,0 +1,17 @@
+opendistro-es:
+  kibana:
+    ingress:
+      enabled: false
+  elasticsearch:
+    sysctl:
+      enabled: true
+    master:
+      replicas: 3
+      persistence:
+        storageClass: standard
+        size: 1Gi
+    data:
+      replicas: 3
+      persistence:
+        storageClass: standard
+        size: 1Gi
