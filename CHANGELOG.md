@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.3.4] - 2020-10-30
+
 ### Added
 
 - enabled antiAffinity to spread `master`, `data` and `client` nodes across `hostname`s
@@ -74,7 +76,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.3...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.4...HEAD
+[0.3.4]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.3...v0.3.4
 [0.3.3]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.2...v0.3.3
 [0.3.2]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.0...v0.3.1
