@@ -2,12 +2,33 @@
 
 # efk-stack-app chart
 
-Giant Swarm offers a Opendistro Managed App which can be installed in tenant clusters.
+Giant Swarm offers an Opendistro Managed App which can be installed in tenant clusters.
 Here we define the Opendistro chart with its templates and default configuration.
 
 This application is intended to have a centralized log storage for your applications, it's not meant to be long term storage and is prepared to delete old indexes (7 days by default)
 
 [Changelog](./CHANGELOG.md)
+
+## Important notes - read before you deploy
+
+1. This chart runs an Elasticsearch document database. It is recommended to run it with
+   3 `master` and 3 `data` pods for the Elasticsearch deployment. These values are already
+   defaults for this chart. However, to make sure that if you loose a single Kubernetes node
+   you won't loose more than 1 Elasticsearch pods (to operate, Elasticsearch needs at least
+   2 out of 3 `master` pods to be up), we use [pod anti affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
+   to forbid running more than 1 `master` pod on a single Kubernetes node. This means that
+   as an **absolute minimum** you need to have at least **3 Kubernetes nodes** (by default)
+   in your Kubernetes cluster. If you have only 3 nodes (or the configured replication
+   factor for `master` pods) and you want to roll some of these Kubernetes nodes,
+   please **create new nodes** first, then delete the old ones. Your Kubernetes cluster
+   needs to have
+   at least 3 nodes at all time - only then your Elasticsearch can survive 1 Kubernetes
+   node crash without data loss.
+2. To ensure that you won't impact your Elasticsearch deployment by accident, we're including
+   [PodDisruptionBudgets(PDBs)](https://kubernetes.io/docs/tasks/run-application/configure-pdb/)
+   by default. This means you won't be able to drain your nodes if it violates
+   Elasticsearch's minimum quorum count (2 out of 3 in the default config).
+
 
 ## Compatibility
 - AWS: 9.0.0+
