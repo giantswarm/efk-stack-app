@@ -142,17 +142,20 @@ livenessProbe:
         STUCK_THRESHOLD_SECONDS=${STUCK_THRESHOLD_SECONDS:-900};
         if [ ! -e /var/log/fluentd-buffers ];
         then
+          echo "Error: /var/log/fluentd-buffers doesn't exist";
           exit 1;
         fi;
         touch -d "${STUCK_THRESHOLD_SECONDS} seconds ago" /tmp/marker-stuck;
         if [ -z "$(find /var/log/fluentd-buffers -type d -newer /tmp/marker-stuck -print -quit)" ];
         then
           rm -rf /var/log/fluentd-buffers;
+          echo "Error: no directory with atime newer than ${STUCK_THRESHOLD_SECONDS} s in /var/log/fluentd-buffers. Removing that dir.";
           exit 1;
         fi;
         touch -d "${LIVENESS_THRESHOLD_SECONDS} seconds ago" /tmp/marker-liveness;
         if [ -z "$(find /var/log/fluentd-buffers -type d -newer /tmp/marker-liveness -print -quit)" ];
         then
+          echo "Error: no directory with atime newer than ${LIVENESS_THRESHOLD_SECONDS} s in /var/log/fluentd-buffers.";
           exit 1;
         fi;
 
