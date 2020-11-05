@@ -206,3 +206,14 @@ def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[
         # assert again
         generate_logs(kube_cluster.kube_client, logs_ns_name, range_start=101, range_end=200)
         query_logs(kube_cluster.kube_client, 200)
+
+
+def test_pdbs_deployed(kube_cluster: Cluster) -> None:
+    pdbs = pykube.PodDisruptionBudget.objects(kube_cluster.kube_client)
+    pdb_names = [pdb.metadata["name"] for pdb in pdbs]
+    assert pdb_names == [f"{app_name}-opendistro-es-data-pdb", f"{app_name}-opendistro-es-master-pdb"]
+    for pdb in pdbs:
+        assert pdb.obj["spec"]["minAvailable"] == "66%"
+        assert pdb.obj["status"]["disruptionsAllowed"] == 1
+        assert pdb.obj["status"]["desiredHealthy"] == 2
+        assert pdb.obj["status"]["currentHealthy"] == 3
