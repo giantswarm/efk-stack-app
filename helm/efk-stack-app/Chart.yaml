@@ -16,7 +16,7 @@ appVersion: 1.9.0
 description: 'Open Distro for Elasticsearch'
 engine: gotpl
 home: https://github.com/giantswarm/efk-stack-app
-icon: https://github.com/giantswarm/efk-stack-app/raw/master/images/logo.png
+icon: https://s.giantswarm.io/app-icons/1/png/efk-stack-app-light.png
 maintainers:
 - name: Giant Swarm applications team
   url: https://github.com/giantswarm/efk-stack-app
