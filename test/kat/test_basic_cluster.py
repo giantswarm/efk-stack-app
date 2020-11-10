@@ -208,6 +208,7 @@ def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[
         query_logs(kube_cluster.kube_client, 200)
 
 
+@pytest.mark.usefixtures("efk_stateful_sets")
 def test_pdbs_deployed(kube_cluster: Cluster) -> None:
     pdbs = pykube.PodDisruptionBudget.objects(kube_cluster.kube_client)
     pdb_names = [pdb.metadata["name"] for pdb in pdbs]
