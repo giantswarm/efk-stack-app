@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- corrected es-client service name in es-client-ingress. ([#36](https://github.com/giantswarm/efk-stack-app/pull/36))
+
 ## [0.3.4] - 2020-10-30
 
 ### Added
