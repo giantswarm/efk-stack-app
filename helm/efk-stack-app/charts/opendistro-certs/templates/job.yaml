@@ -27,7 +27,7 @@ spec:
           serviceAccountName: {{ include "opendistro-certs.fullname" . }}
           containers:
           - name: certs
-            image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+            image: "{{ .Values.global.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
             env:
               - name: RELEASE
                 value: {{ .Release.Name }}
@@ -51,7 +51,7 @@ spec:
       serviceAccountName: {{ include "opendistro-certs.fullname" . }}
       containers:
       - name: certs
-        image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        image: "{{ .Values.global.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         env:
           - name: RELEASE
             value: {{ .Release.Name }}

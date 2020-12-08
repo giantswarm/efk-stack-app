@@ -1,6 +1,5 @@
 global:
-  image:
-    registry: quay.io
+  registry: quay.io
   opendistro:
     es:
       client:
@@ -113,38 +112,44 @@ opendistro-es:
 
   kibana:
     enabled: true
-    image:
-      registry: quay.io
-      repository: giantswarm/opendistro-for-elasticsearch-kibana
-      tag: 1.9.0@sha256:3a35a31aba8070ff7f0c215d36ad31990cabb3b04ac449d1c19943a17ddd55c4
+    image: giantswarm/opendistro-for-elasticsearch-kibana
+    imageTag: 1.11.0@sha256:8155aa7d729aa5b3f2a8fc9d16b6e7289db7476392af99366f3bd4a531a8fad8
+    imagePullPolicy: IfNotPresent
 
     config:
-      server.name: kibana
-      server.host: "0"
+      server:
+        name: kibana
+        host: "0"
 
-      elasticsearch.hosts: http://opendistro-es-client-service:9200
-      elasticsearch.requestTimeout: 360000
+      elasticsearch:
+        hosts: http://opendistro-es-client-service:9200
+        requestTimeout: 360000
+        username: ${ELASTICSEARCH_USERNAME}
+        password: ${ELASTICSEARCH_PASSWORD}
+
+      elasticsearch.requestHeadersWhitelist: ["securitytenant", "Authorization"]
 
       logging.verbose: false
 
-      opendistro_security.cookie.secure: true
-      opendistro_security.cookie.password: ${COOKIE_PASS}
-
-      elasticsearch.username: ${ELASTICSEARCH_USERNAME}
-      elasticsearch.password: ${ELASTICSEARCH_PASSWORD}
-
-      # Multitenancy with global/private tenants disabled,
-      # set to both to true if you want them to be available.
-      opendistro_security.multitenancy.enabled: false
-      opendistro_security.multitenancy.tenants.enable_private: false
-      opendistro_security.multitenancy.tenants.enable_global: false
-      opendistro_security.readonly_mode.roles: ["kibana_read_only"]
-      elasticsearch.requestHeadersWhitelist: ["securitytenant", "Authorization"]
+      opendistro_security:
+        cookie.secure: true
+        cookie.password: ${COOKIE_PASS}
+        # Multitenancy with global/private tenants disabled,
+        # set to both to true if you want them to be available.
+        multitenancy.enabled: false
+        multitenancy.tenants.enable_private: false
+        multitenancy.tenants.enable_global: false
+        readonly_mode.roles: ["kibana_read_only"]
 
     elasticsearchAccount:
       secret: kibana-auth
 
   elasticsearch:
+    # image: giantswarm/opendistro-for-elasticsearch
+    image: giantswarm/opendistro-for-elasticsearch
+    imageTag: 1.11.0@sha256:806b65b68b371527ceab61c75ab740ab7b0d6924da6741a98b5884bd2fcae3e0
+    imagePullPolicy: IfNotPresent
+
     sysctl:
       enabled: true
 
@@ -152,36 +157,37 @@ opendistro-es:
       enabled: true
       replicas: 3
       persistence:
-        storageClassName: default
+        # storageClassName: default
         size: 50Gi
       podDisruptionBudget:
         enabled: true
-        # should work for 1,3,5 replicas in master group
-        minAvailable: 66%
+        minAvailable: null
+        maxUnavailable: 1
 
     initContainer:
-      image:
-        registry: quay.io
-        repository: giantswarm/busybox
-        tag: 1.31.0@sha256:78560d44615215a1b352338e548d3ee595811fc8d85ff422154416d7d02767f1
+      image: giantswarm/busybox
+      imageTag: 1.32.0@sha256:400ee2ed939df769d4681023810d2e4fb9479b8401d97003c710d0e20f7c49c6
 
     data:
       enabled: true
       replicas: 3
       persistence:
-        storageClassName: default
+        # storageClassName: default
         size: 100Gi
       podDisruptionBudget:
         enabled: true
-        # should work for 1,3,5 replicas in master group
-        minAvailable: 66%
+        minAvailable: null
+        maxUnavailable: 1
 
     client:
       enabled: true
       ingress:
         enabled: false
+      replicas: 2
       podDisruptionBudget:
-        enabled: false
+        enabled: true
+        minAvailable: null
+        maxUnavailable: 1
 
     ssl:
       transport:
@@ -190,38 +196,48 @@ opendistro-es:
 
     config:
       # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example
-      opendistro_security.audit.ignore_users: ["admin"]
-      opendistro_security.allow_unsafe_democertificates: false
-      # Set to false if running securityadmin.sh manually following deployment
-      opendistro_security.allow_default_init_securityindex: true
-      # See: https://opendistro.github.io/for-elasticsearch-docs/docs/security-audit-logs/
-      opendistro_security.audit.type: internal_elasticsearch
-      # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L27
-      opendistro_security.roles_mapping_resolution: BOTH
-      opendistro_security.restapi.roles_enabled: ["all_access", "security_rest_api_access"]
+      opendistro_security:
+        audit:
+          ignore_users: ["admin"]
+          # See: https://opendistro.github.io/for-elasticsearch-docs/docs/security-audit-logs/
+          type: internal_elasticsearch
 
-      node:
-        max_local_storage_nodes: 1
-        attr.box_type: hot
+        allow_unsafe_democertificates: false
+        # Set to false if running securityadmin.sh manually following deployment
+        allow_default_init_securityindex: true
+        # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L27
+        roles_mapping_resolution: BOTH
+        restapi.roles_enabled: ["all_access", "security_rest_api_access"]
+        # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L17
+        nodes_dn:
+          - "*"
+        ssl:
+          transport:
+            enforce_hostname_verification: false
+            pemcert_filepath: elk-transport-crt.pem
+            pemkey_filepath: elk-transport-key.pem
+            pemtrustedcas_filepath: elk-transport-root-ca.pem
 
-      # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L17
-      opendistro_security.nodes_dn:
-        - "*"
+    # config:
+    #   # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example
+      
+    #   opendistro_security.audit.ignore_users: ["admin"]
+    #       # See: https://opendistro.github.io/for-elasticsearch-docs/docs/security-audit-logs/
+    #   opendistro_security.audit.type: internal_elasticsearch
 
-      processors: ${PROCESSORS:1}
-
-      thread_pool.write.queue_size: 800
-
-      http:
-        compression: true
-
-      # TLS Configuration Transport Layer
-      opendistro_security.ssl.transport.enforce_hostname_verification: false
-      opendistro_security.ssl.transport.pemcert_filepath: elk-transport-crt.pem
-      opendistro_security.ssl.transport.pemkey_filepath: elk-transport-key.pem
-      opendistro_security.ssl.transport.pemtrustedcas_filepath: elk-transport-root-ca.pem
-
-    image:
-      registry: quay.io
-      repository: giantswarm/opendistro-for-elasticsearch
-      tag: 1.9.0@sha256:878e6947b3a50487f5a57453a7ba8c1e7da6488f997c6fc257c657ad04874d29
+    #   opendistro_security:
+    #     allow_unsafe_democertificates: false
+    #     # Set to false if running securityadmin.sh manually following deployment
+    #     allow_default_init_securityindex: true
+    #     # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L27
+    #     roles_mapping_resolution: BOTH
+    #     restapi.roles_enabled: ["all_access", "security_rest_api_access"]
+    #     # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L17
+    #     nodes_dn:
+    #       - "*"
+    #     ssl:
+    #       transport:
+    #         enforce_hostname_verification: false
+    #         pemcert_filepath: elk-transport-crt.pem
+    #         pemkey_filepath: elk-transport-key.pem
+    #         pemtrustedcas_filepath: elk-transport-root-ca.pem
