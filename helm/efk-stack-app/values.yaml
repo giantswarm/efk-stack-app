@@ -1,6 +1,11 @@
 global:
   registry: quay.io
 
+  opendistro:
+    es:
+      client:
+        uri: opendistro-es-client-service
+
 opendistro-certs:
   enabled: true
   organization: Giant Swarm
@@ -141,7 +146,6 @@ opendistro-es:
       secret: kibana-auth
 
   elasticsearch:
-    # image: giantswarm/opendistro-for-elasticsearch
     image: giantswarm/opendistro-for-elasticsearch
     imageTag: 1.11.0@sha256:806b65b68b371527ceab61c75ab740ab7b0d6924da6741a98b5884bd2fcae3e0
     imagePullPolicy: IfNotPresent
@@ -149,46 +153,77 @@ opendistro-es:
     sysctl:
       enabled: true
 
-    master:
-      enabled: true
-      replicas: 3
-      persistence:
-        # storageClassName: default
-        size: 50Gi
-      podDisruptionBudget:
-        enabled: true
-        minAvailable: null
-        maxUnavailable: 1
-
     initContainer:
       image: giantswarm/busybox
       imageTag: 1.32.0@sha256:400ee2ed939df769d4681023810d2e4fb9479b8401d97003c710d0e20f7c49c6
-
-    data:
-      enabled: true
-      replicas: 3
-      persistence:
-        # storageClassName: default
-        size: 100Gi
-      podDisruptionBudget:
-        enabled: true
-        minAvailable: null
-        maxUnavailable: 1
-
-    client:
-      enabled: true
-      ingress:
-        enabled: false
-      replicas: 2
-      podDisruptionBudget:
-        enabled: true
-        minAvailable: null
-        maxUnavailable: 1
 
     ssl:
       transport:
         enabled: true
         existingCertSecret: opendistro-transport-certs
+
+    master:
+      replicas: 3
+
+      persistence:
+        size: 50Gi
+
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: null
+        maxUnavailable: 1
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  role: master
+
+    data:
+      replicas: 3
+
+      persistence:
+        size: 100Gi
+      
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: null
+        maxUnavailable: 1
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  role: data
+
+    client:
+      replicas: 2
+
+      ingress:
+        enabled: false
+
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: null
+        maxUnavailable: 1
+
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                  role: client
 
     config:
       # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example

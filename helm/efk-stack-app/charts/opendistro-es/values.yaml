@@ -155,12 +155,6 @@ global:
   # imagePullSecrets:
   #   - myRegistryKeySecretName
 
-  opendistro:
-    es:
-      client:
-        uri: opendistro-es-client-service
-
-
 elasticsearch:
   ## Used when deploying hot/warm architecture. Allows second aliased deployment to find cluster.
   ## Default {{ template opendistro-es.fullname }}-discovery.
@@ -274,7 +268,7 @@ elasticsearch:
     javaOpts: "-Xms512m -Xmx512m"
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
+      # minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:
@@ -351,7 +345,7 @@ elasticsearch:
     javaOpts: "-Xms512m -Xmx512m"
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
+      # minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:
@@ -420,7 +414,7 @@ elasticsearch:
     #    memory: 1024Mi
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
+      # minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:

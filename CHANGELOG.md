@@ -21,7 +21,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ### Added
 
-- Simple default `readinessProbe` for Elasticsearch: Just waits for HTTP connection to become OK
+FIXME
+- Simple default `readinessProbe` for Elasticsearch: Just checks for TCP connection
 
 ## [0.3.5] - 2020-11-25
 
