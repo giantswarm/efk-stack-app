@@ -155,6 +155,11 @@ global:
   # imagePullSecrets:
   #   - myRegistryKeySecretName
 
+  opendistro:
+    es:
+      client:
+        uri: opendistro-es-client-service
+
 
 elasticsearch:
   ## Used when deploying hot/warm architecture. Allows second aliased deployment to find cluster.

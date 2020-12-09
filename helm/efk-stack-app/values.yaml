@@ -1,9 +1,5 @@
 global:
   registry: quay.io
-  opendistro:
-    es:
-      client:
-        uri: opendistro-es-client-service
 
 opendistro-certs:
   enabled: true
