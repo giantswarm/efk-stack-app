@@ -113,8 +113,9 @@ opendistro-es:
 
   kibana:
     enabled: true
+    # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch-kibana?tab=tags
     image: giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.11.0@sha256:8155aa7d729aa5b3f2a8fc9d16b6e7289db7476392af99366f3bd4a531a8fad8
+    imageTag: 1.12.0@sha256:ad07feadbf595048572908ca604aff7fa547a6c0c15e750f765a799b48bd5c3d
     imagePullPolicy: IfNotPresent
 
     config:
@@ -146,8 +147,9 @@ opendistro-es:
       secret: kibana-auth
 
   elasticsearch:
+    # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch?tab=tags
     image: giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.11.0@sha256:806b65b68b371527ceab61c75ab740ab7b0d6924da6741a98b5884bd2fcae3e0
+    imageTag: 1.12.0@sha256:1cbbcd721f356c2fb07d95648b89a278287cefeb0f663b9fd8fb0f9a4c89a63d
     imagePullPolicy: IfNotPresent
 
     sysctl:
