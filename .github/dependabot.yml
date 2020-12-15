@@ -1,14 +1,16 @@
 # DO NOT EDIT. Generated with:
 #
-#    devctl gen dependabot
+#    devctl@4.0.1
 #
 version: 2
 updates:
-- package-ecosystem: github-actions
-  directory: "/"
-  schedule:
-    interval: weekly
-    time: "04:00"
-  target-branch: master
-  reviewers:
-  - giantswarm/app-squad-efk
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      time: "04:00"
+    open-pull-requests-limit: 10
+    reviewers:
+      - giantswarm/app-squad-efk
+    ignore:
+      - dependency-name: zricethezav/gitleaks-action
