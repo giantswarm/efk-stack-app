@@ -27,4 +27,3 @@ sources:
 - https://pages.git.viasat.com/ATG/charts
 # Chart version
 version: [[ .Version ]]
-# icon: https://avatars1.githubusercontent.com/u/45981434
