@@ -190,7 +190,7 @@ opendistro-es:
 
       persistence:
         size: 100Gi
-      
+
       podDisruptionBudget:
         enabled: true
         minAvailable: null
@@ -253,7 +253,7 @@ opendistro-es:
 
     # config:
     #   # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example
-      
+
     #   opendistro_security.audit.ignore_users: ["admin"]
     #       # See: https://opendistro.github.io/for-elasticsearch-docs/docs/security-audit-logs/
     #   opendistro_security.audit.type: internal_elasticsearch
