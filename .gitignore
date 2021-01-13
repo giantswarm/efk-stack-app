@@ -11,3 +11,4 @@ test/kat/.idea/
 efk-stack-app*.tgz
 test-results/
 **/.idea
+build/
