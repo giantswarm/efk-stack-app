@@ -12,3 +12,4 @@ efk-stack-app*.tgz
 test-results/
 **/.idea
 build/
+helm/efk-stack-app/tests/abs/test_results*.xml
