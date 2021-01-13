@@ -31,6 +31,7 @@ def delete_logs_scope(kube_cluster: Cluster):
     delete_logs(kube_cluster.kube_client)
 
 
+@pytest.mark.smoke
 def test_api_working(kube_cluster: Cluster) -> None:
     """Very minimalistic example of using the [kube_cluster](pytest_helm_charts.fixtures.kube_cluster)
     fixture to get an instance of [Cluster](pytest_helm_charts.clusters.Cluster) under test
@@ -43,6 +44,7 @@ def test_api_working(kube_cluster: Cluster) -> None:
     assert len(pykube.Node.objects(kube_cluster.kube_client)) >= 1
 
 
+@pytest.mark.smoke
 def test_cluster_info(kube_cluster: Cluster, cluster_type: str, chart_extra_info: Dict[str, str]) -> None:
     """Example shows how you can access additional information about the cluster the tests are running on"""
     logger.info(f"Running on cluster type {cluster_type}")
@@ -72,12 +74,14 @@ def wait_for_efk_stateful_sets(kube_cluster: Cluster) -> List[pykube.StatefulSet
 
 # when we start the tests on circleci, we have to wait for EFK API to be available, hence
 # this additional delay and retries
+@pytest.mark.smoke
 @pytest.mark.flaky(reruns=5, reruns_delay=10)
 def test_pods_available(kube_cluster: Cluster, efk_stateful_sets: List[pykube.StatefulSet]):
     for s in efk_stateful_sets:
         assert int(s.obj["status"]["readyReplicas"]) > 0
 
 
+@pytest.mark.functional
 def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.StatefulSet]):
     masters = [s for s in efk_stateful_sets if s.name == f"{app_name}-opendistro-es-master"]
     assert len(masters) == 1
@@ -167,6 +171,7 @@ def delete_logs(kube_client: pykube.HTTPClient, index_date: Optional[datetime.da
     return run_shell_against_efk(kube_client, "delete-logs-", namespace_name, command)
 
 
+@pytest.mark.functional
 @pytest.mark.usefixtures("efk_stateful_sets")
 def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
     # create a new namespace
@@ -179,6 +184,7 @@ def test_logs_are_picked_up(kube_cluster: Cluster) -> None:
         query_logs(kube_cluster.kube_client, expected_no_log_entries_lower_bound=100)
 
 
+@pytest.mark.functional
 @pytest.mark.usefixtures("efk_stateful_sets")
 def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[pykube.StatefulSet]) -> None:
     logs_ns_name = "logs-ns"
@@ -208,6 +214,7 @@ def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[
         query_logs(kube_cluster.kube_client, 200)
 
 
+@pytest.mark.functional
 @pytest.mark.usefixtures("efk_stateful_sets")
 def test_pdbs_deployed(kube_cluster: Cluster) -> None:
     pdbs = pykube.PodDisruptionBudget.objects(kube_cluster.kube_client)

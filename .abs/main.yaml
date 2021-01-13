@@ -1,0 +1,5 @@
+replace-chart-version-with-git: true
+generate-metadata: true
+catalog-base-url: http://localhost/
+functional-tests-cluster-type: kind
+smoke-tests-cluster-type: kind

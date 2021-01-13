@@ -10,3 +10,4 @@ test/kat/.idea/
 **/.python-version
 efk-stack-app*.tgz
 test-results/
+**/.idea
