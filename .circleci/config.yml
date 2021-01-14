@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  architect: giantswarm/architect@0.16.0
+  architect: giantswarm/architect@dev:bump-app-build-suite-version
 
 workflows:
   package-and-push-chart-on-tag:
@@ -16,13 +16,11 @@ workflows:
             tags:
               only: /^v.*/
 
-      - architect/run-kat-tests:
+      - architect/run-tests-with-abs:
           resource_class: xlarge
-          name: "test the chart with kat"
-          chart: "efk-stack-app"
-          kube-app-testing-version: "use-gsctl"
-          kind-version: "0.9.0"
-          additional_kube-app-testing_flags: "--python-container-tag 3.8-slim --kind-config-file test/kind_config.yaml"
+          name: "execute chart tests"
+          chart_dir: "./helm/efk-stack-app"
+          additional_app-build-suite_flags: "--skip-steps test_unit"
           filters:
             tags:
               only: /^v.*/
