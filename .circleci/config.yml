@@ -18,7 +18,7 @@ workflows:
 
       - architect/run-tests-with-abs:
           resource_class: xlarge
-          name: "execute chart tests"
+          name: execute chart tests
           chart_dir: "./helm/efk-stack-app"
           additional_app-build-suite_flags: "--skip-steps test_unit"
           filters:
