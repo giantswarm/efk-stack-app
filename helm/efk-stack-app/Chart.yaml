@@ -1,7 +1,3 @@
-annotations:
-  application.giantswarm.io/metadata: http://localhost/efk-stack-app-0.3.5-2d81bd191a40b9a3bf48936ab34ad65315a148ce.tgz-meta/main.yaml
-  application.giantswarm.io/readme: http://localhost/efk-stack-app-0.3.5-2d81bd191a40b9a3bf48936ab34ad65315a148ce.tgz-meta/README.md
-  application.giantswarm.io/values-schema: http://localhost/efk-stack-app-0.3.5-2d81bd191a40b9a3bf48936ab34ad65315a148ce.tgz-meta/values.schema.json
 apiVersion: v1
 appVersion: 0.3.5-2d81bd191a40b9a3bf48936ab34ad65315a148ce
 description: Open Distro for Elasticsearch
@@ -14,5 +10,4 @@ maintainers:
 name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
-- https://raw.githubusercontent.com/giantswarm/efk-stack-app/v[[ .Version ]]/README.md
 version: 0.3.5-2d81bd191a40b9a3bf48936ab34ad65315a148ce
