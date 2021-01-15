@@ -6,3 +6,4 @@ functional-tests-cluster-type: kind
 smoke-tests-cluster-type: kind
 smoke-tests-cluster-config-file: helm/efk-stack-app/tests/kind_config.yaml
 functional-tests-cluster-config-file: helm/efk-stack-app/tests/kind_config.yaml
+skip-steps: test_unit
