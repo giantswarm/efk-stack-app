@@ -19,7 +19,7 @@ workflows:
 
       - architect/run-tests-with-abs:
           resource_class: xlarge
-          name: execute chart tests
+          name: "execute chart tests"
           chart_dir: "./helm/efk-stack-app"
           filters:
             tags:
