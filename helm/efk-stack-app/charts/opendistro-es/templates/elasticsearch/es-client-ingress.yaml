@@ -42,7 +42,7 @@ spec:
         paths:
           - path: {{ $ingressPath }}
             backend:
-              serviceName: {{ .Values.global.opendistro.es.client.uri }}
+              serviceName: {{ $.Values.global.opendistro.es.client.uri }}
               servicePort: http
   {{- end }}
 {{- end }}

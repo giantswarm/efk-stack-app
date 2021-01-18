@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- corrected es-client hostname ([#43](https://github.com/giantswarm/efk-stack-app/pull/43))
+
 ## [0.3.5] - 2020-11-25
 
 ### Fixed
