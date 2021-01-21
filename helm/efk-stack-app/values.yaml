@@ -87,10 +87,6 @@ fluentd-elasticsearch:
       systemInputConf: false
   podSecurityPolicy:
     enabled: true
-  image:
-    registry: quay.io
-    repository: giantswarm/fluentd
-    tag: v3.0.0@sha256:2cc9334d646b14a002e71f0b0c34eca411e35f07c88f0bac9783805fb13c0190
   elasticsearch:
     host: opendistro-es-client-service
     logstashPrefix: "fluentd"
