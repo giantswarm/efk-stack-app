@@ -219,9 +219,19 @@ def test_can_survive_pod_restart(kube_cluster: Cluster, efk_stateful_sets: List[
 def test_pdbs_deployed(kube_cluster: Cluster) -> None:
     pdbs = pykube.PodDisruptionBudget.objects(kube_cluster.kube_client)
     pdb_names = [pdb.metadata["name"] for pdb in pdbs]
-    assert pdb_names == [f"{app_name}-opendistro-es-data-pdb", f"{app_name}-opendistro-es-master-pdb"]
+    assert pdb_names == [
+        f"{app_name}-opendistro-es-client-pdb",
+        f"{app_name}-opendistro-es-data-pdb", 
+        f"{app_name}-opendistro-es-master-pdb"
+    ]
     for pdb in pdbs:
-        assert pdb.obj["spec"]["minAvailable"] == "66%"
-        assert pdb.obj["status"]["disruptionsAllowed"] == 1
-        assert pdb.obj["status"]["desiredHealthy"] == 2
-        assert pdb.obj["status"]["currentHealthy"] == 3
+        if pdb.metadata["name"] == f"{app_name}-opendistro-es-client-pdb":
+            assert pdb.obj["spec"]["maxUnavailable"] == 1
+            assert pdb.obj["status"]["disruptionsAllowed"] == 1
+            assert pdb.obj["status"]["desiredHealthy"] == 1
+            assert pdb.obj["status"]["currentHealthy"] == 2
+        else:
+            assert pdb.obj["spec"]["maxUnavailable"] == 1
+            assert pdb.obj["status"]["disruptionsAllowed"] == 1
+            assert pdb.obj["status"]["desiredHealthy"] == 2
+            assert pdb.obj["status"]["currentHealthy"] == 3

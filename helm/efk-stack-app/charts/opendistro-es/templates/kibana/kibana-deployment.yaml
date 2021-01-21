@@ -22,7 +22,6 @@ metadata:
     role: kibana
     giantswarm.io/monitoring_basic_sli: "true"
   name: {{ template "opendistro-es.fullname" . }}-kibana
-  namespace: {{ .Release.Namespace }}
 spec:
   replicas: {{ .Values.kibana.replicas }}
   selector:
@@ -39,8 +38,15 @@ spec:
         {{- if .Values.kibana.config }}
         checksum/config: {{ include (print .Template.BasePath "/kibana/kibana-config-secret.yaml") . | sha256sum | trunc 63 }}
         {{- end }}
+{{- if .Values.kibana.podAnnotations }}
+{{ toYaml .Values.kibana.podAnnotations | indent 8 }}
+{{- end }}
     spec:
 {{- include "opendistro-es.imagePullSecrets" . | indent 6 }}
+{{- if .Values.kibana.extraInitContainers }}
+      initContainers:
+{{ toYaml .Values.kibana.extraInitContainers | indent 8 }}
+{{- end }}
       containers:
       - env:
         - name: CLUSTER_NAME
@@ -48,7 +54,7 @@ spec:
         # If no custom configuration provided, default to internal DNS
         {{- if not .Values.kibana.config }}
         - name: ELASTICSEARCH_HOSTS
-          value: https://{{ .Values.global.opendistro.es.client.uri }}:9200
+          value: https://{{ template "opendistro-es.fullname" . }}-client-service:9200
         {{- end }}
         {{- if .Values.kibana.elasticsearchAccount.secret }}
         - name: ELASTICSEARCH_USERNAME
@@ -78,7 +84,7 @@ spec:
 {{- if .Values.kibana.extraEnvs }}
 {{ toYaml .Values.kibana.extraEnvs | indent 8 }}
 {{- end }}
-        image: {{ .Values.global.image.registry }}/{{ .Values.kibana.image.repository }}:{{ .Values.kibana.image.tag }}
+        image: {{ .Values.global.registry }}/{{ .Values.kibana.image }}:{{ .Values.kibana.imageTag }}
         imagePullPolicy: {{ .Values.kibana.imagePullPolicy | default "Always" | quote }}
     {{- with .Values.kibana.readinessProbe}}
         readinessProbe:
@@ -86,6 +92,10 @@ spec:
     {{- end }}
     {{- with .Values.kibana.livenessProbe}}
         livenessProbe:
+{{ toYaml . | indent 10 }}
+    {{- end }}
+    {{- with .Values.kibana.startupProbe}}
+        startupProbe:
 {{ toYaml . | indent 10 }}
     {{- end }}
         resources:
@@ -119,8 +129,14 @@ spec:
             name: elasticsearch-certs
             subPath: {{ .Values.kibana.ssl.elasticsearch.existingCertSecretRootCASubPath }}
          {{- end }}
+{{- if .Values.kibana.extraVolumeMounts }}
+{{ toYaml .Values.kibana.extraVolumeMounts | indent 10 }}
+{{- end }}
         ports:
         - containerPort: {{ .Values.kibana.port }}
+{{- if .Values.kibana.extraContainers }}
+{{ toYaml .Values.kibana.extraContainers | indent 6 }}
+{{- end }}
       serviceAccountName: {{ template "opendistro-es.kibana.serviceAccountName" . }}
       volumes:
         {{- if .Values.kibana.config }}
@@ -138,6 +154,9 @@ spec:
           secret:
             secretName: {{ .Values.kibana.ssl.elasticsearch.existingCertSecret }}
         {{- end }}
+{{- if .Values.kibana.extraVolumes }}
+{{ toYaml .Values.kibana.extraVolumes | indent 8 }}
+{{- end }}
     {{- with .Values.kibana.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

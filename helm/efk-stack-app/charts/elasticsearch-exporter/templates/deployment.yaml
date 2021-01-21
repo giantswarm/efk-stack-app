@@ -61,7 +61,7 @@ spec:
           - secretRef:
               name: {{ .Values.envFromSecret }}
           {{- end }}
-          image: "{{ .Values.global.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          image: "{{ .Values.global.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["elasticsearch_exporter",
                     {{- if .Values.es.uri }}
