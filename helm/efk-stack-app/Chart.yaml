@@ -8,6 +8,22 @@ icon: https://s.giantswarm.io/app-icons/1/png/efk-stack-app-light.png
 sources:
 - https://github.com/giantswarm/efk-stack-app
 upstreamChartURL: https://github.com/opendistro-for-elasticsearch/opendistro-build/tree/master/helm/opendistro-es
+dependencies:
+- name: elasticsearch-curator
+  version: 2.0.3
+  repository: file://.
+- name: fluentd-elasticsearch
+  version: 6.1.1
+  repository: file://.
+- name: opendistro-certs
+  version: 0.1.0
+  repository: file://.
+- name: opendistro-es
+  version: 1.9.0
+  repository: file://.
+- name: elasticsearch-exporter
+  version: 3.0.0
+  repository: file://.
 maintainers:
 - name: Giant Swarm applications team
   url: https://github.com/giantswarm/efk-stack-app
