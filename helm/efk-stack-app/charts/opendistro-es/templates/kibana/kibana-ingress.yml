@@ -19,7 +19,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ template "opendistro-es.fullname" . }}-kibana-ing
+  name: {{ template "opendistro-es.fullname" . }}-kibana
   labels:
     {{- include "opendistro-es.labels.standard" . | nindent 4 }}
   {{- with .Values.kibana.ingress.annotations }}
