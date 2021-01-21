@@ -1,18 +1,28 @@
 version: 2.1
 orbs:
-  architect: giantswarm/architect@1.1.1
+  architect: giantswarm/architect@0.16.0
 
 workflows:
   package-and-push-chart-on-tag:
     jobs:
       - architect/push-to-app-catalog:
           context: "architect"
-          executor: "app-build-suite"
           name: "package and push efk-stack-app chart"
           app_catalog: "giantswarm-catalog"
           app_catalog_test: "giantswarm-test-catalog"
           chart: "efk-stack-app"
           # Trigger job on git tag.
+          filters:
+            tags:
+              only: /^v.*/
+
+      - architect/run-kat-tests:
+          resource_class: xlarge
+          name: "test the chart with kat"
+          chart: "efk-stack-app"
+          kube-app-testing-version: "use-gsctl"
+          kind-version: "0.9.0"
+          additional_kube-app-testing_flags: "--python-container-tag 3.8-slim --kind-config-file test/kind_config.yaml"
           filters:
             tags:
               only: /^v.*/
