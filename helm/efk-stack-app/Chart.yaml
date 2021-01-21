@@ -1,14 +1,13 @@
 apiVersion: v1
-name: efk-stack-app
-version: 0.4.0
-appVersion: v0.4.0
+appVersion: [[ .Version ]]
 description: Open Distro for Elasticsearch
+engine: gotpl
 home: https://github.com/giantswarm/efk-stack-app
 icon: https://s.giantswarm.io/app-icons/1/png/efk-stack-app-light.png
-sources:
-- https://github.com/giantswarm/efk-stack-app
-upstreamChartURL: https://github.com/opendistro-for-elasticsearch/opendistro-build/tree/master/helm/opendistro-es
 maintainers:
 - name: Giant Swarm applications team
   url: https://github.com/giantswarm/efk-stack-app
-engine: gotpl
+name: efk-stack-app
+sources:
+- https://github.com/giantswarm/efk-stack-app
+version: [[ .Version ]]
