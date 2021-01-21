@@ -13,25 +13,24 @@
 
 kibana:
   enabled: true
-  image:
-    registry: quay.io
-    repository: giantswarm/opendistro-for-elasticsearch-kibana
-    tag: 1.9.0
+  image: amazon/opendistro-for-elasticsearch-kibana
+  imageTag: 1.12.0
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
   imagePullPolicy: ""
   replicas: 1
   port: 5601
   externalPort: 443
-  resources:
-    limits:
-      cpu: 2500m
-      memory: 2Gi
-    requests:
-      cpu: 500m
-      memory: 512Mi
+  resources: {}
+  #  limits:
+  #    cpu: 2500m
+  #    memory: 2Gi
+  #  requests:
+  #    cpu: 500m
+  #    memory: 512Mi
   readinessProbe: []
   livenessProbe: []
+  startupProbe: []
 
   elasticsearchAccount:
     secret: ""
@@ -39,6 +38,25 @@ kibana:
       enabled: false
 
   extraEnvs: []
+
+  extraVolumes: []
+  # - name: extras
+  #   emptyDir: {}
+
+  extraVolumeMounts: []
+  # - name: extras
+  #   mountPath: /usr/share/extras
+  #   readOnly: true
+
+  extraInitContainers: []
+  # - name: do-something
+  #   image: busybox
+  #   command: ['do', 'something']
+
+  extraContainers: []
+  # - name: do-something
+  #   image: busybox
+  #   command: ['do', 'something']
 
   ssl:
     kibana:
@@ -117,6 +135,8 @@ kibana:
     ## If not set and create is true, a name is generated using the fullname template
     name:
 
+  podAnnotations: {}
+
 
 global:
   clusterName: elasticsearch
@@ -126,11 +146,14 @@ global:
 
   rbac:
     enabled: true
+
+  # Optionally override the docker registry to use for images
+  registry: docker.io
+
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
   # imagePullSecrets:
   #   - myRegistryKeySecretName
-
 
 elasticsearch:
   ## Used when deploying hot/warm architecture. Allows second aliased deployment to find cluster.
@@ -173,15 +196,13 @@ elasticsearch:
   #   readOnly: true
 
   initContainer:
-    image:
-      registry: quay.io
-      repository: giantswarm/busybox
-      tag: 1.32.0
+    image: busybox
+    imageTag: 1.27.2
 
   ## Set optimal sysctl's. This requires privilege. Can be disabled if
   ## the system has already been preconfigured.
   sysctl:
-    enabled: false
+    enabled: true
 
   ssl:
     ## TLS is mandatory for the transport layer and can not be disabled
@@ -237,37 +258,51 @@ elasticsearch:
       size: 8Gi
       annotations: {}
 
-    resources:
-      limits:
-        cpu: 1
-        memory: 1024Mi
-      requests:
-        cpu: 200m
-        memory: 1024Mi
+    resources: {}
+    #  limits:
+    #    cpu: 1
+    #    memory: 1024Mi
+    #  requests:
+    #    cpu: 200m
+    #    memory: 1024Mi
     javaOpts: "-Xms512m -Xmx512m"
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
+      # minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:
         port: transport
       initialDelaySeconds: 60
       periodSeconds: 10
+    startupProbe: []
     nodeSelector: {}
     tolerations: []
     ## Anti-affinity to disallow deploying client and master nodes on the same worker node
-    affinity: # {}
-      podAntiAffinity:
-        requiredDuringSchedulingIgnoredDuringExecution:
-          - topologyKey: "kubernetes.io/hostname"
-            labelSelector:
-              matchLabels:
-                role: master
+    affinity: {}
+    #  podAntiAffinity:
+    #    requiredDuringSchedulingIgnoredDuringExecution:
+    #      - topologyKey: "kubernetes.io/hostname"
+    #        labelSelector:
+    #          matchLabels:
+    #            role: master
     podAnnotations: {}
+
+    extraInitContainers: []
+    # - name: do-something
+    #   image: busybox
+    #   command: ['do', 'something']
+
+    extraContainers: []
+    # - name: do-something
+    #   image: busybox
+    #   command: ['do', 'something']
 
   data:
     enabled: true
+    ## Enables dedicated statefulset for data. Otherwise master nodes as data storage
+    dedicatedPod:
+      enabled: true
     replicas: 1
     updateStrategy: "RollingUpdate"
 
@@ -300,45 +335,46 @@ elasticsearch:
       size: 8Gi
       annotations: {}
 
-    resources:
-      limits:
-        cpu: 1
-        memory: 1024Mi
-      requests:
-        cpu: 200m
-        memory: 1024Mi
+    resources: {}
+    #  limits:
+    #    cpu: 1
+    #    memory: 1024Mi
+    #  requests:
+    #    cpu: 200m
+    #    memory: 1024Mi
     javaOpts: "-Xms512m -Xmx512m"
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
+      # minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:
         port: transport
       initialDelaySeconds: 60
       periodSeconds: 10
+    startupProbe: []
     nodeSelector: {}
     tolerations: []
     ## Anti-affinity to disallow deploying client and master nodes on the same worker node
-    affinity: # {}
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchLabels:
-                  role: data
+    affinity: {}
+    #  podAntiAffinity:
+    #    preferredDuringSchedulingIgnoredDuringExecution:
+    #      - weight: 1
+    #        podAffinityTerm:
+    #          topologyKey: "kubernetes.io/hostname"
+    #          labelSelector:
+    #            matchLabels:
+    #              role: data
     podAnnotations: {}
 
   client:
     enabled: true
+    ## Enables dedicated deployment for client/ingest. Otherwise master nodes as client/ingest
+    dedicatedPod:
+      enabled: true
     service:
       type: ClusterIP
-      annotations:
-        giantswarm.io/monitoring: "true"
-        giantswarm.io/monitoring-path: /metrics
-        giantswarm.io/monitoring-port: "9600"
+      annotations: {}
         # # Defined ELB backend protocol as HTTPS to allow connection to Elasticsearch API
         # service.beta.kubernetes.io/aws-load-balancer-backend-protocol: https
 
@@ -369,34 +405,35 @@ elasticsearch:
       #  - secretName: chart-example-tls
       #    hosts:
       #      - chart-example.local
-    resources:
-      limits:
-        cpu: 1
-        memory: 1024Mi
-      requests:
-        cpu: 200m
-        memory: 1024Mi
+    resources: {}
+    #  limits:
+    #    cpu: 1
+    #    memory: 1024Mi
+    #  requests:
+    #    cpu: 200m
+    #    memory: 1024Mi
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
+      # minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:
         port: transport
       initialDelaySeconds: 60
       periodSeconds: 10
+    startupProbe: []
     nodeSelector: {}
     tolerations: []
     ## Weighted anti-affinity to disallow deploying client node to the same worker node as master node
-    affinity: # {}
-      podAntiAffinity:
-        preferredDuringSchedulingIgnoredDuringExecution:
-          - weight: 1
-            podAffinityTerm:
-              topologyKey: "kubernetes.io/hostname"
-              labelSelector:
-                matchLabels:
-                  role: client
+    affinity: {}
+    #  podAntiAffinity:
+    #    preferredDuringSchedulingIgnoredDuringExecution:
+    #      - weight: 1
+    #        podAffinityTerm:
+    #          topologyKey: "kubernetes.io/hostname"
+    #          labelSelector:
+    #            matchLabels:
+    #              role: client
     podAnnotations: {}
 
   config: {}
@@ -479,10 +516,8 @@ elasticsearch:
 
   maxMapCount: 262144
 
-  image:
-    registry: quay.io
-    repository: giantswarm/opendistro-for-elasticsearch
-    tag: 1.9.0
+  image: amazon/opendistro-for-elasticsearch
+  imageTag: 1.12.0
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
   imagePullPolicy: ""

@@ -1,0 +1,191 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "type": "object",
+    "definitions": {
+        "podDisruptionBudget": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean"
+                },
+                "maxUnavailable": {
+                    "type": ["integer","string","null"]
+                },
+                "minAvailable": {
+                    "type": ["integer","string","null"]
+                }
+            }
+        }
+    },
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "opendistro": {
+                    "type": "object",
+                    "properties": {
+                        "es": {
+                            "type": "object",
+                            "properties": {
+                                "client": {
+                                    "type": "object",
+                                    "properties": {
+                                        "uri": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "registry": {
+                    "type": "string"
+                }
+            }
+        },
+        "elasticsearch": {
+            "type": "object",
+            "properties": {
+                "client": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "ingress": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "podDisruptionBudget": {
+                            "$ref": "#/definitions/podDisruptionBudget"
+                        },
+                        "replicas": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "persistence": {
+                            "type": "object",
+                            "properties": {
+                                "size": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "podDisruptionBudget": {
+                            "$ref": "#/definitions/podDisruptionBudget"
+                        },
+                        "replicas": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "image": {
+                    "type": "string"
+                },
+                "imagePullPolicy": {
+                    "type": "string"
+                },
+                "imageTag": {
+                    "type": "string"
+                },
+                "initContainer": {
+                    "type": "object",
+                    "properties": {
+                        "image": {
+                            "type": "string"
+                        },
+                        "imageTag": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "master": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        },
+                        "persistence": {
+                            "type": "object",
+                            "properties": {
+                                "size": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "podDisruptionBudget": {
+                            "$ref": "#/definitions/podDisruptionBudget"
+                        },
+                        "replicas": {
+                            "type": "integer"
+                        }
+                    }
+                },
+                "ssl": {
+                    "type": "object",
+                    "properties": {
+                        "transport": {
+                            "type": "object",
+                            "properties": {
+                                "enabled": {
+                                    "type": "boolean"
+                                },
+                                "existingCertSecret": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "sysctl": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "enabled": {
+            "type": "boolean"
+        },
+        "kibana": {
+            "type": "object",
+            "properties": {
+                "elasticsearchAccount": {
+                    "type": "object",
+                    "properties": {
+                        "secret": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "enabled": {
+                    "type": "boolean"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "imagePullPolicy": {
+                    "type": "string"
+                },
+                "imageTag": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

@@ -13,7 +13,7 @@
 # permissions and limitations under the License.
 
 # @formatter:off
-{{ if .Values.elasticsearch.data.enabled }}
+{{ if and .Values.elasticsearch.data.enabled .Values.elasticsearch.data.dedicatedPod.enabled }}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
@@ -58,7 +58,7 @@ spec:
       initContainers:
 {{- if .Values.elasticsearch.sysctl.enabled }}
       - name: init-sysctl
-        image: {{ .Values.global.image.registry }}/{{ .Values.elasticsearch.initContainer.image.repository }}:{{ .Values.elasticsearch.initContainer.image.tag }}
+        image: {{ .Values.global.registry }}/{{ .Values.elasticsearch.initContainer.image }}:{{ .Values.elasticsearch.initContainer.imageTag }}
         command:
         - sysctl
         - -w
@@ -68,7 +68,7 @@ spec:
 {{- end }}
       - name: fixmount
         command: [ 'sh', '-c', 'chown -R 1000:1000 /usr/share/elasticsearch/data' ]
-        image: {{ .Values.global.image.registry }}/{{ .Values.elasticsearch.initContainer.image.repository }}:{{ .Values.elasticsearch.initContainer.image.tag }}
+        image: {{ .Values.global.registry }}/{{ .Values.elasticsearch.initContainer.image }}:{{ .Values.elasticsearch.initContainer.imageTag }}
         volumeMounts:
           - mountPath: /usr/share/elasticsearch/data
             name: data
@@ -117,7 +117,7 @@ spec:
 {{ toYaml .Values.elasticsearch.extraEnvs | indent 8 }}
 {{- end }}
         # Official Image from Open Distro Team
-        image: {{ .Values.global.image.registry }}/{{ .Values.elasticsearch.image.repository }}:{{ .Values.elasticsearch.image.tag }}
+        image: {{ .Values.global.registry }}/{{ .Values.elasticsearch.image }}:{{ .Values.elasticsearch.imageTag }}
         imagePullPolicy: {{ .Values.elasticsearch.imagePullPolicy | default "Always" | quote }}
         # only publish the transport port
         ports:
@@ -131,6 +131,10 @@ spec:
     {{- end }}
     {{- with .Values.elasticsearch.data.livenessProbe}}
         livenessProbe:
+{{ toYaml . | indent 10 }}
+    {{- end }}
+    {{- with .Values.elasticsearch.data.startupProbe}}
+        startupProbe:
 {{ toYaml . | indent 10 }}
     {{- end }}
         volumeMounts:
