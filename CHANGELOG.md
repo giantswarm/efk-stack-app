@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.4.1] - 2021-01-21
+
 ### Fixed
 
 - Revert change of ingress naming schema [#49](https://github.com/giantswarm/efk-stack-app/pull/49)
@@ -104,7 +106,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.6...v0.4.0
 [0.3.6]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.5...v0.3.6
 [0.3.5]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.4...v0.3.5
