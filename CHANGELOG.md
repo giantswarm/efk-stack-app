@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- Container image version for fluentd corrected
+
 ## [0.4.1] - 2021-01-21
 
 ### Fixed
