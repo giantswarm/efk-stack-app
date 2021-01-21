@@ -7,8 +7,6 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
-## [0.4.0] - 2021-01-21
-
 ### Changed
 
 - Opendistro for Elasticsearch
