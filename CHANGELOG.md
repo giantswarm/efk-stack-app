@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.4.0] - 2021-01-21
+
 ### Changed
 
 - Opendistro for Elasticsearch
@@ -98,7 +100,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.6...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.6...0.4.0
 [0.3.6]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.5...v0.3.6
 [0.3.5]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.4...v0.3.5
 [0.3.4]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.3...v0.3.4
