@@ -1,18 +1,18 @@
 dependencies:
 - name: elasticsearch-curator
   repository: file://.
-  version: 0.3.6-9ad7d4e56d101c1bfa27f736d68614e4e59b207b
+  version: 0.4.1
 - name: fluentd-elasticsearch
   repository: file://.
-  version: 0.3.6-9ad7d4e56d101c1bfa27f736d68614e4e59b207b
+  version: 0.4.1
 - name: opendistro-certs
   repository: file://.
-  version: 0.3.6-9ad7d4e56d101c1bfa27f736d68614e4e59b207b
+  version: 0.4.1
 - name: opendistro-es
   repository: file://.
-  version: 0.3.6-9ad7d4e56d101c1bfa27f736d68614e4e59b207b
+  version: 0.4.1
 - name: elasticsearch-exporter
   repository: file://.
-  version: 0.3.6-9ad7d4e56d101c1bfa27f736d68614e4e59b207b
-digest: sha256:850af2b8bb526824942bb461bc781de218c135679c5dcd945c2395eb6d8b5934
-generated: "2021-01-21T05:19:34.764111827Z"
+  version: 0.4.1
+digest: sha256:a84c661feac5f5807df8d017a17efb1d607dfa8fed11c45416a655c2abc2c7f0
+generated: "2021-01-25T17:04:55.147585021+01:00"
