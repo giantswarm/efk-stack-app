@@ -21,6 +21,7 @@ workflows:
           resource_class: 2xlarge
           name: execute chart tests
           chart_dir: "./helm/efk-stack-app"
+          app-build-suite_version: "0.1.5-8917af43e56804f7b7abb4f7ba6a5a845373eb51"
           filters:
             tags:
               only: /^v.*/
