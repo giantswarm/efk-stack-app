@@ -75,7 +75,7 @@ def wait_for_efk_stateful_sets(kube_cluster: Cluster) -> List[pykube.StatefulSet
 # when we start the tests on circleci, we have to wait for EFK API to be available, hence
 # this additional delay and retries
 @pytest.mark.smoke
-@pytest.mark.flaky(reruns=10, reruns_delay=15)
+@pytest.mark.flaky(reruns=5, reruns_delay=10)
 def test_pods_available(kube_cluster: Cluster, efk_stateful_sets: List[pykube.StatefulSet]):
     for s in efk_stateful_sets:
         assert int(s.obj["status"]["readyReplicas"]) > 0
@@ -221,7 +221,7 @@ def test_pdbs_deployed(kube_cluster: Cluster) -> None:
     pdb_names = [pdb.metadata["name"] for pdb in pdbs]
     assert pdb_names == [
         f"{app_name}-opendistro-es-client-pdb",
-        f"{app_name}-opendistro-es-data-pdb", 
+        f"{app_name}-opendistro-es-data-pdb",
         f"{app_name}-opendistro-es-master-pdb"
     ]
     for pdb in pdbs:
