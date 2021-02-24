@@ -1,9 +1,5 @@
-annotations:
-  application.giantswarm.io/metadata: https://giantswarm.github.io/giantswarm-catalog/efk-stack-app-0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d.tgz-meta/main.yaml
-  application.giantswarm.io/readme: https://giantswarm.github.io/giantswarm-catalog/efk-stack-app-0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d.tgz-meta/README.md
-  application.giantswarm.io/values-schema: https://giantswarm.github.io/giantswarm-catalog/efk-stack-app-0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d.tgz-meta/values.schema.json
 apiVersion: v2
-appVersion: 0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d
+appVersion: 0.4.2
 dependencies:
 - name: elasticsearch-curator
   repository: file://.
@@ -16,7 +12,7 @@ dependencies:
   version: 0.1.0
 - name: opendistro-es
   repository: file://.
-  version: 1.12.0
+  version: 1.13.0
 - name: elasticsearch-exporter
   repository: file://.
   version: 3.0.0
@@ -30,4 +26,4 @@ maintainers:
 name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
-version: 0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d
+version: 0.4.2
