@@ -45,7 +45,6 @@ service:
   metricsPort:
     name: http
   annotations:
-    giantswarm.io/monitoring: "true"
     giantswarm.io/monitoring-path: /metrics
     giantswarm.io/monitoring-port: "9108"
   labels:
