@@ -72,9 +72,10 @@ elasticsearch-exporter:
     tag: 1.1.0@sha256:0f94474f46a917d85657ee62ad6d01d30128198ed048014caf5471b9b7151b45
   service:
     annotations:
-      giantswarm.io/monitoring: "true"
       giantswarm.io/monitoring-path: /metrics
       giantswarm.io/monitoring-port: "9108"
+    labels:
+      giantswarm.io/monitoring: "true"
   envFromSecret: "kibana-auth"
   es:
     uri: http://$(username):$(password)@opendistro-es-client-service:9200

@@ -9,9 +9,9 @@ metadata:
     {{- if semverCompare "> 1.6" .Capabilities.KubeVersion.GitVersion }}
     kubernetes.io/cluster-service: "true"
     {{- end }}
+    giantswarm.io/monitoring: "true"
     addonmanager.kubernetes.io/mode: Reconcile
   annotations:
-    giantswarm.io/monitoring: "true"
     giantswarm.io/monitoring-path: /metrics
     giantswarm.io/monitoring-port: {{ .Values.serviceMonitor.port | quote }}
 spec:
