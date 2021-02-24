@@ -26,6 +26,8 @@ elasticsearch-curator:
         key: password
   command: ["/usr/bin/curator"]
   image:
+    # https://quay.io/repository/giantswarm/bobrik-curator?tab=tags
+    # https://github.com/elastic/curator
     registry: quay.io
     repository: giantswarm/bobrik-curator
     tag: 5.8.1@sha256:3aaf4d8aca9ec1d77fc46e99ba119abf4ad4d5ac42eb7e1227c420a8b6927259
@@ -67,6 +69,8 @@ elasticsearch-curator:
 elasticsearch-exporter:
   enabled: true
   image:
+    # see https://quay.io/repository/giantswarm/elasticsearch_exporter?tab=tags
+    # and https://github.com/justwatchcom/elasticsearch_exporter
     registry: quay.io
     repository: giantswarm/elasticsearch_exporter
     tag: 1.1.0@sha256:0f94474f46a917d85657ee62ad6d01d30128198ed048014caf5471b9b7151b45
@@ -89,9 +93,12 @@ fluentd-elasticsearch:
   podSecurityPolicy:
     enabled: true
   image:
+    # see https://quay.io/repository/giantswarm/fluentd?tab=tags
+    # and https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch/fluentd-es-image
     registry: quay.io
     repository: giantswarm/fluentd
     tag: v3.0.0@sha256:2cc9334d646b14a002e71f0b0c34eca411e35f07c88f0bac9783805fb13c0190
+    # tag: v3.2.0@sha256:5867172358b073e2e99db73ee2157e21e91d5f266cb94f6837f292e7e3f45f22
   elasticsearch:
     host: opendistro-es-client-service
     logstashPrefix: "fluentd"
@@ -111,12 +118,14 @@ fluentd-elasticsearch:
 
 opendistro-es:
   enabled: true
+  # fullnameOverride: opendistro-es
+  # -> opendistro-es-client
 
   kibana:
     enabled: true
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch-kibana?tab=tags
     image: giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.12.0@sha256:ad07feadbf595048572908ca604aff7fa547a6c0c15e750f765a799b48bd5c3d
+    imageTag: 1.13.0@sha256:5549437aa57ec950ac0e45636bb5ceb1dde153666fb5c4babf08e83590c942dd
     imagePullPolicy: IfNotPresent
 
     config:
@@ -150,15 +159,16 @@ opendistro-es:
   elasticsearch:
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch?tab=tags
     image: giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.12.0@sha256:1cbbcd721f356c2fb07d95648b89a278287cefeb0f663b9fd8fb0f9a4c89a63d
+    imageTag: 1.13.0@sha256:43e00bb9779d185de0ea61d1f0af4c5d6d7cd7c501bb95e4903d72361ed7f087
     imagePullPolicy: IfNotPresent
 
     sysctl:
       enabled: true
 
     initContainer:
+      # see https://quay.io/repository/giantswarm/busybox?tab=tags
       image: giantswarm/busybox
-      imageTag: 1.32.0@sha256:400ee2ed939df769d4681023810d2e4fb9479b8401d97003c710d0e20f7c49c6
+      imageTag: 1.33.0@sha256:99243e861067446c9aed305b5690cccb88658d23af3fde338398f27386ded1be
 
     ssl:
       transport:

@@ -96,7 +96,8 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
             [
                 "sh",
                 "-c",
-                "wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green",
+                # "wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green",
+                "wget -O - -q " f"{client_service_base_url}/_cluster/health" " | grep green",
             ],
         ),
         timeout_sec=timeout,

@@ -1,5 +1,9 @@
+annotations:
+  application.giantswarm.io/metadata: https://giantswarm.github.io/giantswarm-catalog/efk-stack-app-0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d.tgz-meta/main.yaml
+  application.giantswarm.io/readme: https://giantswarm.github.io/giantswarm-catalog/efk-stack-app-0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d.tgz-meta/README.md
+  application.giantswarm.io/values-schema: https://giantswarm.github.io/giantswarm-catalog/efk-stack-app-0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d.tgz-meta/values.schema.json
 apiVersion: v2
-appVersion: 0.4.1
+appVersion: 0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d
 dependencies:
 - name: elasticsearch-curator
   repository: file://.
@@ -26,4 +30,4 @@ maintainers:
 name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
-version: 0.4.1
+version: 0.4.1-8e5a2794cb845f23807615ce83bcf45d621e8b6d

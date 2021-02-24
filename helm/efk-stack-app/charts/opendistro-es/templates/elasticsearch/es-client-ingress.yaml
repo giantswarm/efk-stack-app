@@ -13,11 +13,12 @@
 
 # @formatter:off
 {{- if and .Values.elasticsearch.client.ingress.enabled .Values.elasticsearch.client.enabled }}
+{{ $fullName := printf "%s-%s"  (include "opendistro-es.fullname" .) "client-service" }}
 {{ $ingressPath := .Values.elasticsearch.client.ingress.path }}
 kind: Ingress
 apiVersion: extensions/v1beta1
 metadata:
-  name: {{ .Values.global.opendistro.es.client.uri }}
+  name: {{ $fullName }}
   labels:
 {{ include "opendistro-es.labels.standard" . | indent 4 }}
 {{- with .Values.elasticsearch.client.ingress.annotations }}
@@ -42,7 +43,7 @@ spec:
         paths:
           - path: {{ $ingressPath }}
             backend:
-              serviceName: {{ $.Values.global.opendistro.es.client.uri }}
+              serviceName: {{ $fullName }}
               servicePort: http
   {{- end }}
 {{- end }}
