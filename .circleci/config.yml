@@ -20,8 +20,8 @@ workflows:
           name: execute chart tests
           resource_class: 2xlarge
           chart_dir: ./helm/efk-stack-app
-          # app-build-suite_version: "v0.1.8"
-          app-build-suite_container_tag: "0.1.8"
+          app-build-suite_version: "210d995d3e455207dcd0ebdf84152847cdcdae3b"
+          app-build-suite_container_tag: "0.1.8-210d995d3e455207dcd0ebdf84152847cdcdae3b"
           filters:
             tags:
               only: /^v.*/
