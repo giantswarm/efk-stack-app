@@ -56,8 +56,8 @@ We cannot have the chart label here as it will prevent upgrades.
 */}}
 {{- define "opendistro-es.labels.selector" -}}
 app: {{ template "opendistro-es.fullname" . }}
-release: "{{ .Release.Name }}"
-heritage: "{{ .Release.Service }}"
+# release: "{{ .Release.Name }}"
+# heritage: "{{ .Release.Service }}"
 {{- end -}}
 
 {{/*

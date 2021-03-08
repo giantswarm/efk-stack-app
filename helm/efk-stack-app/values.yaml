@@ -125,7 +125,7 @@ opendistro-es:
     enabled: true
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch-kibana?tab=tags
     image: giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.13.0@sha256:5549437aa57ec950ac0e45636bb5ceb1dde153666fb5c4babf08e83590c942dd
+    imageTag: 1.13.1@sha256:6ab8f1c3d67f7d33f7028b13465646e1285c058035d06507fb7034b35abecdde
     imagePullPolicy: IfNotPresent
 
     config:
@@ -159,7 +159,7 @@ opendistro-es:
   elasticsearch:
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch?tab=tags
     image: giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.13.0@sha256:43e00bb9779d185de0ea61d1f0af4c5d6d7cd7c501bb95e4903d72361ed7f087
+    imageTag: 1.13.1@sha256:5f7c039c57c8079454de9ddc56adf64aed240af7f76bbb45e86132e95dfc3efc
     imagePullPolicy: IfNotPresent
 
     sysctl:
@@ -261,27 +261,3 @@ opendistro-es:
             pemcert_filepath: elk-transport-crt.pem
             pemkey_filepath: elk-transport-key.pem
             pemtrustedcas_filepath: elk-transport-root-ca.pem
-
-    # config:
-    #   # Majority of options described here: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example
-
-    #   opendistro_security.audit.ignore_users: ["admin"]
-    #       # See: https://opendistro.github.io/for-elasticsearch-docs/docs/security-audit-logs/
-    #   opendistro_security.audit.type: internal_elasticsearch
-
-    #   opendistro_security:
-    #     allow_unsafe_democertificates: false
-    #     # Set to false if running securityadmin.sh manually following deployment
-    #     allow_default_init_securityindex: true
-    #     # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L27
-    #     roles_mapping_resolution: BOTH
-    #     restapi.roles_enabled: ["all_access", "security_rest_api_access"]
-    #     # See: https://github.com/opendistro-for-elasticsearch/security/blob/master/securityconfig/elasticsearch.yml.example#L17
-    #     nodes_dn:
-    #       - "*"
-    #     ssl:
-    #       transport:
-    #         enforce_hostname_verification: false
-    #         pemcert_filepath: elk-transport-crt.pem
-    #         pemkey_filepath: elk-transport-key.pem
-    #         pemtrustedcas_filepath: elk-transport-root-ca.pem
