@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.5.0] - 2021-03-08
+
 ### Changed
 
 - Update to `Elasticsearch` and `Kibana` version `7.10.2`. For more details see [Open Distro for Elasticsearch 1.13.0 Release Notes](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.0.md)
@@ -110,7 +112,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.4.1...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.4.1...v0.5.0
 [0.4.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.6...v0.4.0
 [0.3.6]: https://github.com/giantswarm/efk-stack-app/compare/v0.3.5...v0.3.6
