@@ -6,12 +6,39 @@ workflows:
   package-and-push-chart-on-tag:
     jobs:
       - architect/push-to-app-catalog:
-          context: "architect"
-          name: "package and push efk-stack-app chart"
-          app_catalog: "giantswarm-catalog"
-          app_catalog_test: "giantswarm-test-catalog"
-          chart: "efk-stack-app"
+          name: package and push efk-stack-app chart
+          chart: efk-stack-app
+          app_catalog: giantswarm-catalog
+          app_catalog_test: giantswarm-test-catalog
+          executor: app-build-suite
           # Trigger job on git tag.
           filters:
             tags:
               only: /^v.*/
+      # Require manual approval for running tests.
+      - hold-tests:
+          name: hold app tests
+          type: approval
+          filters:
+            # Do not trigger the job on master branch or release tags.
+            branches:
+              ignore:
+                - master
+            tags:
+              ignore: /^v.*/
+
+      - architect/run-tests-with-abs:
+          name: execute chart tests
+          requires:
+            - hold app tests
+            - package and push efk-stack-app chart
+          resource_class: 2xlarge
+          chart_dir: ./helm/efk-stack-app
+          app-build-suite_container_tag: "0.1.8"
+          filters:
+            # Do not trigger the job on master branch or release tags.
+            branches:
+              ignore:
+                - master
+            tags:
+              ignore: /^v.*/

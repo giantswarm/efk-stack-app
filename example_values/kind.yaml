@@ -5,13 +5,23 @@ opendistro-es:
   elasticsearch:
     sysctl:
       enabled: true
+    client:
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: null
     master:
       replicas: 3
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: null
       persistence:
-        storageClass: standard
+        # storageClass: standard
         size: 1Gi
     data:
       replicas: 3
+      podDisruptionBudget:
+        enabled: true
+        minAvailable: null
       persistence:
-        storageClass: standard
+        # storageClass: standard
         size: 1Gi

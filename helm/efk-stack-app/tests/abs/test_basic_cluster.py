@@ -96,7 +96,8 @@ def test_masters_green(kube_cluster: Cluster, efk_stateful_sets: List[pykube.Sta
             [
                 "sh",
                 "-c",
-                "wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green",
+                # "wget -O - -q " f"{client_service_base_url}/_cat/health" " | grep green",
+                "wget -O - -q " f"{client_service_base_url}/_cluster/health" " | grep green",
             ],
         ),
         timeout_sec=timeout,
@@ -221,7 +222,7 @@ def test_pdbs_deployed(kube_cluster: Cluster) -> None:
     pdb_names = [pdb.metadata["name"] for pdb in pdbs]
     assert pdb_names == [
         f"{app_name}-opendistro-es-client-pdb",
-        f"{app_name}-opendistro-es-data-pdb", 
+        f"{app_name}-opendistro-es-data-pdb",
         f"{app_name}-opendistro-es-master-pdb"
     ]
     for pdb in pdbs:

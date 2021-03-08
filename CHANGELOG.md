@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Update to `Elasticsearch` and `Kibana` version `7.10.2`. For more details see [Open Distro for Elasticsearch 1.13.0 Release Notes](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.0.md)
+
 ## [0.4.1] - 2021-01-21
 
 ### Fixed

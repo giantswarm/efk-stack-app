@@ -1,5 +1,21 @@
-apiVersion: v1
-appVersion: [[ .Version ]]
+apiVersion: v2
+appVersion: 0.4.2
+dependencies:
+- name: elasticsearch-curator
+  repository: file://.
+  version: 2.0.3
+- name: fluentd-elasticsearch
+  repository: file://.
+  version: 6.1.1
+- name: opendistro-certs
+  repository: file://.
+  version: 0.1.0
+- name: opendistro-es
+  repository: file://.
+  version: 1.13.0
+- name: elasticsearch-exporter
+  repository: file://.
+  version: 3.0.0
 description: Open Distro for Elasticsearch
 engine: gotpl
 home: https://github.com/giantswarm/efk-stack-app
@@ -10,4 +26,4 @@ maintainers:
 name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
-version: [[ .Version ]]
+version: 0.4.2
