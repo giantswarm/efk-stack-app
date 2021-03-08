@@ -15,13 +15,30 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+      # Require manual approval for running tests.
+      - hold-tests:
+          name: hold app tests
+          type: approval
+          filters:
+            # Do not trigger the job on master branch or release tags.
+            branches:
+              ignore:
+                - master
+            tags:
+              ignore: /^v.*/
 
       - architect/run-tests-with-abs:
           name: execute chart tests
+          requires:
+            - hold app tests
+            - package and push efk-stack-app chart
           resource_class: 2xlarge
           chart_dir: ./helm/efk-stack-app
-          app-build-suite_version: "210d995d3e455207dcd0ebdf84152847cdcdae3b"
-          app-build-suite_container_tag: "0.1.8-210d995d3e455207dcd0ebdf84152847cdcdae3b"
+          app-build-suite_container_tag: "0.1.8"
           filters:
+            # Do not trigger the job on master branch or release tags.
+            branches:
+              ignore:
+                - master
             tags:
-              only: /^v.*/
+              ignore: /^v.*/
