@@ -34,7 +34,6 @@ workflows:
             - package and push efk-stack-app chart
           resource_class: 2xlarge
           chart_dir: ./helm/efk-stack-app
-          app-build-suite_container_tag: "0.1.8"
           filters:
             # Do not trigger the job on master branch or release tags.
             branches:
