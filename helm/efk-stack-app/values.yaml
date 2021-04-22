@@ -125,7 +125,7 @@ opendistro-es:
     enabled: true
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch-kibana?tab=tags
     image: giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.13.1@sha256:6ab8f1c3d67f7d33f7028b13465646e1285c058035d06507fb7034b35abecdde
+    imageTag: 1.13.2@sha256:c740d7a89475518b07f52809f264e55f235d9c6432c60a1bf2e703376e55c835
     imagePullPolicy: IfNotPresent
 
     config:
@@ -159,7 +159,7 @@ opendistro-es:
   elasticsearch:
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch?tab=tags
     image: giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.13.1@sha256:5f7c039c57c8079454de9ddc56adf64aed240af7f76bbb45e86132e95dfc3efc
+    imageTag: 1.13.2@sha256:ba1d85ec37391537c9abcc4d3b13eb55351b5a25626c70a2a07852340235e9f5
     imagePullPolicy: IfNotPresent
 
     sysctl:

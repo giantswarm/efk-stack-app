@@ -7,6 +7,11 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Update to Open Distro for Elasticsearch 1.13.2. For more details see their [Release Notes](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.13.2.md).
+
+
 ## [0.5.0] - 2021-03-08
 
 ### Changed

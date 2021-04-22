@@ -20,7 +20,6 @@ metadata:
   labels:
 {{ include "opendistro-es.labels.standard" . | indent 4 }}
     role: kibana
-    giantswarm.io/monitoring_basic_sli: "true"
   name: {{ template "opendistro-es.fullname" . }}-kibana
 spec:
   replicas: {{ .Values.kibana.replicas }}
@@ -84,7 +83,7 @@ spec:
 {{- if .Values.kibana.extraEnvs }}
 {{ toYaml .Values.kibana.extraEnvs | indent 8 }}
 {{- end }}
-        image: {{ .Values.global.registry }}/{{ .Values.kibana.image }}:{{ .Values.kibana.imageTag }}
+        image: {{ .Values.global.imageRegistry }}/{{ .Values.kibana.image }}:{{ .Values.kibana.imageTag }}
         imagePullPolicy: {{ .Values.kibana.imagePullPolicy | default "Always" | quote }}
     {{- with .Values.kibana.readinessProbe}}
         readinessProbe:
