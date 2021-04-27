@@ -14,7 +14,7 @@
 kibana:
   enabled: true
   image: amazon/opendistro-for-elasticsearch-kibana
-  imageTag: 1.13.1
+  imageTag: 1.13.2
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
   imagePullPolicy: ""
@@ -148,7 +148,7 @@ global:
     enabled: true
 
   # Optionally override the docker registry to use for images
-  registry: docker.io
+  imageRegistry: docker.io
 
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -172,13 +172,20 @@ elasticsearch:
     #The following option simplifies securityConfig by using a single secret and specifying the respective secrets in the corresponding files instead of creating different secrets for config,internal users, roles, roles mapping and tenants
     #Note that this is an alternative to the above secrets and shouldn't be used if the above secrets are used
     config:
-       securityConfigSecret:
-       data: {}
-        # config.yml: |-
-        # internal_users.yml: |-
-        # roles.yml: |-
-        # rolesMapping.yml: |-
-        # tenants.yml: |-
+      securityConfigSecret:
+      data: {}
+       # config.yml: |-
+       # internal_users.yml: |-
+       # roles.yml: |-
+       # rolesMapping.yml: |-
+       # tenants.yml: |-
+
+
+  ## securityContext to apply to the pod. Allows for running as non-root
+  securityContextCustom: {}
+  #  fsGroup: 1000
+  #  runAsUser: 1000
+  #  runAsGroup: 1000
 
   extraEnvs: []
 
@@ -203,6 +210,15 @@ elasticsearch:
   ## Set optimal sysctl's. This requires privilege. Can be disabled if
   ## the system has already been preconfigured.
   sysctl:
+    enabled: true
+
+  ## Give SYS_CHROOT cap to ES pods. This might not be neccesary
+  sys_chroot:
+    enabled: true
+
+  ## init container to chown the mount volume. not neccesary if setting a
+  ## fsGroup in the securityContext
+  fixmount:
     enabled: true
 
   ssl:
@@ -521,7 +537,7 @@ elasticsearch:
   maxMapCount: 262144
 
   image: amazon/opendistro-for-elasticsearch
-  imageTag: 1.13.1
+  imageTag: 1.13.2
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
   ## Default to "Always".
   imagePullPolicy: ""

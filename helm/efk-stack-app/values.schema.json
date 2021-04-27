@@ -123,13 +123,18 @@
                         "annotations": {
                             "type": "object",
                             "properties": {
-                                "giantswarm.io/monitoring": {
-                                    "type": "string"
-                                },
                                 "giantswarm.io/monitoring-path": {
                                     "type": "string"
                                 },
                                 "giantswarm.io/monitoring-port": {
+                                    "type": "string"
+                                }
+                            }
+                        },
+                        "labels": {
+                            "type": "object",
+                            "properties": {
+                                "giantswarm.io/monitoring": {
                                     "type": "string"
                                 }
                             }
