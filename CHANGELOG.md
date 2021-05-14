@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- Revert upstream changes of deployment labels. Those caused conflicts on upgrading.
+
 ## [0.5.1] - 2021-04-27
 
 ### Changed
