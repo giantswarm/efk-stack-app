@@ -46,8 +46,6 @@ Define standard labels for frequently used metadata.
 {{- define "opendistro-es.labels.standard" -}}
 app: {{ template "opendistro-es.fullname" . }}
 chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-release: "{{ .Release.Name }}"
-heritage: "{{ .Release.Service }}"
 {{- end -}}
 
 {{/*
@@ -56,8 +54,6 @@ We cannot have the chart label here as it will prevent upgrades.
 */}}
 {{- define "opendistro-es.labels.selector" -}}
 app: {{ template "opendistro-es.fullname" . }}
-release: "{{ .Release.Name }}"
-heritage: "{{ .Release.Service }}"
 {{- end -}}
 
 {{/*
