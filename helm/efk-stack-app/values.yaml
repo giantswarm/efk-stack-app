@@ -183,7 +183,7 @@ opendistro-es:
 
       podDisruptionBudget:
         enabled: true
-        minAvailable: null
+        # minAvailable: null
         maxUnavailable: 1
 
       affinity:
@@ -204,7 +204,7 @@ opendistro-es:
 
       podDisruptionBudget:
         enabled: true
-        minAvailable: null
+        # minAvailable: null
         maxUnavailable: 1
 
       affinity:
@@ -225,7 +225,7 @@ opendistro-es:
 
       podDisruptionBudget:
         enabled: true
-        minAvailable: null
+        # minAvailable: null
         maxUnavailable: 1
 
       affinity:
