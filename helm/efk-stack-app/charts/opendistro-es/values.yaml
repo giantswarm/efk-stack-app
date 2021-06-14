@@ -13,6 +13,8 @@
 
 kibana:
   enabled: true
+  #  command:
+  #  - "/usr/local/bin/kibana-docker"
   image: amazon/opendistro-for-elasticsearch-kibana
   imageTag: 1.13.2
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".

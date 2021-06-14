@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- Add possibility to change the kibana command to enable plugin installations.
+
 ## [0.5.2] - 2021-05-14
 
 ### Fixed
