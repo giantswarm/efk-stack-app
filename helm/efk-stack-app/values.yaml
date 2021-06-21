@@ -123,6 +123,8 @@ opendistro-es:
 
   kibana:
     enabled: true
+    # Allows override of the registry for the kibana image only
+    registry: ""
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch-kibana?tab=tags
     image: giantswarm/opendistro-for-elasticsearch-kibana
     imageTag: 1.13.2@sha256:c740d7a89475518b07f52809f264e55f235d9c6432c60a1bf2e703376e55c835

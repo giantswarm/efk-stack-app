@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- Add overridability of the Kibana image registry to allow users to ues their own image (extra-plugins, etc.).
+
 ## [0.5.2] - 2021-05-14
 
 ### Fixed

@@ -84,7 +84,11 @@ spec:
 {{- if .Values.kibana.extraEnvs }}
 {{ toYaml .Values.kibana.extraEnvs | indent 8 }}
 {{- end }}
+        {{- if .Values.kibana.registry }}
+        image: {{ .Values.kibana.registry }}/{{ .Values.kibana.image }}:{{ .Values.kibana.imageTag }}
+        {{- else }}
         image: {{ .Values.global.imageRegistry }}/{{ .Values.kibana.image }}:{{ .Values.kibana.imageTag }}
+        {{- end }}
         imagePullPolicy: {{ .Values.kibana.imagePullPolicy | default "Always" | quote }}
     {{- with .Values.kibana.readinessProbe}}
         readinessProbe:
