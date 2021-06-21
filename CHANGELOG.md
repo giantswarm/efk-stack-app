@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.5.3] - 2021-06-21
+
 ### Added
 
 - Add overridability of the Kibana image registry to allow users to ues their own image (extra-plugins, etc.).
@@ -129,7 +131,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.2...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.3...HEAD
+[0.5.3]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.4.1...v0.5.0
