@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- Work around a Helm issue when `null` is used in the default values file. This caused problems with upgrades in some scenarious.
+
 ## [0.5.3] - 2021-06-21
 
 ### Added
