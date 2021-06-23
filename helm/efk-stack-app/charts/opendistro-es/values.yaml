@@ -223,6 +223,10 @@ elasticsearch:
   fixmount:
     enabled: true
 
+  ## TODO
+  deleteLockfiles:
+    enabled: false
+
   ssl:
     ## TLS is mandatory for the transport layer and can not be disabled
     transport:
