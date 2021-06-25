@@ -47,9 +47,7 @@ This application is intended to have a centralized log storage for your applicat
 
 ## Running on NFS
 
-Using NFS for storage is not officially supported by Elasticsearch. Problems can happen when Pods are evicted unexpectedly, lock files will be left and so Elasticsearch in the restarted Pod will complain and stop writing data. As a workaround it is possible to set `elasticsearch.deleteLockfiles.enabled: true` in the value file. In that case an init container will delete all lock files present on the storage for the Elasticsearch data nodes. Please enable this with care! Only enable this when running on NFS and those issues already showd up.
-
-
+Using [NFS for storage is not officially supported](https://discuss.elastic.co/t/why-nfs-is-to-be-avoided-for-data-directories/215240/3) by Elasticsearch. [Problems can happen](https://www.frakkingsweet.com/elasticsearch-nfs-and-locking-issues/) when Pods are evicted unexpectedly, lock files will be left and so Elasticsearch in the restarted Pod will complain and stop writing data. As a workaround it is possible to set `elasticsearch.deleteLockfiles.enabled: true` in the value file. In that case an init container will delete all lock files present on the storage for the Elasticsearch data nodes. Please enable this with care! Only enable this when running on NFS and those issues already showd up.
 
 ## Components
 
