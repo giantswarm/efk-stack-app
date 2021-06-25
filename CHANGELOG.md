@@ -10,6 +10,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ### Fixed
 
 - Work around a Helm issue when `null` is used in the default values file. This caused problems with upgrades in some scenarious.
+- Add a configurable workaround to [clean up leftover lock files on NFS storage](https://github.com/giantswarm/efk-stack-app/blob/master/README.md#running-on-nfs).
 
 ## [0.5.3] - 2021-06-21
 

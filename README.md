@@ -45,6 +45,10 @@ This application is intended to have a centralized log storage for your applicat
 
 - If you change the name of the helm release from "efk-stack-app" to "logging-stack" you will need to adapt default configuration and change all references of "efk-stack-app-opendistro-es-client-service" to "logging-stack-opendistro-es-client-service" in the [values file](./helm/efk-stack-app/values.yaml)
 
+## Running on NFS
+
+Using [NFS for storage is not officially supported](https://discuss.elastic.co/t/why-nfs-is-to-be-avoided-for-data-directories/215240/3) by Elasticsearch. [Problems can happen](https://www.frakkingsweet.com/elasticsearch-nfs-and-locking-issues/) when Pods are evicted unexpectedly, lock files will be left and so Elasticsearch in the restarted Pod will complain and stop writing data. As a workaround it is possible to set `opendistro-es.elasticsearch.deleteLockfiles.enabled: true` in the value file. In that case an init container will delete all lock files present on the storage for the Elasticsearch data nodes. Please enable this with care! Only enable this when running on NFS and those issues already showed up.
+
 ## Components
 
 ### OpenDistro

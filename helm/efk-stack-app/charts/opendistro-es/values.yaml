@@ -223,6 +223,10 @@ elasticsearch:
   fixmount:
     enabled: true
 
+  ## Use with care! For more information see https://github.com/giantswarm/efk-stack-app#running-on-nfs
+  deleteLockfiles:
+    enabled: false
+
   ssl:
     ## TLS is mandatory for the transport layer and can not be disabled
     transport:
