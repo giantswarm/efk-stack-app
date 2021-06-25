@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.5.4] - 2021-06-25
+
 ### Fixed
 
 - Work around a Helm issue when `null` is used in the default values file. This caused problems with upgrades in some scenarious.
@@ -136,7 +138,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.3...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.4...HEAD
+[0.5.4]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.2...v0.5.3
 [0.5.2]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.0...v0.5.1
