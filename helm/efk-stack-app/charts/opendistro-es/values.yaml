@@ -223,7 +223,7 @@ elasticsearch:
   fixmount:
     enabled: true
 
-  ## TODO
+  ## Use with care! For more information see https://github.com/giantswarm/efk-stack-app#running-on-nfs
   deleteLockfiles:
     enabled: false
 
