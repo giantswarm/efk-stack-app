@@ -110,7 +110,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [0.2.0] 2020-04-15
 ### Opendistro
-- Upgrade to OpenDistro 1.6.0 [Changelog](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/master/release-notes/release-notes-odfe-1.6.0.md)
+- Upgrade to OpenDistro 1.6.0 [Changelog](https://github.com/opendistro-for-elasticsearch/opendistro-build/blob/main/release-notes/opendistro-for-elasticsearch-release-notes-1.6.0.md)
 - Add pod affinity
 - Allow subpath for Persistent Volumes
 - Allow use of unmanaged Persistent Volumes
