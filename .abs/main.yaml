@@ -1,0 +1,15 @@
+replace-app-version-with-git: true
+replace-chart-version-with-git: true
+generate-metadata: true
+chart-dir: ./helm/efk-stack-app
+destination: ./build
+# CI overwrites this, check .circleci/config.yaml
+catalog-base-url: https://giantswarm.github.com/default-catalog/
+
+app-tests-app-config-file: ./helm/efk-stack-app/ci/kind.yaml
+app-tests-deploy-namespace: kube-system
+
+smoke-tests-cluster-type: kind
+smoke-tests-cluster-config-file: ./helm/efk-stack-app/tests/kind_config.yaml
+functional-tests-cluster-type: kind
+functional-tests-cluster-config-file: ./helm/efk-stack-app/tests/kind_config.yaml

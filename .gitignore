@@ -6,6 +6,7 @@ __pycache__
 .pytest_cache
 .pytest-kube
 .vscode
+.devcontainer/
 test/kat/.idea/
 **/.python-version
 efk-stack-app*.tgz*
