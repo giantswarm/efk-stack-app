@@ -97,7 +97,7 @@ fluentd-elasticsearch:
     # and https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch/fluentd-es-image
     registry: quay.io
     repository: giantswarm/fluentd
-    tag: v3.3.0-opendistro-patch@sha256:5a68f0d35d50c25e4baf4c8a4011daba05b8068a7fd2d82d1c0944445424d6ad
+    tag: v3.3.0-opendistro-patch@sha256:fab881e9d61b264814cf424c8c626c8f421fb23b4ae36997d1951241deaffff3
     # tag: v3.2.0@sha256:5867172358b073e2e99db73ee2157e21e91d5f266cb94f6837f292e7e3f45f22
   elasticsearch:
     host: opendistro-es-client-service
