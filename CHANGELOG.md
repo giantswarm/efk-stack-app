@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Update fluentd-elasticsearch container image to 3.3.0
+
 ## [0.5.4] - 2021-06-25
 
 ### Fixed
