@@ -1,5 +1,5 @@
 <!--
-@app-squad-efk will be automatically requested for review once
+@team-atlas will be automatically requested for review once
 this PR has been submitted.
 -->
 
