@@ -83,7 +83,7 @@ spec:
         - -c
         - |
           rm -f /usr/share/elasticsearch/data/nodes/0/node.lock ; \
-          find /usr/share/elasticsearch/data -name write.lock -delete
+          find /usr/share/elasticsearch/data -name write.lock -print -delete
         volumeMounts:
         - mountPath: /usr/share/elasticsearch/data
           name: data

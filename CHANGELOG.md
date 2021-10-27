@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Print deleted files when cleaning leftover lock files on NFS storage.
+
 ## [0.6.0] - 2021-10-15
 
 ### Changed
