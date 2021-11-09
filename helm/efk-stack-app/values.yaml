@@ -99,7 +99,7 @@ fluentd-elasticsearch:
     repository: giantswarm/fluentd
     tag: v3.3.0-for-opendistro@sha256:e71f79e701e478b83bcc933b913bde76a6e8763a4a50adad83e1f9ff9babcc67
   elasticsearch:
-    host: opendistro-es-client-service
+    host: "efk-stack-app-opendistro-es-client-service"
     logstashPrefix: "fluentd"
     sslVerify: false
     scheme: "http"
