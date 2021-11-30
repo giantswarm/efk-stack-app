@@ -10,6 +10,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ### Changed
 
 - Print deleted files when cleaning leftover lock files on NFS storage.
+- Remove duplicate service for elasticsearch ingest nodes.
 
 ### Fixed
 
