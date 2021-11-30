@@ -18,7 +18,7 @@ from pytest_helm_charts.utils import (
 logger = logging.getLogger(__name__)
 
 app_name = "efk-stack-app"
-client_service_base_url = "http://admin:admin@opendistro-es-client-service:9200"
+client_service_base_url = "http://admin:admin@efk-stack-app-opendistro-es-client-service:9200"
 namespace_name = "default"
 catalog_name = "chartmuseum"
 
