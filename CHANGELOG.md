@@ -12,6 +12,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 - Print deleted files when cleaning leftover lock files on NFS storage.
 - Remove duplicate service for elasticsearch ingest nodes.
 - Increase log level for fluentd.
+- Increase log level for curator.
 
 ### Fixed
 
