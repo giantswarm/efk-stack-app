@@ -267,20 +267,24 @@ spec:
       - name: config
         secret:
           secretName: {{ template "opendistro-es.fullname" . }}-es-config
+          defaultMode: 0600
       {{- if .Values.elasticsearch.ssl.transport.existingCertSecret }}
       - name: transport-certs
         secret:
           secretName: {{ .Values.elasticsearch.ssl.transport.existingCertSecret }}
+          defaultMode: 0600
       {{- end }}
       {{- if and .Values.elasticsearch.ssl.rest.enabled .Values.elasticsearch.ssl.rest.existingCertSecret }}
       - name: rest-certs
         secret:
           secretName: {{ .Values.elasticsearch.ssl.rest.existingCertSecret }}
+          defaultMode: 0600
       {{- end }}
       {{- if and .Values.elasticsearch.ssl.admin.enabled .Values.elasticsearch.ssl.admin.existingCertSecret }}
       - name: admin-certs
         secret:
           secretName: {{ .Values.elasticsearch.ssl.admin.existingCertSecret }}
+          defaultMode: 0600
       {{- end }}
       {{- if and .Values.elasticsearch.securityConfig.config.securityConfigSecret .Values.elasticsearch.securityConfig.config.data }}
       - name: security-config
