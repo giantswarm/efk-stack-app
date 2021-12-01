@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.7.0] - 2021-12-01
+
 ### Changed
 
 - Print deleted files when cleaning leftover lock files on NFS storage.
@@ -157,7 +159,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.4...v0.6.0
 [0.5.4]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.3...v0.5.4
 [0.5.3]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.2...v0.5.3
