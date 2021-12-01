@@ -85,8 +85,8 @@ configMaps:
       # http_auth:
       # timeout: 30
       # master_only: False
-    # logging:
-    #   loglevel: INFO
+    logging:
+      loglevel: DEBUG
     #   logfile:
     #   logformat: default
     #   blacklist: ['elasticsearch', 'urllib3']
