@@ -4,7 +4,7 @@ global:
   opendistro:
     es:
       client:
-        uri: opendistro-es-client-service
+        uri: efk-stack-app-opendistro-es-client-service
 
 opendistro-certs:
   enabled: true
@@ -62,7 +62,7 @@ elasticsearch-curator:
       ---
       client:
         hosts:
-          - opendistro-es-client-service
+          - efk-stack-app-opendistro-es-client-service
         port: 9200
         http_auth: ${ELASTIC_CREDS}
 
@@ -82,7 +82,7 @@ elasticsearch-exporter:
       giantswarm.io/monitoring: "true"
   envFromSecret: "kibana-auth"
   es:
-    uri: http://$(username):$(password)@opendistro-es-client-service:9200
+    uri: http://$(username):$(password)@efk-stack-app-opendistro-es-client-service:9200
 
 fluentd-elasticsearch:
   enabled: true
@@ -99,7 +99,7 @@ fluentd-elasticsearch:
     repository: giantswarm/fluentd
     tag: v3.3.0-for-opendistro@sha256:e71f79e701e478b83bcc933b913bde76a6e8763a4a50adad83e1f9ff9babcc67
   elasticsearch:
-    host: opendistro-es-client-service
+    host: "efk-stack-app-opendistro-es-client-service"
     logstashPrefix: "fluentd"
     sslVerify: false
     scheme: "http"
