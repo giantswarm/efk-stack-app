@@ -35,10 +35,10 @@ spec:
     name: metrics
   - port: 9650
     name: rca
-  clusterIP: None
   selector:
   {{- if .Values.elasticsearch.data.dedicatedPod.enabled }}
     role: data
   {{- else }}
     role: master
   {{- end }}
+  type: ClusterIP
