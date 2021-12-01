@@ -135,7 +135,7 @@ opendistro-es:
         host: "0"
 
       elasticsearch:
-        hosts: http://opendistro-es-client-service:9200
+        hosts: http://efk-stack-app-opendistro-es-client-service:9200
         requestTimeout: 360000
         username: ${ELASTICSEARCH_USERNAME}
         password: ${ELASTICSEARCH_PASSWORD}
