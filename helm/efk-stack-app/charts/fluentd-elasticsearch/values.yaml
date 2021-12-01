@@ -74,7 +74,7 @@ elasticsearch:
 
 # If you want to change args of fluentd process
 # by example you can add -vv to launch with trace log
-fluentdArgs: "--no-supervisor -q"
+fluentdArgs: "--no-supervisor"
 
 # If you want to add custom environment variables, use the env dict
 # You can then reference these in your config file e.g.:
