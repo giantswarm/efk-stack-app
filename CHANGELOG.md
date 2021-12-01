@@ -18,6 +18,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - Fix incorrect internal service name for `efk-stack-app-opendistro-es-client-service`.
 - Set elasticsearch master and data service type to `ClusterIP`.
+- Set config files permissions to `0600`.
 
 ## [0.6.0] - 2021-10-15
 
