@@ -13,6 +13,8 @@
 
 kibana:
   enabled: true
+  # Allows override of the registry for the kibana image only
+  registry: ""
   image: amazon/opendistro-for-elasticsearch-kibana
   imageTag: 1.13.2
   ## Specifies the image pull policy. Can be "Always" or "IfNotPresent" or "Never".
