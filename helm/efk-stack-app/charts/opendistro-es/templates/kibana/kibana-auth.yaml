@@ -1,0 +1,22 @@
+{{- if .Values.kibana.enabled }}
+kind: Secret
+apiVersion: v1
+type: Opaque
+metadata:
+  name: kibana-auth
+  namespace: {{ .Release.Namespace }}
+data:
+  cookie: {{ randAlphaNum 32 | b64enc | quote }}
+
+  {{- if .Values.kibana.password }}
+  password: {{ .Values.kibana.password | b64enc | quote }}
+  {{- else }}
+  password: YWRtaW4=
+  {{- end }}
+
+  {{- if .Values.kibana.username }}
+  username: {{ .Values.kibana.username | b64enc | quote }}
+  {{- else }}
+  username: YWRtaW4=
+  {{- end }}
+{{- end }}
