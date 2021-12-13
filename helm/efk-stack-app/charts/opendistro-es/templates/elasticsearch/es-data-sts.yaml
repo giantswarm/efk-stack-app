@@ -75,6 +75,20 @@ spec:
             name: data
             subPath: {{ .Values.elasticsearch.data.persistence.subPath }}
 {{- end }}
+{{- if .Values.elasticsearch.deleteLockfiles.enabled }}
+      - name: remove-lock-files
+        image: {{ .Values.global.registry }}/{{ .Values.elasticsearch.initContainer.image }}:{{ .Values.elasticsearch.initContainer.imageTag }}
+        command:
+        - sh
+        - -c
+        - |
+          rm -f /usr/share/elasticsearch/data/nodes/0/node.lock ; \
+          find /usr/share/elasticsearch/data -name write.lock -print -delete
+        volumeMounts:
+        - mountPath: /usr/share/elasticsearch/data
+          name: data
+          subPath: {{ .Values.elasticsearch.data.persistence.subPath }}
+{{- end }}
 {{- if .Values.elasticsearch.extraInitContainers }}
 {{ toYaml .Values.elasticsearch.extraInitContainers| indent 6 }}
 {{- end }}
