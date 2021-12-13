@@ -291,7 +291,6 @@ elasticsearch:
     javaOpts: "-Xms512m -Xmx512m"
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:
@@ -368,7 +367,6 @@ elasticsearch:
     javaOpts: "-Xms512m -Xmx512m"
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:
@@ -440,7 +438,6 @@ elasticsearch:
     #    memory: 1024Mi
     podDisruptionBudget:
       enabled: false
-      minAvailable: 1
     readinessProbe: []
     livenessProbe:
       tcpSocket:
