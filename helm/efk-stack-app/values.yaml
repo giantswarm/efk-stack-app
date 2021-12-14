@@ -160,7 +160,7 @@ opendistro-es:
   elasticsearch:
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch?tab=tags
     image: giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.13.2@sha256:ba1d85ec37391537c9abcc4d3b13eb55351b5a25626c70a2a07852340235e9f5
+    imageTag: 1.13.3@sha256:2acfa1dcc5f8a2e5aac09bc64c4047c6674755f9b2f57de2a945be182888ea33
     imagePullPolicy: IfNotPresent
 
     sysctl:
