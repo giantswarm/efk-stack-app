@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 0.5.4
+appVersion: 0.7.1
 dependencies:
 - name: elasticsearch-curator
   repository: file://charts/elasticsearch-curator
@@ -26,4 +26,4 @@ maintainers:
 name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
-version: 0.5.4
+version: 0.7.1
