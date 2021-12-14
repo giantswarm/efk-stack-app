@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- Security fix for CVE-2021-44228, which affect the Log4j library used in opendistro.
+
 ## [0.7.0] - 2021-12-01
 
 ### Changed
