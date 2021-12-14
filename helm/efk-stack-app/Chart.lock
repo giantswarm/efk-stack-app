@@ -10,9 +10,9 @@ dependencies:
   version: 0.1.0
 - name: opendistro-es
   repository: file://charts/opendistro-es
-  version: 1.13.2
+  version: 1.13.3
 - name: elasticsearch-exporter
   repository: file://charts/elasticsearch-exporter
   version: 3.0.0
-digest: sha256:23d78cb4d65b2900a027b8c6be3a8ba5c81f74d53314c7170c5a677f1da56f90
-generated: "2021-09-16T21:00:27.306336083Z"
+digest: sha256:2e2fc5a1351020a771ea61fa3d3e1dffaf8d21f5711b3e1a09aebef2d29fea16
+generated: "2021-12-14T18:01:19.511093868+01:00"

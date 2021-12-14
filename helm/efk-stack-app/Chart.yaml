@@ -12,7 +12,7 @@ dependencies:
   version: 0.1.0
 - name: opendistro-es
   repository: file://charts/opendistro-es
-  version: 1.13.2
+  version: 1.13.3
 - name: elasticsearch-exporter
   repository: file://charts/elasticsearch-exporter
   version: 3.0.0
