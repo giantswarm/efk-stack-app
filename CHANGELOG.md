@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.7.1] - 2021-12-14
+
 ### Fixed
 
 - Security fix for CVE-2021-44228, which affect the Log4j library used in opendistro.
@@ -163,7 +165,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.1...HEAD
+[0.7.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.4...v0.6.0
 [0.5.4]: https://github.com/giantswarm/efk-stack-app/compare/v0.5.3...v0.5.4
