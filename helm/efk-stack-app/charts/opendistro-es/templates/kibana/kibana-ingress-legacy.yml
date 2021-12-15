@@ -12,11 +12,11 @@
 # permissions and limitations under the License.
 
 # @formatter:off
-{{- if and .Values.kibana.ingress.enabled .Values.kibana.enabled (.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") }}
+{{- if and .Values.kibana.ingress.enabled .Values.kibana.enabled (not (.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress")) }}
 {{- $serviceName := printf "%s-%s" (include "opendistro-es.fullname" .) "kibana-svc" }}
 {{- $servicePort := .Values.kibana.externalPort }}
 {{- $ingressPath := .Values.kibana.ingress.path }}
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: {{ template "opendistro-es.fullname" . }}-kibana-ing
@@ -34,12 +34,9 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
-            pathType: ImplementationSpecific
             backend:
-              service: 
-                name: {{ $serviceName }}
-                port: 
-                  number: {{ $servicePort }}
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
     {{- end }}
   {{- if .Values.kibana.ingress.tls }}
   tls: {{ toYaml .Values.kibana.ingress.tls | nindent 4 }}

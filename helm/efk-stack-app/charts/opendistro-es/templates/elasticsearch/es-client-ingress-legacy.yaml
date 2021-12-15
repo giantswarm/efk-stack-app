@@ -12,10 +12,10 @@
 # permissions and limitations under the License.
 
 # @formatter:off
-{{- if and .Values.elasticsearch.client.ingress.enabled .Values.elasticsearch.client.enabled (.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress") }}
+{{- if and .Values.elasticsearch.client.ingress.enabled .Values.elasticsearch.client.enabled (not (.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress")) }}
 {{ $fullName := printf "%s-%s"  (include "opendistro-es.fullname" .) "client-service" }}
 {{ $ingressPath := .Values.elasticsearch.client.ingress.path }}
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: {{ $fullName }}
@@ -43,11 +43,8 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
-            pathType: ImplementationSpecific
             backend:
-              service: 
-                name: {{ $fullName }}
-                port: 
-                  name: http
+              serviceName: {{ $fullName }}
+              servicePort: http
   {{- end }}
 {{- end }}
