@@ -55,8 +55,8 @@ spec:
                 port: 
                   name: http
               {{- else }}
-              serviceName: {{ $serviceName }}
-              servicePort: {{ $servicePort }}
+              serviceName: {{ $fullName }}
+              servicePort: http
               {{- end }}
   {{- end }}
 {{- end }}
