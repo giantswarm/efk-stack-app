@@ -13,7 +13,7 @@
 
 # @formatter:off
 {{- if and .Values.elasticsearch.client.ingress.enabled .Values.elasticsearch.client.enabled }}
-{{ $fullName := printf "%s-%s"  (include "opendistro-es.fullname" .) "client-ingress" }}
+{{ $fullName := printf "%s-%s"  (include "opendistro-es.fullname" .) "client-service" }}
 {{ $ingressPath := .Values.elasticsearch.client.ingress.path }}
 {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
 apiVersion: networking.k8s.io/v1
@@ -30,6 +30,7 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
+  ingressClassName: {{ default "nginx" .Values.elastisearch.client.ingress.class }}
 {{- if .Values.elasticsearch.client.ingress.tls }}
   tls:
   {{- range .Values.elasticsearch.client.ingress.tls }}
@@ -48,9 +49,14 @@ spec:
           - path: {{ $ingressPath }}
             pathType: ImplementationSpecific
             backend:
+              {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
               service: 
                 name: {{ $fullName }}
                 port: 
                   name: http
+              {{- else }}
+              serviceName: {{ $serviceName }}
+              servicePort: {{ $servicePort }}
+              {{- end }}
   {{- end }}
 {{- end }}

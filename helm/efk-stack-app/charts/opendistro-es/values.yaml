@@ -86,6 +86,7 @@ kibana:
     #  kubernetes.io/ingress.class: nginx
     #  kubernetes.io/tls-acme: "true"
     labels: {}
+    class: "nginx"
     path: /
     hosts:
       - chart-example.local
@@ -422,6 +423,7 @@ elasticsearch:
       #  nginx.org/ssl-services:"{{ template "opendistro-es.fullname" . }}-client-service"
       #  nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
       labels: {}
+      class: "nginx"
       path: /
       hosts:
         - chart-example.local
