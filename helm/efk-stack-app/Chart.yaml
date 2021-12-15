@@ -1,5 +1,5 @@
 apiVersion: v2
-appVersion: 0.5.4
+appVersion: 0.7.1
 dependencies:
 - name: elasticsearch-curator
   repository: file://charts/elasticsearch-curator
@@ -12,7 +12,7 @@ dependencies:
   version: 0.1.0
 - name: opendistro-es
   repository: file://charts/opendistro-es
-  version: 1.13.2
+  version: 1.13.3
 - name: elasticsearch-exporter
   repository: file://charts/elasticsearch-exporter
   version: 3.0.0
@@ -26,4 +26,4 @@ maintainers:
 name: efk-stack-app
 sources:
 - https://github.com/giantswarm/efk-stack-app
-version: 0.5.4
+version: 0.7.1

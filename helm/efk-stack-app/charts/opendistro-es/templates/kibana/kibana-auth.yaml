@@ -1,9 +1,9 @@
 {{- if .Values.kibana.enabled }}
-kind: Secret                                                                                                                                                                                                                                                                                                                
-apiVersion: v1                                                                                                                                                                                                                                                                                                              
+kind: Secret
+apiVersion: v1
 type: Opaque
-metadata:                                                                                                                                                                                                                                                                                                                   
-  name: kibana-auth                                                                                                                                                                                                                                                                                                         
+metadata:
+  name: kibana-auth
   namespace: {{ .Release.Namespace }}
 data:
   cookie: {{ randAlphaNum 32 | b64enc | quote }}
