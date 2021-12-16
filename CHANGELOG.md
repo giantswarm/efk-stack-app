@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix kibana ingress to use the correct value from values.yaml `.Values.kibana.ingress.class`
+
 ## [0.7.3] - 2021-12-16
 
 ### Update

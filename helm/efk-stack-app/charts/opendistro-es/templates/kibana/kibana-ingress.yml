@@ -31,7 +31,7 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
-  ingressClassName: {{ default "nginx" .Values.elasticsearch.client.ingress.class }}
+  ingressClassName: {{ default "nginx" .Values.kibana.ingress.class }}
   rules:
     {{- range .Values.kibana.ingress.hosts }}
     - host: {{ . | quote }}
