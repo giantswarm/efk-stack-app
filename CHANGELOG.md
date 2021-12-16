@@ -7,6 +7,11 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Update
+
+- update app-build-suite config to replace chart version on release
+- update chart version
+
 ## [0.7.2] - 2021-12-16
 
 ### Updated
