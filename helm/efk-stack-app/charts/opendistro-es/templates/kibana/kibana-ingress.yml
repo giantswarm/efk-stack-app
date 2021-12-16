@@ -16,7 +16,11 @@
 {{- $serviceName := printf "%s-%s" (include "opendistro-es.fullname" .) "kibana-svc" }}
 {{- $servicePort := .Values.kibana.externalPort }}
 {{- $ingressPath := .Values.kibana.ingress.path }}
-apiVersion: extensions/v1beta1
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+apiVersion: networking.k8s.io/v1
+{{- else }}
+apiVersion: networking.k8s.io/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: {{ template "opendistro-es.fullname" . }}-kibana-ing
@@ -27,15 +31,24 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  ingressClassName: {{ default "nginx" .Values.elasticsearch.client.ingress.class }}
   rules:
     {{- range .Values.kibana.ingress.hosts }}
     - host: {{ . | quote }}
       http:
         paths:
           - path: {{ $ingressPath }}
+            pathType: ImplementationSpecific
             backend:
+            {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+              service: 
+                name: {{ $serviceName }}
+                port: 
+                  number: {{ $servicePort }}
+            {{- else}} 
               serviceName: {{ $serviceName }}
               servicePort: {{ $servicePort }}
+            {{- end }}
     {{- end }}
   {{- if .Values.kibana.ingress.tls }}
   tls: {{ toYaml .Values.kibana.ingress.tls | nindent 4 }}

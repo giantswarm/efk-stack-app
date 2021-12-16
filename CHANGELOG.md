@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Updated
+
+- apiVersion for ingress resources to `networking.k8s.io/v1`/`networking.k8s.io/v1beta1` depending on cluster capabilities
+
 ## [0.7.1] - 2021-12-14
 
 ### Fixed
