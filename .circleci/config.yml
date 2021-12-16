@@ -33,7 +33,7 @@ workflows:
           requires:
             - hold app tests
             - package and push efk-stack-app chart
-          resource_class: 2xlarge
+          resource_class: large
           filters:
             # Do not trigger the job on master branch or release tags.
             branches:

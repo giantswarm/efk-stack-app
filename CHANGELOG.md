@@ -9,10 +9,11 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ### Fixed
 
-- fix skipped version
-- fix app-build-suite config to replace chart version on release
-- fix chart version
-- apiVersion for ingress resources to `networking.k8s.io/v1`/`networking.k8s.io/v1beta1` depending on cluster capabilities
+- fixes circleCI resource_class for testing
+- fixes skipped version
+- fixes app-build-suite config to replace chart version on release
+- fixes chart version
+- fixes apiVersion for ingress resources to `networking.k8s.io/v1`/`networking.k8s.io/v1beta1` depending on cluster capabilities
 
 ## [0.7.1] - 2021-12-14
 
