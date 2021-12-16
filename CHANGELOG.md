@@ -9,6 +9,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ### Fixed
 
+- fix skipped version
 - fix app-build-suite config to replace chart version on release
 - fix chart version
 - apiVersion for ingress resources to `networking.k8s.io/v1`/`networking.k8s.io/v1beta1` depending on cluster capabilities
