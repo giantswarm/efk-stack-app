@@ -30,6 +30,7 @@ metadata:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
+  ingressClassName: {{ default "nginx" .Values.elasticsearch.client.ingress.class }}
 {{- if .Values.elasticsearch.client.ingress.tls }}
   tls:
   {{- range .Values.elasticsearch.client.ingress.tls }}
@@ -46,6 +47,7 @@ spec:
       http:
         paths:
           - path: {{ $ingressPath }}
+            pathType: ImplementationSpecific
             backend:
             {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
               service: 
