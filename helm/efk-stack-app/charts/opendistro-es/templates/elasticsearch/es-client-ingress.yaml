@@ -16,7 +16,11 @@
 {{ $fullName := printf "%s-%s"  (include "opendistro-es.fullname" .) "client-service" }}
 {{ $ingressPath := .Values.elasticsearch.client.ingress.path }}
 kind: Ingress
-apiVersion: extensions/v1beta1
+{{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+apiVersion: networking.k8s.io/v1
+{{- else }}
+apiVersion: networking.k8s.io/v1beta1
+{{- end }}
 metadata:
   name: {{ $fullName }}
   labels:
@@ -43,7 +47,14 @@ spec:
         paths:
           - path: {{ $ingressPath }}
             backend:
+            {{- if $.Capabilities.APIVersions.Has "networking.k8s.io/v1/Ingress" }}
+              service: 
+                name: {{ $fullName }}
+                port: 
+                  name: http
+            {{- else}}  
               serviceName: {{ $fullName }}
               servicePort: http
+            {{- end }}
   {{- end }}
 {{- end }}
