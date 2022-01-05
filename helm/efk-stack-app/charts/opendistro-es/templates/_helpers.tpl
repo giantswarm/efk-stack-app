@@ -46,6 +46,7 @@ Define standard labels for frequently used metadata.
 {{- define "opendistro-es.labels.standard" -}}
 app: {{ template "opendistro-es.fullname" . }}
 chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+break: label
 {{- end -}}
 
 {{/*
