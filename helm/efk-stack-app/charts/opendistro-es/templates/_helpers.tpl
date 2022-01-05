@@ -54,6 +54,7 @@ We cannot have the chart label here as it will prevent upgrades.
 */}}
 {{- define "opendistro-es.labels.selector" -}}
 app: {{ template "opendistro-es.fullname" . }}
+break: label
 {{- end -}}
 
 {{/*
