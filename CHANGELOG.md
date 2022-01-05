@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Added
+
+- Set team annotation in Chart.yaml for alert routing.
+
 ## [0.7.2] - 2021-12-16
 
 ### Fixed

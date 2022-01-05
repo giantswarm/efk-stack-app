@@ -20,6 +20,8 @@ description: Open Distro for Elasticsearch
 engine: gotpl
 home: https://github.com/giantswarm/efk-stack-app
 icon: https://s.giantswarm.io/app-icons/1/png/efk-stack-app-light.png
+annotations:
+  application.giantswarm.io/team: "atlas"
 maintainers:
 - name: Giant Swarm applications team
   url: https://github.com/giantswarm/efk-stack-app
