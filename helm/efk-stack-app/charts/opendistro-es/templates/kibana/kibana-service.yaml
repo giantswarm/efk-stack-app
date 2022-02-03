@@ -22,10 +22,10 @@ metadata:
   labels:
 {{ include "opendistro-es.labels.standard" . | indent 4 }}
     role: kibana
-  name: {{ template "opendistro-es.fullname" . }}-kibana-svc
+  name: {{ template "opendistro-es.fullname" . }}-kibana
 spec:
   ports:
-  - name: kibana-svc
+  - name: kibana
     port: {{ .Values.kibana.externalPort }}
     targetPort: {{ .Values.kibana.port }}
   selector:

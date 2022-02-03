@@ -11,6 +11,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - Set team annotation in Chart.yaml for alert routing.
 
+### Fixed
+
+- Fix invalid kibana service : duplicate value
+
 ## [0.7.2] - 2021-12-16
 
 ### Fixed
