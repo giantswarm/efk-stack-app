@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Make number of days consistent between Curator code and docs
+
 ### Added
 
 - Set team annotation in Chart.yaml for alert routing.
