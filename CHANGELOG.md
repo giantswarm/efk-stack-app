@@ -15,6 +15,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - Set team annotation in Chart.yaml for alert routing.
 
+### Fixed
+
+- Fix deprecated api version for rbac.
+
 ## [0.7.2] - 2021-12-16
 
 ### Fixed
