@@ -11,6 +11,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 - Make number of days consistent between Curator code and docs
 
+## [0.7.3] - 2022-04-06
+
 ### Added
 
 - Set team annotation in Chart.yaml for alert routing.
@@ -187,7 +189,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.2...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.3...HEAD
+[0.7.3]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.1...v0.7.2
 [0.7.1]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/giantswarm/efk-stack-app/compare/v0.6.0...v0.7.0
