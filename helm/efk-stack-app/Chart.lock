@@ -1,18 +1,6 @@
 dependencies:
-- name: elasticsearch-curator
-  repository: file://charts/elasticsearch-curator
-  version: 2.0.3
-- name: fluentd-elasticsearch
-  repository: file://charts/fluentd-elasticsearch
-  version: 6.1.1
-- name: opendistro-certs
-  repository: file://charts/opendistro-certs
-  version: 0.1.0
-- name: opendistro-es
-  repository: file://charts/opendistro-es
-  version: 1.13.3
-- name: elasticsearch-exporter
-  repository: file://charts/elasticsearch-exporter
-  version: 3.0.0
-digest: sha256:2e2fc5a1351020a771ea61fa3d3e1dffaf8d21f5711b3e1a09aebef2d29fea16
-generated: "2021-12-14T18:01:19.511093868+01:00"
+- name: opensearch
+  repository: https://opensearch-project.github.io/helm-charts/
+  version: 1.12.1
+digest: sha256:462df29a2aa3003e9c37f9a51dbac1dfc0219bc006c3ed9992727bc5042f4606
+generated: "2022-06-28T18:24:21.549031154+02:00"
