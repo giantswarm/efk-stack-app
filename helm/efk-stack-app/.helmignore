@@ -19,6 +19,5 @@
 .project
 .idea/
 *.tmproj
-*.tgz
 # Helm files
 OWNERS
