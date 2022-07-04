@@ -6,13 +6,16 @@ dependencies:
   version: 6.1.1
 - name: opensearch-certs
   repository: file://charts/opensearch-certs
-  version: 0.1.0
+  version: 1.0.0
 - name: opensearch
   repository: file://charts/opensearch
-  version: 1.13.3
-- name: opensearch-exporter
-  repository: file://charts/opensearch-exporter
-  version: 3.0.0
+  version: 2.2.0
+- name: opensearch-dashboards
+  repository: file://charts/opensearch-dashboards
+  version: 2.1.0
+#- name: opensearch-exporter
+#  repository: file://charts/opensearch-exporter
+#  version: 3.0.0
 description: Opensearch
 engine: gotpl
 home: https://github.com/giantswarm/efk-stack-app

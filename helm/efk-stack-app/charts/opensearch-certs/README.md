@@ -1,6 +1,6 @@
-# OpenDistro certificate generator
+# opensearch certificate generator
 
-Generates CA needed to enable OpenDistro security pluguin with [certstrap](https://github.com/square/certstrap).
+Generates CA needed to enable opensearch security pluguin with [certstrap](https://github.com/square/certstrap).
 
 The rootCA and the transport certificates will be stored in kubernetes secrets using a Job to create the initial certificates and a cronjob to constantly check that the certificates are present.
 
@@ -13,7 +13,7 @@ If you wish to renew certificates you just can delete the kubernetes secret and 
 ```
 enabled: true
 
-image: quay.io/giantswarm/opendistro-certs
+image: quay.io/giantswarm/opensearch-certs
 imageTag: v0.0.3
 
 organization: Giant Swarm
