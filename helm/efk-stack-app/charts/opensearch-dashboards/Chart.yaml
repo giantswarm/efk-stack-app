@@ -30,3 +30,5 @@ maintainers:
   - name: peterzhuamazon
   - name: prudhvigodithi
   - name: TheAlgo
+  - name: Giant Swarm applications team
+  url: https://github.com/giantswarm/efk-stack-app

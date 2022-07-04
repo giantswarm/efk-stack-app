@@ -110,7 +110,8 @@ service:
   port: 5601
   loadBalancerIP: ""
   nodePort: ""
-  labels: {}
+  labels:
+    giantswarm.io/monitoring: "true"
   annotations: {}
   loadBalancerSourceRanges: []
   # 0.0.0.0/0
