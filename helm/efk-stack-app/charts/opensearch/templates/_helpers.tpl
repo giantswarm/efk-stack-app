@@ -17,7 +17,7 @@ permissions and limitations under the License.
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "opendistro-es.name" -}}
+{{- define "opensearch.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
@@ -26,7 +26,7 @@ Create a default fully qualified app name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 If release name contains chart name it will be used as a full name.
 */}}
-{{- define "opendistro-es.fullname" -}}
+{{- define "opensearch.fullname" -}}
 {{- if .Values.fullnameOverride -}}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
@@ -43,8 +43,8 @@ If release name contains chart name it will be used as a full name.
 {{/*
 Define standard labels for frequently used metadata.
 */}}
-{{- define "opendistro-es.labels.standard" -}}
-app: {{ template "opendistro-es.fullname" . }}
+{{- define "opensearch.labels.standard" -}}
+app: {{ template "opensearch.fullname" . }}
 chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 {{- end -}}
 
@@ -52,36 +52,36 @@ chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
 Define labels for deployment/statefulset selectors.
 We cannot have the chart label here as it will prevent upgrades.
 */}}
-{{- define "opendistro-es.labels.selector" -}}
-app: {{ template "opendistro-es.fullname" . }}
+{{- define "opensearch.labels.selector" -}}
+app: {{ template "opensearch.fullname" . }}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "opendistro-es.kibana.serviceAccountName" -}}
-{{- if .Values.kibana.serviceAccount.create -}}
-    {{ default (include "opendistro-es.fullname" .) .Values.kibana.serviceAccount.name }}-kibana
+{{- define "opensearch.opensearch-dashboards.serviceAccountName" -}}
+{{- if .Values.opensearch-dashboards.serviceAccount.create -}}
+    {{ default (include "opensearch.fullname" .) .Values.opensearch-dashboards.serviceAccount.name }}-opensearch-dashboards
 {{- else -}}
-    {{ default "default" .Values.kibana.serviceAccount.name }}
+    {{ default "default" .Values.opensearch-dashboards.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "opendistro-es.elasticsearch.serviceAccountName" -}}
-{{- if .Values.elasticsearch.serviceAccount.create -}}
-    {{ default (include "opendistro-es.fullname" .) .Values.elasticsearch.serviceAccount.name }}-es
+{{- define "opensearch.opensearch.serviceAccountName" -}}
+{{- if .Values.opensearch.serviceAccount.create -}}
+    {{ default (include "opensearch.fullname" .) .Values.opensearch.serviceAccount.name }}-es
 {{- else -}}
-    {{ default "default" .Values.elasticsearch.serviceAccount.name }}
+    {{ default "default" .Values.opensearch.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "opendistro-es.imagePullSecrets" -}}
+{{- define "opensearch.imagePullSecrets" -}}
 {{/*
 Helm 2.11 supports the assignment of a value to a variable defined in a different scope,
 but Helm 2.9 and 2.10 does not support it, so we need to implement this if-else logic.
@@ -93,38 +93,38 @@ imagePullSecrets:
 {{- range .Values.global.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- else if or .Values.kibana.imagePullSecrets .Values.elasticsearch.imagePullSecrets .Values.elasticsearch.initContainer.imagePullSecrets }}
+{{- else if or .Values.opensearch-dashboards.imagePullSecrets .Values.opensearch.imagePullSecrets .Values.opensearch.initContainer.imagePullSecrets }}
 imagePullSecrets:
-{{- range .Values.kibana.imagePullSecrets }}
+{{- range .Values.opensearch-dashboards.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- range .Values.elasticsearch.imagePullSecrets }}
+{{- range .Values.opensearch.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- range .Values.elasticsearch.initContainer.imagePullSecrets }}
+{{- range .Values.opensearch.initContainer.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
-{{- else if or .Values.kibana.imagePullSecrets .Values.elasticsearch.imagePullSecrets .Values.elasticsearch.initContainer.imagePullSecrets }}
+{{- else if or .Values.opensearch-dashboards.imagePullSecrets .Values.opensearch.imagePullSecrets .Values.opensearch.initContainer.imagePullSecrets }}
 imagePullSecrets:
-{{- range .Values.kibana.imagePullSecrets }}
+{{- range .Values.opensearch-dashboards.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- range .Values.elasticsearch.imagePullSecrets }}
+{{- range .Values.opensearch.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
-{{- range .Values.elasticsearch.initContainer.imagePullSecrets }}
+{{- range .Values.opensearch.initContainer.imagePullSecrets }}
   - name: {{ . }}
 {{- end }}
 {{- end -}}
 {{- end -}}
 
 {{- define "master-nodes" -}}
-{{- template "opendistro-es.fullname" . -}}-master
+{{- template "opensearch.fullname" . -}}-master
 {{- end -}}
 
 {{- define "initial-master-nodes" -}}
-{{- $replicas := .Values.elasticsearch.master.replicas | int }}
+{{- $replicas := .Values.opensearch.master.replicas | int }}
   {{- range $i, $e := untilStep 0 $replicas 1 -}}
     {{ template "master-nodes" $ }}-{{ $i }},
   {{- end -}}

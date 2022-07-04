@@ -1,17 +1,14 @@
 dependencies:
-- name: elasticsearch-curator
-  repository: file://charts/elasticsearch-curator
-  version: 2.0.3
 - name: fluentd-elasticsearch
   repository: file://charts/fluentd-elasticsearch
   version: 6.1.1
-- name: opendistro-certs
-  repository: file://charts/opendistro-certs
+- name: opensearch-certs
+  repository: file://charts/opensearch-certs
   version: 0.1.0
-- name: opendistro-es
-  repository: file://charts/opendistro-es
+- name: opensearch
+  repository: file://charts/opensearch
   version: 1.13.3
-- name: elasticsearch-exporter
+- name: opensearch-exporter
   repository: file://charts/elasticsearch-exporter
   version: 3.0.0
 digest: sha256:2e2fc5a1351020a771ea61fa3d3e1dffaf8d21f5711b3e1a09aebef2d29fea16

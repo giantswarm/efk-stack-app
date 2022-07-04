@@ -1,4 +1,6 @@
-# Copyright 2019 Viasat, Inc.
+## TODO change copyrights
+
+# Copyright 2019 Giant, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License").
 # You may not use this file except in compliance with the License.
@@ -12,18 +14,15 @@
 # permissions and limitations under the License.
 
 apiVersion: v1
-# Open Distro for Elasticsearch version
-appVersion: 1.13.3
-description: 'Open Distro for Elasticsearch'
+# Opensearch
+appVersion: 2.0.1
+description: 'Opensearch'
 engine: gotpl
 kubeVersion: ^1.10.0-0
 maintainers:
-- email: derek.heldt-werle@viasat.com
-  name: Derek Heldt-Werle
-- email: kalvin.chau@viasat.com
-  name: Kalvin Chau
-name: opendistro-es
+- name: Giant Swarm applications team
+  url: https://github.com/giantswarm/efk-stack-app
+name: opensearch
 sources:
-- https://pages.git.viasat.com/ATG/charts
-# Chart version
-version: 1.13.3
+- https://github.com/opensearch-project/helm-charts/tree/main/charts
+version: 1.0.0
