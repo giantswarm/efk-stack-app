@@ -155,12 +155,12 @@ sidecarResources: {}
 networkHost: "0.0.0.0"
 
 rbac:
-  create: false
+  create: true
   serviceAccountAnnotations: {}
   serviceAccountName: ""
 
 podSecurityPolicy:
-  create: false
+  create: true
   name: ""
   spec:
     privileged: true
@@ -255,7 +255,8 @@ httpPort: 9200
 transportPort: 9300
 
 service:
-  labels: {}
+  labels:
+    giantswarm.io/monitoring: "true"
   labelsHeadless: {}
   headless:
     annotations: {}
