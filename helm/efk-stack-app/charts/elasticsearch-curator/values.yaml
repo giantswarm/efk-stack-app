@@ -32,7 +32,7 @@ psp:
 image:
   registry: quay.io
   repository: giantswarm/elasticsearch-untergeek-curator
-  tag: 5.8.4
+  tag: 8.0.3
   pullPolicy: IfNotPresent
 
 hooks:
