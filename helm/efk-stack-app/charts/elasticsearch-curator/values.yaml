@@ -46,7 +46,7 @@ command: ["/curator/curator"]
 env: {}
 
 configMaps:
-  # Delete indices older than 7 days
+  # Delete indices older than 3 days
   action_file_yml: |-
     ---
     actions:
