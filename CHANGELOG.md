@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Changed
+
+- Make number of days consistent between Curator code and docs
+
 ## [0.7.3] - 2022-04-06
 
 ### Added
