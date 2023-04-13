@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "7ad78b4d88a71e9c26bc477782d20612eadb6e2652092a540588769d9bbc4a5b"
+            "sha256": "7173f758e08700ef42424e2193fac9095bdfd18d5c595e8a0c93805a3e7c6859"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -139,11 +139,11 @@
         },
         "packaging": {
             "hashes": [
-                "sha256:714ac14496c3e68c99c29b00845f7a2b85f3bb6f1078fd9f72fd20f0570002b2",
-                "sha256:b6ad297f8907de0fa2fe1ccbd26fdaf387f5f47c7275fedf8cce89f99446cf97"
+                "sha256:994793af429502c4ea2ebf6bf664629d07c1a9fe974af92966e4b8d2df7edc61",
+                "sha256:a392980d2b6cffa644431898be54b0045151319d1e7ec34f0cfed48767dd334f"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==23.0"
+            "version": "==23.1"
         },
         "pluggy": {
             "hashes": [
@@ -363,11 +363,11 @@
         },
         "filelock": {
             "hashes": [
-                "sha256:892be14aa8efc01673b5ed6589dbccb95f9a8596f0507e232626155495c18105",
-                "sha256:bde48477b15fde2c7e5a0713cbe72721cb5a5ad32ee0b8f419907960b9d75536"
+                "sha256:3618c0da67adcc0506b015fd11ef7faf1b493f0b40d87728e19986b536890c37",
+                "sha256:f08a52314748335c6460fc8fe40cd5638b85001225db78c2aa01c8c0db83b318"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==3.10.7"
+            "version": "==3.11.0"
         },
         "identify": {
             "hashes": [
@@ -395,11 +395,11 @@
         },
         "pre-commit": {
             "hashes": [
-                "sha256:31ef31af7e474a8d8995027fefdfcf509b5c913ff31f2015b4ec4beb26a6f658",
-                "sha256:e2f91727039fc39a92f58a588a25b87f936de6567eed4f0e673e0507edc75bad"
+                "sha256:0b4210aea813fe81144e87c5a291f09ea66f199f367fa1df41b55e1d26e1e2b4",
+                "sha256:5b808fcbda4afbccf6d6633a56663fed35b6c2bc08096fd3d47ce197ac351d9d"
             ],
             "index": "pypi",
-            "version": "==2.21.0"
+            "version": "==3.2.2"
         },
         "pyyaml": {
             "hashes": [
