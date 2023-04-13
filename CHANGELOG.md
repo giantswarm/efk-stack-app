@@ -9,6 +9,7 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ### Changed
 
+- Remove sha in container images to avoid container registry sync issues (https://github.com/giantswarm/giantswarm/issues/26577)
 - Make number of days consistent between Curator code and docs
 
 ## [0.7.3] - 2022-04-06

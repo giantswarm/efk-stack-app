@@ -30,7 +30,7 @@ elasticsearch-curator:
     # https://github.com/elastic/curator
     registry: quay.io
     repository: giantswarm/bobrik-curator
-    tag: 5.8.1@sha256:3aaf4d8aca9ec1d77fc46e99ba119abf4ad4d5ac42eb7e1227c420a8b6927259
+    tag: 5.8.1
 
   configMaps:
     # Delete indices older than 7 days
@@ -73,7 +73,7 @@ elasticsearch-exporter:
     # and https://github.com/justwatchcom/elasticsearch_exporter
     registry: quay.io
     repository: giantswarm/elasticsearch_exporter
-    tag: 1.1.0@sha256:0f94474f46a917d85657ee62ad6d01d30128198ed048014caf5471b9b7151b45
+    tag: 1.1.0
   service:
     annotations:
       giantswarm.io/monitoring-path: /metrics
@@ -97,7 +97,7 @@ fluentd-elasticsearch:
     # and https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch/fluentd-es-image
     registry: quay.io
     repository: giantswarm/fluentd
-    tag: v3.3.0-for-opendistro@sha256:e71f79e701e478b83bcc933b913bde76a6e8763a4a50adad83e1f9ff9babcc67
+    tag: v3.3.0-for-opendistro
   elasticsearch:
     host: "efk-stack-app-opendistro-es-client-service"
     logstashPrefix: "fluentd"
@@ -126,7 +126,7 @@ opendistro-es:
     registry: ""
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch-kibana?tab=tags
     image: giantswarm/opendistro-for-elasticsearch-kibana
-    imageTag: 1.13.2@sha256:c740d7a89475518b07f52809f264e55f235d9c6432c60a1bf2e703376e55c835
+    imageTag: 1.13.2
     imagePullPolicy: IfNotPresent
 
     config:
@@ -160,7 +160,7 @@ opendistro-es:
   elasticsearch:
     # see https://quay.io/repository/giantswarm/opendistro-for-elasticsearch?tab=tags
     image: giantswarm/opendistro-for-elasticsearch
-    imageTag: 1.13.3@sha256:2acfa1dcc5f8a2e5aac09bc64c4047c6674755f9b2f57de2a945be182888ea33
+    imageTag: 1.13.3
     imagePullPolicy: IfNotPresent
 
     sysctl:
@@ -169,7 +169,7 @@ opendistro-es:
     initContainer:
       # see https://quay.io/repository/giantswarm/busybox?tab=tags
       image: giantswarm/busybox
-      imageTag: 1.33.0@sha256:99243e861067446c9aed305b5690cccb88658d23af3fde338398f27386ded1be
+      imageTag: 1.33.0
 
     ssl:
       transport:
