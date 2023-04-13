@@ -4,7 +4,7 @@ image:
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
 ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
-  tag: v3.3.0-for-opendistro@sha256:e71f79e701e478b83bcc933b913bde76a6e8763a4a50adad83e1f9ff9babcc67
+  tag: v3.3.0-for-opendistro
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
