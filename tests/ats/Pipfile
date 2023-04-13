@@ -10,7 +10,7 @@ pre-commit = "~=3.2.2"
 pytest-helm-charts = "~=0.5.2"
 pytest = "~=6.2.5"
 pykube-ng = "~=21.10.0"
-pytest-rerunfailures = "~=10.1"
+pytest-rerunfailures = "~=11.1"
 
 [requires]
 python_version = "3"
