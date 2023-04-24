@@ -1,6 +1,17 @@
 [![CircleCI](https://circleci.com/gh/giantswarm/efk-stack-app.svg?style=shield)](https://circleci.com/gh/giantswarm/efk-stack-app)
 
-# efk-stack-app chart
+# ⛔️DEPRECATED efk-stack-app chart
+
+This is repository is no longer actively maintained or updated.
+
+Instead we recommed using either:
+
+- [fluent-bit](https://github.com/giantswarm/fluent-logshipping-app)
+- [promtail](https://github.com/giantswarm/promtail-app)
+
+More information about audit logging at : https://docs.giantswarm.io/getting-started/observability/logging/audit-logs/
+
+## Description
 
 Giant Swarm offers an Opendistro Managed App which can be installed in tenant clusters.
 Here we define the Opendistro chart with its templates and default configuration.
