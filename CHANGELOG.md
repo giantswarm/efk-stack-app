@@ -7,6 +7,10 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+### Fixed
+
+- Upgrade elasticsearch-exporter to v1.5.0 and read credentials from environment variables.
+
 ## [0.7.4] - 2023-04-13
 
 ### Changed
