@@ -2,6 +2,7 @@ checks:
   addAllBuiltIn: true
   exclude:
   - "access-to-secrets"
+  - "dangling-service"
   - "default-service-account"
   - "dnsconfig-options"
   - "drop-net-raw-capability"

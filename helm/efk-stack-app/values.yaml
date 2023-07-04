@@ -72,17 +72,27 @@ elasticsearch-exporter:
     # see https://quay.io/repository/giantswarm/elasticsearch_exporter?tab=tags
     # and https://github.com/justwatchcom/elasticsearch_exporter
     registry: quay.io
-    repository: giantswarm/elasticsearch_exporter
-    tag: 1.1.0
+    repository: giantswarm/elasticsearch-exporter
+    tag: 1.5.0
   service:
     annotations:
       giantswarm.io/monitoring-path: /metrics
       giantswarm.io/monitoring-port: "9108"
     labels:
       giantswarm.io/monitoring: "true"
-  envFromSecret: "kibana-auth"
+  env:
+  - name: ES_USERNAME
+    valueFrom:
+      secretKeyRef:
+        key: username
+        name: kibana-auth
+  - name: ES_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        key: password
+        name: kibana-auth
   es:
-    uri: http://$(username):$(password)@efk-stack-app-opendistro-es-client-service:9200
+    uri: http://efk-stack-app-opendistro-es-client-service:9200
 
 fluentd-elasticsearch:
   enabled: true
