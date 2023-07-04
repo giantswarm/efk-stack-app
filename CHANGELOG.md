@@ -7,6 +7,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 
 ## [Unreleased]
 
+## [0.7.5] - 2023-07-04
+
 ### Fixed
 
 - Upgrade elasticsearch-exporter to v1.5.0 and read credentials from environment variables.
@@ -196,7 +198,8 @@ and this project's packages adheres to [Semantic Versioning](http://semver.org/s
 ## [0.1.3] 2020-02-10
 - First release
 
-[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.4...HEAD
+[Unreleased]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.5...HEAD
+[0.7.5]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.4...v0.7.5
 [0.7.4]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.3...v0.7.4
 [0.7.3]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.2...v0.7.3
 [0.7.2]: https://github.com/giantswarm/efk-stack-app/compare/v0.7.1...v0.7.2
