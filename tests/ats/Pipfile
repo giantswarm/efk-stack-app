@@ -4,7 +4,7 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
-pre-commit = "~=3.3.1"
+pre-commit = "~=3.4.0"
 
 [packages]
 pytest-helm-charts = "~=0.5.2"
