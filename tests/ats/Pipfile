@@ -8,7 +8,7 @@ pre-commit = "~=3.4.0"
 
 [packages]
 pytest-helm-charts = "~=0.5.2"
-pytest = "~=6.2.5"
+pytest = "~=7.4.2"
 pykube-ng = "~=21.10.0"
 pytest-rerunfailures = "~=12.0"
 
