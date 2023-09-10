@@ -73,7 +73,7 @@ elasticsearch-exporter:
     # and https://github.com/justwatchcom/elasticsearch_exporter
     registry: quay.io
     repository: giantswarm/elasticsearch-exporter
-    tag: 1.5.0
+    tag: v1.6.0
   service:
     annotations:
       giantswarm.io/monitoring-path: /metrics
